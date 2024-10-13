@@ -155,9 +155,10 @@ class _RegisterPageState extends State<RegisterPage> {
               ]),
             ),
             const SizedBox(height: 10),
-            SizedBox(
-              width: 327,
-              child: Row(children: [
+            Padding(
+              padding: const EdgeInsets.only(right: 150),
+              child:
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 Padding(
                   padding: const EdgeInsets.only(right: 10),
                   child: AnimatedContainer(
@@ -199,9 +200,10 @@ class _RegisterPageState extends State<RegisterPage> {
             const SizedBox(
               height: 10,
             ),
-            SizedBox(
-              width: 327,
-              child: Row(children: [
+            Padding(
+              padding: const EdgeInsets.only(right: 170),
+              child:
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 Padding(
                   padding: const EdgeInsets.only(right: 10),
                   child: AnimatedContainer(
