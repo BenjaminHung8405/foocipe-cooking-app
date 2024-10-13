@@ -41,24 +41,24 @@ class _RegisterPageState extends State<RegisterPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Text(
+            const Text(
               'Welcome to',
               style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: 25,
                   color: Color(0xFF2E3E5C)),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
-            Image(
+            const Image(
               image: AssetImage('assets/logos/foocipe-1.png'),
               width: 250,
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
-            Text(
+            const Text(
               'Please enter your account here',
               style: TextStyle(
                   fontWeight: FontWeight.w500,
@@ -66,7 +66,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   color: Color(0xFF9FA5C0)),
             ),
             Container(
-              margin: EdgeInsets.only(
+              margin: const EdgeInsets.only(
                 top: 30,
               ),
               child: SizedBox(
@@ -76,30 +76,30 @@ class _RegisterPageState extends State<RegisterPage> {
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
-                    contentPadding: EdgeInsets.all(15),
+                    contentPadding: const EdgeInsets.all(15),
                     hintText: 'Email or phone number',
                     hintStyle:
-                        TextStyle(color: Color(0xffDDDADA), fontSize: 16),
-                    prefixIcon: Padding(
+                        const TextStyle(color: Color(0xffDDDADA), fontSize: 16),
+                    prefixIcon: const Padding(
                       padding: EdgeInsets.all(12),
                       child: Icon(Icons.mail_outline_rounded),
                     ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
-                      borderSide:
-                          BorderSide(color: Color(0xFFD0DBEA), width: 1.0),
+                      borderSide: const BorderSide(
+                          color: Color(0xFFD0DBEA), width: 1.0),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
-                      borderSide:
-                          BorderSide(color: Color(0xFFD0DBEA), width: 1.0),
+                      borderSide: const BorderSide(
+                          color: Color(0xFFD0DBEA), width: 1.0),
                     ),
                   ),
                 ),
               ),
             ),
             Container(
-              margin: EdgeInsets.only(top: 15),
+              margin: const EdgeInsets.only(top: 15),
               child: SizedBox(
                 height: 62,
                 width: 327,
@@ -109,10 +109,10 @@ class _RegisterPageState extends State<RegisterPage> {
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
-                    contentPadding: EdgeInsets.all(15),
+                    contentPadding: const EdgeInsets.all(15),
                     hintText: 'Password',
                     hintStyle:
-                        TextStyle(color: Color(0xffDDDADA), fontSize: 16),
+                        const TextStyle(color: Color(0xffDDDADA), fontSize: 16),
                     suffixIcon: IconButton(
                         padding: const EdgeInsetsDirectional.only(end: 12),
                         onPressed: () {
@@ -121,28 +121,28 @@ class _RegisterPageState extends State<RegisterPage> {
                           });
                         },
                         icon: _isObsure
-                            ? Icon(Icons.visibility_off)
-                            : Icon(Icons.visibility)),
-                    prefixIcon: Padding(
+                            ? const Icon(Icons.visibility_off)
+                            : const Icon(Icons.visibility)),
+                    prefixIcon: const Padding(
                       padding: EdgeInsets.all(12),
                       child: Icon(Icons.lock_outline_rounded),
                     ),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
-                      borderSide:
-                          BorderSide(color: Color(0xFFD0DBEA), width: 1.0),
+                      borderSide: const BorderSide(
+                          color: Color(0xFFD0DBEA), width: 1.0),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
-                      borderSide:
-                          BorderSide(color: Color(0xFFD0DBEA), width: 1.0),
+                      borderSide: const BorderSide(
+                          color: Color(0xFFD0DBEA), width: 1.0),
                     ),
                   ),
                 ),
               ),
             ),
-            SizedBox(height: 20),
-            SizedBox(
+            const SizedBox(height: 20),
+            const SizedBox(
               width: 327,
               child: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
                 Text(
@@ -154,32 +154,32 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
               ]),
             ),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
             SizedBox(
               width: 327,
               child: Row(children: [
                 Padding(
                   padding: const EdgeInsets.only(right: 10),
                   child: AnimatedContainer(
-                    duration: Duration(milliseconds: 500),
+                    duration: const Duration(milliseconds: 500),
                     width: 20,
                     height: 20,
                     decoration: BoxDecoration(
                       color: _isPasswordTenCharacters
-                          ? Color(0xFFFD8B51).withOpacity(0.3)
-                          : Color(0xFF9FA5C0).withOpacity(0.3),
+                          ? const Color(0xFFFD8B51).withOpacity(0.3)
+                          : const Color(0xFF9FA5C0).withOpacity(0.3),
                       border: _isPasswordTenCharacters
                           ? Border.all(color: Colors.transparent)
                           : Border.all(
-                              color: Color(0xFF9FA5C0).withOpacity(0.3)),
+                              color: const Color(0xFF9FA5C0).withOpacity(0.3)),
                       borderRadius: BorderRadius.circular(50),
                     ),
                     child: Center(
                       child: Icon(
                         Icons.check,
                         color: _isPasswordTenCharacters
-                            ? Color(0xFFFD8B51).withOpacity(0.8)
-                            : Color(0xFF9FA5C0).withOpacity(0.3),
+                            ? const Color(0xFFFD8B51).withOpacity(0.8)
+                            : const Color(0xFF9FA5C0).withOpacity(0.3),
                         size: 15,
                       ),
                     ),
@@ -189,14 +189,14 @@ class _RegisterPageState extends State<RegisterPage> {
                   'Atleast 10 characters',
                   style: TextStyle(
                       color: _isPasswordTenCharacters
-                          ? Color(0xFF2E3E5C)
-                          : Color(0xFF9FA5C0).withOpacity(0.8),
+                          ? const Color(0xFF2E3E5C)
+                          : const Color(0xFF9FA5C0).withOpacity(0.8),
                       fontSize: 16,
                       fontWeight: FontWeight.w500),
                 )
               ]),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             SizedBox(
@@ -205,25 +205,25 @@ class _RegisterPageState extends State<RegisterPage> {
                 Padding(
                   padding: const EdgeInsets.only(right: 10),
                   child: AnimatedContainer(
-                    duration: Duration(milliseconds: 500),
+                    duration: const Duration(milliseconds: 500),
                     width: 20,
                     height: 20,
                     decoration: BoxDecoration(
                       color: _isPasswordHaveNum
-                          ? Color(0xFFFD8B51).withOpacity(0.3)
-                          : Color(0xFF9FA5C0).withOpacity(0.3),
+                          ? const Color(0xFFFD8B51).withOpacity(0.3)
+                          : const Color(0xFF9FA5C0).withOpacity(0.3),
                       border: _isPasswordHaveNum
                           ? Border.all(color: Colors.transparent)
                           : Border.all(
-                              color: Color(0xFF9FA5C0).withOpacity(0.3)),
+                              color: const Color(0xFF9FA5C0).withOpacity(0.3)),
                       borderRadius: BorderRadius.circular(50),
                     ),
                     child: Center(
                       child: Icon(
                         Icons.check,
                         color: _isPasswordHaveNum
-                            ? Color(0xFFFD8B51).withOpacity(0.8)
-                            : Color(0xFF9FA5C0).withOpacity(0.3),
+                            ? const Color(0xFFFD8B51).withOpacity(0.8)
+                            : const Color(0xFF9FA5C0).withOpacity(0.3),
                         size: 15,
                       ),
                     ),
@@ -233,14 +233,14 @@ class _RegisterPageState extends State<RegisterPage> {
                   'Contains a number',
                   style: TextStyle(
                       color: _isPasswordHaveNum
-                          ? Color(0xFF2E3E5C)
-                          : Color(0xFF9FA5C0).withOpacity(0.8),
+                          ? const Color(0xFF2E3E5C)
+                          : const Color(0xFF9FA5C0).withOpacity(0.8),
                       fontSize: 16,
                       fontWeight: FontWeight.w500),
                 )
               ]),
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             ElevatedButton(
@@ -248,21 +248,21 @@ class _RegisterPageState extends State<RegisterPage> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => LoginPage(),
+                        builder: (context) => const LoginPage(),
                       ));
                 },
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFFFD8B51),
+                    minimumSize: const Size(327, 56),
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30))),
                 child: Text(
                   'Sign Up',
                   style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 20,
                       color: Colors.white),
-                ),
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xFFFD8B51),
-                    minimumSize: Size(327, 56),
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30))))
+                ))
           ],
         ),
       ),
