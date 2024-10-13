@@ -4,3 +4,7 @@ import 'app.dart';
 void main() {
   runApp(const MyApp());
 }
+
+void TestConflict() {
+  print('Test Conflict');
+}
