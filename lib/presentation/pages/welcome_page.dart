@@ -21,14 +21,14 @@ class _WelcomePageState extends State<WelcomePage> {
 
   Future<void> checkCredentials() async {
     try {
-      final accessToken = await storage.read(key: 'accessToken');
-      final userId = await storage.read(key: 'user_id');
+      final access_token = await storage.read(key: 'access_token');
+      print(access_token);
 
-      if (accessToken != null && userId != null) {
-        // Both accessToken and user_id exist, navigate to home page
+      if (access_token != null) {
+        // Both access_token and user_id exist, navigate to home page
         Navigator.of(context).pushReplacementNamed('/home');
       } else {
-        // Either accessToken or user_id is missing, navigate to login page
+        // Either access_token or user_id is missing, navigate to login page
         Navigator.of(context).pushReplacementNamed('/login');
       }
     } catch (e) {
