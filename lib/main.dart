@@ -5,6 +5,6 @@ void main() {
   runApp(const MyApp());
 }
 
-void Fuckyou() {
+void FUckyou1() {
   print('Fuck you');
 }
