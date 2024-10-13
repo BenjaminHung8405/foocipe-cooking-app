@@ -5,6 +5,6 @@ void main() {
   runApp(const MyApp());
 }
 
-void TestConflict() {
+void TestConflict123() {
   print('Test Conflict');
 }
