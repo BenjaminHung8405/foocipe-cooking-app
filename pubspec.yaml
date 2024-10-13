@@ -24,6 +24,7 @@ flutter:
 
   assets:
     - assets/logos/foocipe-1.png
+    - assets/icons/Google.png
     - assets/images/welcome_background-1.jpg
     - assets/images/welcome_background-2.jpg
     - assets/images/welcome_background-3.jpg

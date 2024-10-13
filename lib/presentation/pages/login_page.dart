@@ -46,63 +46,73 @@ class _LoginPageState extends State<LoginPage> {
               margin: EdgeInsets.only(
                 top: 30,
               ),
-              child: TextField(
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  contentPadding: EdgeInsets.all(15),
-                  hintText: 'Email or phone number',
-                  hintStyle: TextStyle(color: Color(0xffDDDADA), fontSize: 16),
-                  prefixIcon: Padding(
-                    padding: EdgeInsets.all(12),
-                    child: Icon(Icons.mail_outline_rounded),
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide:
-                        BorderSide(color: Color(0xFFD0DBEA), width: 1.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide:
-                        BorderSide(color: Color(0xFFD0DBEA), width: 1.0),
+              child: SizedBox(
+                height: 56,
+                width: 327,
+                child: TextField(
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    contentPadding: EdgeInsets.all(15),
+                    hintText: 'Email or phone number',
+                    hintStyle:
+                        TextStyle(color: Color(0xffDDDADA), fontSize: 16),
+                    prefixIcon: Padding(
+                      padding: EdgeInsets.all(12),
+                      child: Icon(Icons.mail_outline_rounded),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30),
+                      borderSide:
+                          BorderSide(color: Color(0xFFD0DBEA), width: 1.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30),
+                      borderSide:
+                          BorderSide(color: Color(0xFFD0DBEA), width: 1.0),
+                    ),
                   ),
                 ),
               ),
             ),
             Container(
               margin: EdgeInsets.only(top: 15),
-              child: TextField(
-                obscureText: _isObsure,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.white,
-                  contentPadding: EdgeInsets.all(15),
-                  hintText: 'Password',
-                  hintStyle: TextStyle(color: Color(0xffDDDADA), fontSize: 16),
-                  suffixIcon: IconButton(
-                      padding: const EdgeInsetsDirectional.only(end: 12),
-                      onPressed: () {
-                        setState(() {
-                          _isObsure = !_isObsure;
-                        });
-                      },
-                      icon: _isObsure
-                          ? Icon(Icons.visibility_off)
-                          : Icon(Icons.visibility)),
-                  prefixIcon: Padding(
-                    padding: EdgeInsets.all(12),
-                    child: Icon(Icons.lock_outline_rounded),
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide:
-                        BorderSide(color: Color(0xFFD0DBEA), width: 1.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    borderSide:
-                        BorderSide(color: Color(0xFFD0DBEA), width: 1.0),
+              child: SizedBox(
+                height: 56,
+                width: 327,
+                child: TextField(
+                  obscureText: _isObsure,
+                  decoration: InputDecoration(
+                    filled: true,
+                    fillColor: Colors.white,
+                    contentPadding: EdgeInsets.all(15),
+                    hintText: 'Password',
+                    hintStyle:
+                        TextStyle(color: Color(0xffDDDADA), fontSize: 16),
+                    suffixIcon: IconButton(
+                        padding: const EdgeInsetsDirectional.only(end: 12),
+                        onPressed: () {
+                          setState(() {
+                            _isObsure = !_isObsure;
+                          });
+                        },
+                        icon: _isObsure
+                            ? Icon(Icons.visibility_off)
+                            : Icon(Icons.visibility)),
+                    prefixIcon: Padding(
+                      padding: EdgeInsets.all(12),
+                      child: Icon(Icons.lock_outline_rounded),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30),
+                      borderSide:
+                          BorderSide(color: Color(0xFFD0DBEA), width: 1.0),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30),
+                      borderSide:
+                          BorderSide(color: Color(0xFFD0DBEA), width: 1.0),
+                    ),
                   ),
                 ),
               ),
@@ -124,7 +134,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 style: ElevatedButton.styleFrom(
                     backgroundColor: Color(0xFFFD8B51),
-                    minimumSize: Size(327, 56),
+                    minimumSize: Size(327, 62),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(30)))),
             SizedBox(
@@ -149,7 +159,7 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Image(
-                        image: AssetImage('assets/images/Google.png'),
+                        image: AssetImage('assets/icons/Google.png'),
                       ),
                       Text(
                         'Google',
@@ -162,7 +172,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   style: ElevatedButton.styleFrom(
                       backgroundColor: Color(0xFFFF5842),
-                      minimumSize: Size(327, 56),
+                      fixedSize: Size(327, 62),
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30)))),
             ),
