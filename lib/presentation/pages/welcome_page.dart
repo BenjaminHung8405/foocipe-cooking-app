@@ -1,70 +1,69 @@
 import 'package:flutter/material.dart';
-import 'package:foocipe_cooking_app/presentation/pages/login_page.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-class WelcomePage extends StatelessWidget {
-  const WelcomePage({super.key});
+class WelcomePage extends StatefulWidget {
+  const WelcomePage({Key? key}) : super(key: key);
+
+  @override
+  _WelcomePageState createState() => _WelcomePageState();
+}
+
+class _WelcomePageState extends State<WelcomePage> {
+  final storage = const FlutterSecureStorage();
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(seconds: 2), () {
+      checkCredentials();
+    });
+  }
+
+  Future<void> checkCredentials() async {
+    try {
+      final accessToken = await storage.read(key: 'accessToken');
+      final userId = await storage.read(key: 'user_id');
+
+      if (accessToken != null && userId != null) {
+        // Both accessToken and user_id exist, navigate to home page
+        Navigator.of(context).pushReplacementNamed('/home');
+      } else {
+        // Either accessToken or user_id is missing, navigate to login page
+        Navigator.of(context).pushReplacementNamed('/login');
+      }
+    } catch (e) {
+      // If there's an error reading from storage, navigate to login page
+      Navigator.of(context).pushReplacementNamed('/login');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.white,
-        body: Column(
-          children: [
-            Image(
-                image: AssetImage('assets/images/onboarding.png'),
-            ),
-            SizedBox(height: 30),
-            Text(
-              'Start Cooking',
-              style: TextStyle(
-                fontWeight: FontWeight.w700,
-                fontSize: 25,
-                color: Color(0xFF2E3E5C),
+      body: Stack(
+        children: [
+          // Background image
+          Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: AssetImage('assets/images/welcome_background-3.jpg'),
+                fit: BoxFit.cover,
               ),
-              textAlign: TextAlign.center,
             ),
-            Padding(
-              padding: EdgeInsets.only(left: 70, right: 70, top: 20),
-              child: Text(
-                'Let’s join our community to cook better food!',
-                style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 20,
-                    color: Color(0xFF9FA5C0)
+          ),
+          Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  'assets/logos/foocipe-1.png',
+                  width: 300,
                 ),
-                textAlign: TextAlign.center,
-              ),
+              ],
             ),
-            Padding(
-              padding: EdgeInsets.only(top: 70),
-              child: ElevatedButton(
-                  onPressed: (){
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => LoginPage()
-                      )
-                    );
-                  },
-                child: Text(
-                    'Get Started',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20,
-                      color: Colors.white
-                  ),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Color(0xFFFD8B51),
-                  minimumSize: Size(327, 56),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30)
-                  )
-                )
-              ),
-            )
-          ],
-        ),
-      );
+          ),
+        ],
+      ),
+    );
   }
 }
