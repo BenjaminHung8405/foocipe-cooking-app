@@ -11,38 +11,21 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _otpController = TextEditingController();
-  final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-
-  bool _isEmailVerified = false;
-  bool _isLoading = false;
   bool _isObscure = true;
-  bool _isPasswordTenCharacters = false;
-  bool _isPasswordHaveNum = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _passwordController.addListener(_onPasswordChanged);
-  }
+  bool _isLoading = false;
+  bool _isEmailVerified = false;
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _otpController = TextEditingController();
 
   @override
   void dispose() {
     _emailController.dispose();
-    _otpController.dispose();
-    _usernameController.dispose();
     _passwordController.dispose();
+    _usernameController.dispose();
+    _otpController.dispose();
     super.dispose();
-  }
-
-  void _onPasswordChanged() {
-    final password = _passwordController.text;
-    setState(() {
-      _isPasswordTenCharacters = password.length >= 10;
-      _isPasswordHaveNum = password.contains(RegExp(r'[0-9]'));
-    });
   }
 
   Future<void> _verifyEmail() async {
@@ -54,7 +37,6 @@ class _RegisterPageState extends State<RegisterPage> {
         headers: {'Content-Type': 'application/json'},
         body: json.encode({
           'email': _emailController.text,
-          'password': _passwordController.text,
         }),
       );
       if (response.statusCode == 200) {
@@ -107,6 +89,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -117,29 +100,30 @@ class _RegisterPageState extends State<RegisterPage> {
         ),
       ),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const SizedBox(height: 16),
               const Text(
                 'Create an Account',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 28,
+                  fontSize: 30,
                   color: Color(0xFF2E3E5C),
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 8),
               const Text(
                 'Please fill in the form to continue',
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
-                  fontSize: 16,
+                  fontSize: 14,
                   color: Color(0xFF9FA5C0),
                 ),
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 24),
               _buildTextField(
                 controller: _emailController,
                 hintText: 'Email',
@@ -151,32 +135,44 @@ class _RegisterPageState extends State<RegisterPage> {
                         onPressed: _isLoading ? null : _verifyEmail,
                       ),
               ),
+              const SizedBox(height: 12),
               if (_isEmailVerified) ...[
-                const SizedBox(height: 15),
                 _buildTextField(
                   controller: _otpController,
                   hintText: 'Enter OTP',
                   prefixIcon: Icons.lock_outline,
                   keyboardType: TextInputType.number,
                 ),
-                const SizedBox(height: 15),
+                const SizedBox(height: 12),
                 _buildTextField(
                   controller: _usernameController,
                   hintText: 'Username',
                   prefixIcon: Icons.person_outline,
                 ),
-                const SizedBox(height: 15),
+                const SizedBox(height: 12),
                 _buildTextField(
                   controller: _passwordController,
                   hintText: 'Password',
                   prefixIcon: Icons.lock_outline_rounded,
                   isPassword: true,
                 ),
-                const SizedBox(height: 20),
-                _buildPasswordRequirements(),
               ],
-              const SizedBox(height: 30),
-              _buildSubmitButton(),
+              const SizedBox(height: 24),
+              _buildRegisterButton(),
+              const SizedBox(height: 24),
+              const Text(
+                'Or sign up with',
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14,
+                  color: Color(0xFF9FA5C0),
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
+              _buildSocialSignupButtons(),
+              const SizedBox(height: 16),
+              _buildSignInRow(),
             ],
           ),
         ),
@@ -199,105 +195,118 @@ class _RegisterPageState extends State<RegisterPage> {
       decoration: InputDecoration(
         filled: true,
         fillColor: Colors.white,
-        contentPadding: const EdgeInsets.all(15),
+        contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 0),
         hintText: hintText,
-        hintStyle: const TextStyle(color: Color(0xffDDDADA), fontSize: 16),
-        prefixIcon: Icon(prefixIcon),
+        hintStyle: const TextStyle(color: Color(0xffDDDADA), fontSize: 14),
+        prefixIcon: Icon(prefixIcon, size: 20),
         suffixIcon: isPassword
             ? IconButton(
-                icon:
-                    Icon(_isObscure ? Icons.visibility_off : Icons.visibility),
+                icon: Icon(_isObscure ? Icons.visibility_off : Icons.visibility,
+                    size: 20),
                 onPressed: () => setState(() => _isObscure = !_isObscure),
               )
             : suffixIcon,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
-          borderSide: const BorderSide(color: Color(0xFFD0DBEA), width: 1.0),
+        border: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Color(0xFFD0DBEA), width: 1.0),
         ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
-          borderSide: const BorderSide(color: Color(0xFFFD8B51), width: 2.0),
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Color(0xFFFD8B51), width: 2.0),
+        ),
+        enabledBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Color(0xFFD0DBEA), width: 1.0),
         ),
       ),
     );
   }
 
-  Widget _buildPasswordRequirements() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Your Password must contain:',
-          style: TextStyle(
-            fontWeight: FontWeight.w500,
-            fontSize: 16,
-            color: Color(0xFF2E3E5C),
-          ),
-        ),
-        const SizedBox(height: 10),
-        _buildRequirementRow(
-            _isPasswordTenCharacters, 'At least 10 characters'),
-        const SizedBox(height: 5),
-        _buildRequirementRow(_isPasswordHaveNum, 'Contains a number'),
-      ],
-    );
-  }
-
-  Widget _buildRequirementRow(bool isMet, String requirement) {
-    return Row(
-      children: [
-        AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
-          width: 20,
-          height: 20,
-          decoration: BoxDecoration(
-            color: isMet
-                ? const Color(0xFFFD8B51).withOpacity(0.3)
-                : Colors.transparent,
-            border: Border.all(
-              color: isMet ? const Color(0xFFFD8B51) : const Color(0xFF9FA5C0),
-              width: 1.5,
-            ),
-            borderRadius: BorderRadius.circular(50),
-          ),
-          child: isMet
-              ? const Icon(Icons.check, color: Color(0xFFFD8B51), size: 14)
-              : null,
-        ),
-        const SizedBox(width: 10),
-        Text(
-          requirement,
-          style: TextStyle(
-            color: isMet ? const Color(0xFF2E3E5C) : const Color(0xFF9FA5C0),
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSubmitButton() {
+  Widget _buildRegisterButton() {
     return ElevatedButton(
       onPressed:
           _isLoading ? null : (_isEmailVerified ? _register : _verifyEmail),
       style: ElevatedButton.styleFrom(
         backgroundColor: const Color(0xFFFD8B51),
-        minimumSize: const Size(double.infinity, 56),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
-        ),
+        minimumSize: const Size(double.infinity, 48),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       ),
       child: _isLoading
-          ? CircularProgressIndicator(color: Colors.white)
+          ? CircularProgressIndicator(color: Colors.white, strokeWidth: 2)
           : Text(
               _isEmailVerified ? 'Sign Up' : 'Verify Email',
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 18,
-                color: Colors.white,
+              style: TextStyle(fontSize: 16, color: Colors.white),
+            ),
+    );
+  }
+
+  Widget _buildSocialSignupButtons() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _buildSocialButton('Google', 'assets/icons/google-logo.png'),
+        const SizedBox(width: 8),
+        _buildSocialButton('Facebook', 'assets/icons/facebook-logo.png'),
+        const SizedBox(width: 8),
+        _buildSocialButton('GitHub', 'assets/icons/github-logo.png'),
+      ],
+    );
+  }
+
+  Widget _buildSocialButton(String text, String iconPath) {
+    return Expanded(
+      child: ElevatedButton(
+        onPressed: () {
+          // Implement social signup functionality
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.white,
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+            side: BorderSide(color: Colors.grey.shade300),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(iconPath, height: 20),
+            const SizedBox(width: 4),
+            Flexible(
+              child: Text(
+                text,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 10,
+                  color: Colors.black87,
+                ),
+                overflow: TextOverflow.ellipsis,
               ),
             ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildSignInRow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const Text(
+          'Already have an account?',
+          style: TextStyle(fontSize: 14, color: Color(0xFF9FA5C0)),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const LoginPage()),
+            );
+          },
+          child: const Text(
+            'Sign In',
+            style: TextStyle(fontSize: 14, color: Color(0xFFFD8B51)),
+          ),
+        )
+      ],
     );
   }
 }
