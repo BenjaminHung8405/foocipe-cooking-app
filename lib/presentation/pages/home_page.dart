@@ -1,10 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:foocipe_cooking_app/model/category.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
   @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  List<CategoryModel> categories = [];
+
+  void _getInitialInfo() {
+    categories = CategoryModel.getCategories();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    _getInitialInfo;
     return SafeArea(
       child: Scaffold(
         body: ListView(
@@ -21,6 +34,55 @@ class HomePage extends StatelessWidget {
                     color: Color(0xFF3E5481),
                     fontSize: 20,
                     fontWeight: FontWeight.w700),
+              ),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Container(
+              height: 120,
+              child: ListView.separated(
+                itemCount: categories.length,
+                padding: const EdgeInsets.only(
+                  left: 20,
+                  right: 20,
+                ),
+                scrollDirection: Axis.horizontal,
+                separatorBuilder: (context, index) => const SizedBox(
+                  width: 25,
+                ),
+                itemBuilder: (context, index) {
+                  return Container(
+                    width: 100,
+                    decoration: BoxDecoration(
+                        color: categories[index].boxColor.withOpacity(0.3),
+                        borderRadius: BorderRadius.circular(16)),
+                    child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Container(
+                            width: 50,
+                            height: 50,
+                            decoration: const BoxDecoration(
+                              color: Colors.white,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Image(
+                                    image: AssetImage(
+                                        categories[index].image_urls))),
+                          ),
+                          Text(
+                            categories[index].name,
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 14),
+                          )
+                        ]),
+                  );
+                },
               ),
             )
           ],

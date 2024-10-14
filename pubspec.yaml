@@ -28,9 +28,19 @@ flutter:
     - assets/icons/google-logo.png
     - assets/icons/facebook-logo.png
     - assets/icons/github-logo.png
+    - assets/icons/cake.png
+    - assets/icons/carrot.png
+    - assets/icons/cherry.png
+    - assets/icons/chicken.png
+    - assets/icons/egg.png
+    - assets/icons/hamburger.png
+    - assets/icons/pizza.png
+    - assets/icons/spoon.png
+    - assets/icons/watermelon.png
     - assets/images/welcome_background-1.jpg
     - assets/images/welcome_background-2.jpg
     - assets/images/welcome_background-3.jpg
+    
 
   fonts:
     - family: SF-Pro
