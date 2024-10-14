@@ -69,59 +69,70 @@ class _LoginPageState extends State<LoginPage> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Image(
-                image: AssetImage('assets/logos/foocipe-1.png'),
-                width: 250,
-              ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
               const Text(
-                'Welcome back!',
+                'Sign in',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 24,
+                  fontSize: 30,
                   color: Color(0xFF2E3E5C),
                 ),
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 8),
               const Text(
-                'Please enter your account details',
+                'Hi, Welcome back you\'ve been missed!',
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
-                  fontSize: 16,
+                  fontSize: 14,
                   color: Color(0xFF9FA5C0),
                 ),
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 24),
               _buildTextField(
                 controller: _emailController,
                 hintText: 'Email or phone number',
                 prefixIcon: Icons.mail_outline_rounded,
               ),
-              const SizedBox(height: 15),
+              const SizedBox(height: 12),
               _buildTextField(
                 controller: _passwordController,
                 hintText: 'Password',
                 prefixIcon: Icons.lock_outline_rounded,
                 isPassword: true,
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 6),
+              Align(
+                alignment: Alignment.centerRight,
+                child: GestureDetector(
+                  onTap: () {},
+                  child: const Text(
+                    'Forget Password?',
+                    style: TextStyle(
+                      color: Color(0xFFFFA500),
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 12),
               _buildLoginButton(),
-              const SizedBox(height: 20),
+              const SizedBox(height: 40),
               const Text(
-                'Or continue with',
+                'Or sign in with',
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
-                  fontSize: 16,
+                  fontSize: 14,
                   color: Color(0xFF9FA5C0),
                 ),
               ),
-              const SizedBox(height: 20),
-              _buildGoogleButton(),
-              const SizedBox(height: 20),
+              const SizedBox(height: 16),
+              _buildSocialLoginButtons(),
+              const SizedBox(height: 16),
               _buildSignUpRow(),
             ],
           ),
@@ -142,24 +153,25 @@ class _LoginPageState extends State<LoginPage> {
       decoration: InputDecoration(
         filled: true,
         fillColor: Colors.white,
-        contentPadding: const EdgeInsets.all(15),
+        contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 0),
         hintText: hintText,
-        hintStyle: const TextStyle(color: Color(0xffDDDADA), fontSize: 16),
-        prefixIcon: Icon(prefixIcon),
+        hintStyle: const TextStyle(color: Color(0xffDDDADA), fontSize: 14),
+        prefixIcon: Icon(prefixIcon, size: 20),
         suffixIcon: isPassword
             ? IconButton(
-                icon:
-                    Icon(_isObscure ? Icons.visibility_off : Icons.visibility),
+                icon: Icon(_isObscure ? Icons.visibility_off : Icons.visibility,
+                    size: 20),
                 onPressed: () => setState(() => _isObscure = !_isObscure),
               )
             : null,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
-          borderSide: const BorderSide(color: Color(0xFFD0DBEA), width: 1.0),
+        border: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Color(0xFFD0DBEA), width: 1.0),
         ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
-          borderSide: const BorderSide(color: Color(0xFFFD8B51), width: 2.0),
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Color(0xFFFD8B51), width: 2.0),
+        ),
+        enabledBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(color: Color(0xFFD0DBEA), width: 1.0),
         ),
       ),
     );
@@ -170,47 +182,61 @@ class _LoginPageState extends State<LoginPage> {
       onPressed: _isLoading ? null : _login,
       style: ElevatedButton.styleFrom(
         backgroundColor: const Color(0xFFFD8B51),
-        minimumSize: const Size(double.infinity, 56),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+        minimumSize: const Size(double.infinity, 48),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       ),
       child: _isLoading
-          ? CircularProgressIndicator(color: Colors.white)
+          ? CircularProgressIndicator(color: Colors.white, strokeWidth: 2)
           : const Text(
               'Login',
-              style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18,
-                  color: Colors.white),
+              style: TextStyle(fontSize: 16, color: Colors.white),
             ),
     );
   }
 
-  Widget _buildGoogleButton() {
-    return ElevatedButton(
-      onPressed: () {
-        // Implement Google Sign-In
-      },
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.white,
-        minimumSize: const Size(double.infinity, 56),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
-          side: BorderSide(color: Colors.grey.shade300),
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset('assets/icons/Google.png', height: 24),
-          const SizedBox(width: 10),
-          const Text(
-            'Continue with Google',
-            style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 16,
-                color: Colors.black87),
+  Widget _buildSocialLoginButtons() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        _buildSocialButton('Google', 'assets/icons/google-logo.png'),
+        _buildSocialButton('Facebook', 'assets/icons/facebook-logo.png'),
+        _buildSocialButton('GitHub', 'assets/icons/github-logo.png'),
+      ],
+    );
+  }
+
+  Widget _buildSocialButton(String text, String iconPath) {
+    return Expanded(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        child: ElevatedButton(
+          onPressed: () {
+            // Implement social login functionality
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.white,
+            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12),
+              side: BorderSide(color: Colors.grey.shade300),
+            ),
           ),
-        ],
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(iconPath, height: 24),
+              const SizedBox(width: 8),
+              Text(
+                text,
+                style: const TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                  color: Colors.black87,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -221,10 +247,7 @@ class _LoginPageState extends State<LoginPage> {
       children: [
         const Text(
           'Don\'t have an account?',
-          style: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontSize: 14,
-              color: Color(0xFF2E3E5C)),
+          style: TextStyle(fontSize: 14, color: Color(0xFF9FA5C0)),
         ),
         TextButton(
           onPressed: () {
@@ -233,10 +256,7 @@ class _LoginPageState extends State<LoginPage> {
           },
           child: const Text(
             'Sign up',
-            style: TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 16,
-                color: Color(0xFF1FCC79)),
+            style: TextStyle(fontSize: 14, color: Color(0xFFFD8B51)),
           ),
         )
       ],
