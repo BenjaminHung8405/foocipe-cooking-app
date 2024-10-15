@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../widgets/expandable_text.dart';
 
 class RecipePage extends StatefulWidget {
   final String recipeId;
@@ -109,15 +110,6 @@ class _RecipePageState extends State<RecipePage> {
             ),
           ],
         ),
-        title: Text(
-          recipe['name'],
-          style: const TextStyle(
-            fontFamily: 'Playfair Display',
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        titlePadding: const EdgeInsets.only(left: 16, bottom: 16),
       ),
       leading: IconButton(
         icon: const Icon(Icons.arrow_back, color: Colors.white),
@@ -142,11 +134,21 @@ class _RecipePageState extends State<RecipePage> {
               ),
             ),
           ),
-          IconButton(
-            icon: const Icon(Icons.favorite_border, color: Colors.red),
-            onPressed: () {
-              // TODO: Implement favorite functionality
-            },
+          Row(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.feedback, color: Colors.blue),
+                onPressed: () {
+                  // TODO: Implement feedback functionality
+                },
+              ),
+              IconButton(
+                icon: const Icon(Icons.favorite_border, color: Colors.red),
+                onPressed: () {
+                  // TODO: Implement favorite functionality
+                },
+              ),
+            ],
           ),
         ],
       ),
@@ -154,48 +156,87 @@ class _RecipePageState extends State<RecipePage> {
   }
 
   Widget _buildInfoSection(Map<String, dynamic> recipe) {
+    final List<Color> colors = [
+      Colors.blue,
+      Colors.green,
+      Colors.orange,
+      Colors.purple,
+    ];
+
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 16),
-      decoration: BoxDecoration(
-        color: Colors.orange.withOpacity(0.1),
-      ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
+          _buildInfoItem(Icons.access_time, '${recipe['prep_time']} min',
+              'Prep', colors[0]),
           _buildInfoItem(
-              Icons.access_time, '${recipe['prep_time']} min', 'Prep'),
-          _buildInfoItem(Icons.whatshot, '${recipe['cook_time']} min', 'Cook'),
-          _buildInfoItem(Icons.restaurant, '${recipe['servings']}', 'Servings'),
+              Icons.whatshot, '${recipe['cook_time']} min', 'Cook', colors[1]),
           _buildInfoItem(
-              Icons.fitness_center, recipe['difficulty'], 'Difficulty'),
+              Icons.restaurant, '${recipe['servings']}', 'Servings', colors[2]),
+          _buildInfoItem(Icons.fitness_center, recipe['difficulty'],
+              'Difficulty', colors[3]),
         ],
       ),
     );
   }
 
-  Widget _buildInfoItem(IconData icon, String value, String label) {
-    return Column(
-      children: [
-        Icon(icon, color: Colors.orange),
-        const SizedBox(height: 4),
-        Text(
-          value,
-          style: const TextStyle(fontWeight: FontWeight.bold),
+  Widget _buildInfoItem(
+      IconData icon, String value, String label, Color color) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.all(8),
+        margin: const EdgeInsets.symmetric(horizontal: 4),
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(8),
         ),
-        Text(
-          label,
-          style: TextStyle(color: Colors.grey[600], fontSize: 12),
+        child: Column(
+          children: [
+            Icon(icon, color: color),
+            const SizedBox(height: 4),
+            Text(
+              value,
+              style: const TextStyle(fontWeight: FontWeight.bold),
+              textAlign: TextAlign.center,
+            ),
+            Text(
+              label,
+              style: TextStyle(color: Colors.grey[600], fontSize: 12),
+              textAlign: TextAlign.center,
+            ),
+          ],
         ),
-      ],
+      ),
     );
   }
 
   Widget _buildDescription(Map<String, dynamic> recipe) {
+    const int maxLines = 3;
+    final String description = recipe['description'];
+
     return Padding(
       padding: const EdgeInsets.all(16),
-      child: Text(
-        recipe['description'],
-        style: const TextStyle(fontSize: 16, height: 1.5),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Description',
+            style: TextStyle(
+              fontFamily: 'Playfair Display',
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          const SizedBox(height: 8),
+          ExpandableText(
+            text: description,
+            maxLines: maxLines,
+            style: const TextStyle(fontSize: 16, height: 1.5),
+            expandText: 'Read more',
+            collapseText: 'Show less',
+            linkColor: Colors.blue,
+          ),
+        ],
       ),
     );
   }
