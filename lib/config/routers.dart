@@ -4,13 +4,18 @@ import '../presentation/pages/login_page.dart';
 import '../presentation/pages/register_page.dart';
 import '../presentation/pages/welcome_page.dart';
 import '../presentation/pages/recipe_page.dart';
-import '../presentation/pages/product_page.dart';
+import '../presentation/pages/Product/product_page.dart';
+import '../presentation/pages/Product/product_shop_page.dart';
+import '../presentation/pages/Recipe/recipe_management_page.dart';
 
 final Map<String, WidgetBuilder> routes = {
   '/': (context) => const WelcomePage(),
   '/home': (context) => HomePage(),
   '/login': (context) => const LoginPage(),
   '/register': (context) => const RegisterPage(),
+  '/recipe': (context) => const RecipeManagementPage(),
+  '/product': (context) => const ProductShopPage(),
+  '/recipe_management': (context) => const RecipeManagementPage(),
 };
 
 Route<dynamic> generateRoute(RouteSettings settings) {

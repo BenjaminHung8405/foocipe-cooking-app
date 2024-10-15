@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../widgets/recipe_card.dart';
+import '../layouts/main_layout.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -60,7 +61,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return MainLayout(
+        child: SafeArea(
       child: Scaffold(
         body: NestedScrollView(
           floatHeaderSlivers: true,
@@ -88,7 +90,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ),
-    );
+    ));
   }
 
   SliverAppBar _appBar() {
