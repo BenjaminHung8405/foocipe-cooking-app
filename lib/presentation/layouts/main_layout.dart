@@ -32,7 +32,7 @@ class _MainLayoutState extends State<MainLayout> {
         Navigator.pushNamed(context, '/cart');
         break;
       case 4:
-        Navigator.pushNamed(context, '/setting/user');
+        Navigator.pushNamed(context, '/setting');
         break;
     }
   }

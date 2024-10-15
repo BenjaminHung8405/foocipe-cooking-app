@@ -7,6 +7,7 @@ import '../presentation/pages/recipe_page.dart';
 import '../presentation/pages/Product/product_page.dart';
 import '../presentation/pages/Product/product_shop_page.dart';
 import '../presentation/pages/Recipe/recipe_management_page.dart';
+import '../presentation/pages/SettingPage/setting_page.dart';
 
 final Map<String, WidgetBuilder> routes = {
   '/': (context) => const WelcomePage(),
@@ -16,6 +17,7 @@ final Map<String, WidgetBuilder> routes = {
   '/recipe': (context) => const RecipeManagementPage(),
   '/product': (context) => const ProductShopPage(),
   '/recipe_management': (context) => const RecipeManagementPage(),
+  '/setting': (context) => const SettingPage(),
 };
 
 Route<dynamic> generateRoute(RouteSettings settings) {
