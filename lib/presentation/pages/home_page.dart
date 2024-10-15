@@ -61,10 +61,10 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20),
-        child: Scaffold(
-          appBar: appBar(),
+      child: Scaffold(
+        body: NestedScrollView(
+          floatHeaderSlivers: true,
+          headerSliverBuilder: (context, innerBoxIsScrolled) => [_appBar()],
           body: CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
@@ -91,15 +91,18 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  AppBar appBar() {
-    return AppBar(
-      toolbarHeight: 100,
+  SliverAppBar _appBar() {
+    return SliverAppBar(
+      floating: true,
+      snap: true,
+      toolbarHeight: 80,
       backgroundColor: Colors.white,
+      scrolledUnderElevation: 0,
       leading: GestureDetector(
         onTap: () {},
         child: Container(
             alignment: Alignment.center,
-            width: 37,
+            width: 20,
             child: Image(
               image: AssetImage('assets/icons/list-button.png'),
             )),
@@ -111,12 +114,11 @@ class _HomePageState extends State<HomePage> {
     return Container(
       padding: const EdgeInsets.only(
         left: 20,
-        right: 150,
       ),
-      child: Text('What would you like to Cook?',
+      child: Text('What would you\nlike to Cook?',
           style: TextStyle(
               color: Colors.black,
-              fontSize: 60,
+              fontSize: 50,
               fontWeight: FontWeight.w600,
               height: 0.8)),
     );
@@ -173,7 +175,7 @@ class _HomePageState extends State<HomePage> {
     return Container(
       width: 100,
       decoration: BoxDecoration(
-        color: category.boxColor.withOpacity(0.3),
+        color: category.boxColor.withOpacity(0.25),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Column(
@@ -187,7 +189,7 @@ class _HomePageState extends State<HomePage> {
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.1),
+                  color: Colors.grey.withOpacity(0.3),
                   spreadRadius: 2,
                   blurRadius: 5,
                   offset: Offset(0, 2),
@@ -289,10 +291,10 @@ class _HomePageState extends State<HomePage> {
           hintText: 'Search for your recipe',
           hintStyle: const TextStyle(
               color: Color.fromARGB(255, 206, 203, 203),
-              fontSize: 35,
+              fontSize: 25,
               fontWeight: FontWeight.w400),
           prefixIcon: Padding(
-            padding: EdgeInsets.only(left: 20, right: 20),
+            padding: EdgeInsets.only(left: 15, right: 10),
             child: Icon(
               Icons.search_rounded,
               size: 30,
