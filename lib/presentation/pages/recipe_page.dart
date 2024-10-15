@@ -43,9 +43,156 @@ class _RecipePageState extends State<RecipePage> {
         recipeData = json.decode(response.body);
       });
     } else {
-      // Handle error
       print('Failed to load recipe data');
     }
+  }
+
+  Future<void> _showPantryDetails(int pantryId) async {
+    final accessToken = await storage.read(key: 'access_token');
+    if (accessToken == null) {
+      print('No access token found');
+      return;
+    }
+
+    final response = await http.get(
+      Uri.parse(
+          'https://foocipe-recipe-service.onrender.com/v1/pantry/$pantryId'),
+      headers: {
+        'access_token': accessToken,
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final pantryData = json.decode(response.body);
+      _showPantryDetailDialog(pantryData);
+    } else {
+      print('Failed to load pantry data');
+    }
+  }
+
+  void _showPantryDetailDialog(Map<String, dynamic> pantryData) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.orange[100],
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(4)),
+                  child: Image.network(
+                    pantryData['image_urls'][0],
+                    height: 200,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        pantryData['name'],
+                        style: const TextStyle(
+                            fontSize: 22, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 4),
+                      Wrap(
+                        spacing: 8,
+                        runSpacing: 8,
+                        children: [
+                          _buildCategoryChip(pantryData['category']),
+                          ...pantryData['sub_categories'].map<Widget>(
+                              (subCategory) => _buildCategoryChip(subCategory)),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        pantryData['description'],
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      const SizedBox(height: 24),
+                      Row(
+                        children: [
+                          _buildActionButton(Icons.more_horiz,
+                              Colors.blue.withOpacity(0.7), 'More', () {}),
+                          const SizedBox(width: 8),
+                          _buildActionButton(Icons.favorite,
+                              Colors.red.withOpacity(0.7), 'Love', () {}),
+                          const SizedBox(width: 8),
+                          _buildActionButton(Icons.shopping_cart,
+                              Colors.green.withOpacity(0.7), 'Buy', () {
+                            Navigator.pushNamed(
+                                context, '/product/${pantryData['id']}');
+                          }),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildCategoryChip(String category) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: BoxDecoration(
+        color: _getCategoryColor(category).withOpacity(0.7), // Làm nhạt màu
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Text(
+        category,
+        style:
+            const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+      ),
+    );
+  }
+
+  Color _getCategoryColor(String category) {
+    final colors = {
+      'Rau củ': Colors.green,
+      'Gia vị': Colors.red,
+      'Thực phẩm tươi sống': Colors.blue,
+    };
+    return colors[category] ?? Colors.grey;
+  }
+
+  Widget _buildActionButton(
+      IconData icon, Color color, String label, VoidCallback onPressed) {
+    return Expanded(
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: color,
+          padding: const EdgeInsets.symmetric(vertical: 12),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        onPressed: onPressed,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, color: Colors.white),
+            const SizedBox(width: 8),
+            Text(
+              label,
+              style: const TextStyle(color: Colors.white),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -138,15 +285,11 @@ class _RecipePageState extends State<RecipePage> {
             children: [
               IconButton(
                 icon: const Icon(Icons.feedback, color: Colors.blue),
-                onPressed: () {
-                  // TODO: Implement feedback functionality
-                },
+                onPressed: () {},
               ),
               IconButton(
                 icon: const Icon(Icons.favorite_border, color: Colors.red),
-                onPressed: () {
-                  // TODO: Implement favorite functionality
-                },
+                onPressed: () {},
               ),
             ],
           ),
@@ -253,6 +396,7 @@ class _RecipePageState extends State<RecipePage> {
           return _buildListItem(
             '${ingredient['quantity']} ${ingredient['pantry_name']}',
             Icons.check_circle_outline,
+            onTap: () => _showPantryDetails(ingredient['pantry_id']),
           );
         },
       ),
@@ -271,6 +415,7 @@ class _RecipePageState extends State<RecipePage> {
           return _buildListItem(
             '${tool['quantity']} ${tool['pantry_name']}',
             Icons.kitchen,
+            onTap: () => _showPantryDetails(tool['pantry_id']),
           );
         },
       ),
@@ -313,15 +458,18 @@ class _RecipePageState extends State<RecipePage> {
     );
   }
 
-  Widget _buildListItem(String text, IconData icon) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Row(
-        children: [
-          Icon(icon, size: 20, color: Colors.orange),
-          const SizedBox(width: 16),
-          Expanded(child: Text(text, style: const TextStyle(fontSize: 16))),
-        ],
+  Widget _buildListItem(String text, IconData icon, {VoidCallback? onTap}) {
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: Row(
+          children: [
+            Icon(icon, size: 20, color: Colors.orange),
+            const SizedBox(width: 16),
+            Expanded(child: Text(text, style: const TextStyle(fontSize: 16))),
+          ],
+        ),
       ),
     );
   }

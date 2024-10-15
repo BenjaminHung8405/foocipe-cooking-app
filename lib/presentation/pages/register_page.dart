@@ -258,9 +258,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget _buildSocialButton(String text, String iconPath) {
     return Expanded(
       child: ElevatedButton(
-        onPressed: () {
-          // Implement social signup functionality
-        },
+        onPressed: () {},
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.white,
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),

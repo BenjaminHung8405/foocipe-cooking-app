@@ -25,14 +25,11 @@ class _WelcomePageState extends State<WelcomePage> {
       print(access_token);
 
       if (access_token != null) {
-        // Both access_token and user_id exist, navigate to home page
         Navigator.of(context).pushReplacementNamed('/home');
       } else {
-        // Either access_token or user_id is missing, navigate to login page
         Navigator.of(context).pushReplacementNamed('/login');
       }
     } catch (e) {
-      // If there's an error reading from storage, navigate to login page
       Navigator.of(context).pushReplacementNamed('/login');
     }
   }
@@ -42,7 +39,6 @@ class _WelcomePageState extends State<WelcomePage> {
     return Scaffold(
       body: Stack(
         children: [
-          // Background image
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
