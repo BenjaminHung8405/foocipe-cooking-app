@@ -46,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
             key: 'refresh_token', value: data['data']['refresh_token']);
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => const HomePage()),
+          MaterialPageRoute(builder: (context) => HomePage()),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(

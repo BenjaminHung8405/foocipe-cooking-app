@@ -3,6 +3,7 @@ import 'package:foocipe_cooking_app/model/category.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../widgets/recipe_card.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -32,7 +33,6 @@ class _HomePageState extends State<HomePage> {
       final accessToken = await storage.read(key: 'access_token');
 
       if (accessToken == null) {
-        // Handle the case where there's no access token
         print('No access token found');
         return;
       }
@@ -51,11 +51,9 @@ class _HomePageState extends State<HomePage> {
           recipes = List<Map<String, dynamic>>.from(data['recipes']);
         });
       } else {
-        // Handle error responses
         print('Failed to fetch recipes: ${response.statusCode}');
       }
     } catch (e) {
-      // Handle any exceptions that occur during the request
       print('Error fetching recipes: $e');
     }
   }
@@ -64,121 +62,206 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: ListView(
-          children: [
-            _searchField(),
-            const SizedBox(height: 20),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Text(
-                'What would you like to Cook?',
-                style: TextStyle(
-                  color: Color(0xFF3E5481),
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
+        body: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const SizedBox(height: 20),
+                  _buildHeader(),
+                  _searchField(),
+                  _buildCategorySection(),
+                ],
               ),
             ),
-            const SizedBox(height: 20),
-            _recipeSlider(),
-            const SizedBox(height: 30),
-            Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: Text(
-                'Category',
-                style: TextStyle(
-                  color: Color(0xFF3E5481),
-                  fontSize: 20,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-            ),
-            const SizedBox(height: 15),
-            _categoryList(),
+            _buildCategoryList(),
+            SliverToBoxAdapter(child: const SizedBox(height: 20)),
+            _buildSectionTitle('Today\'s Recipes'),
+            _buildRecipeSlider(),
+            SliverToBoxAdapter(child: const SizedBox(height: 30)),
+            _buildSectionTitle('Recommended Recipes'),
+            _buildRecommendedRecipes(),
           ],
         ),
       ),
     );
   }
 
-  Widget _recipeSlider() {
-    return Container(
-      height: 220,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: recipes.length,
-        itemBuilder: (context, index) {
-          final recipe = recipes[index];
-          return Container(
-            width: 280,
-            margin: EdgeInsets.only(left: index == 0 ? 20 : 0, right: 20),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
-              image: DecorationImage(
-                image: NetworkImage(recipe['image_urls'][0]),
-                fit: BoxFit.cover,
+  Widget _buildHeader() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Text(
+        'What would you like to Cook?',
+        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+      ),
+    );
+  }
+
+  Widget _buildCategorySection() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            'Category',
+            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                  color: Color(0xFF3E5481),
+                  fontWeight: FontWeight.w700,
+                ),
+          ),
+          TextButton(
+            onPressed: () {},
+            child: Text(
+              'See all',
+              style: TextStyle(
+                color: Theme.of(context).primaryColor,
+                fontWeight: FontWeight.w600,
               ),
             ),
-            child: Stack(
-              children: [
-                Positioned(
-                  bottom: 0,
-                  left: 0,
-                  right: 0,
-                  child: Container(
-                    padding: EdgeInsets.all(15),
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.6),
-                      borderRadius: BorderRadius.only(
-                        bottomLeft: Radius.circular(20),
-                        bottomRight: Radius.circular(20),
-                      ),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          recipe['name'],
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(height: 5),
-                        Row(
-                          children: [
-                            Icon(Icons.access_time,
-                                color: Colors.white, size: 16),
-                            SizedBox(width: 5),
-                            Text(
-                              '${recipe['cook_time']} min',
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            SizedBox(width: 20),
-                            Icon(Icons.star, color: Colors.white, size: 16),
-                            SizedBox(width: 5),
-                            Text(
-                              recipe['difficulty'],
-                              style: TextStyle(color: Colors.white),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCategoryList() {
+    return SliverToBoxAdapter(
+      child: SizedBox(
+        height: 120,
+        child: ListView.builder(
+          itemCount: categories.length,
+          scrollDirection: Axis.horizontal,
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: EdgeInsets.only(right: 16),
+              child: _buildCategoryItem(categories[index]),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCategoryItem(CategoryModel category) {
+    return Container(
+      width: 100,
+      decoration: BoxDecoration(
+        color: category.boxColor.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(
+          color: category.boxColor.withOpacity(0.3),
+          width: 1,
+        ),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 60,
+            height: 60,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.1),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: Offset(0, 2),
                 ),
               ],
             ),
-          );
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Image(image: AssetImage(category.image_urls)),
+            ),
+          ),
+          SizedBox(height: 8),
+          Text(
+            category.name,
+            style: TextStyle(
+              color: Color(0xFF3E5481),
+              fontWeight: FontWeight.w600,
+              fontSize: 14,
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSectionTitle(String title) {
+    return SliverToBoxAdapter(
+      child: Padding(
+        padding: const EdgeInsets.only(left: 20, bottom: 12),
+        child: Text(
+          title,
+          style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRecipeSlider() {
+    return SliverToBoxAdapter(
+      child: SizedBox(
+        height: 230,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: recipes.length,
+          itemBuilder: (context, index) {
+            return Padding(
+              padding: EdgeInsets.only(left: index == 0 ? 20 : 0, right: 16),
+              child: RecipeCardV1(recipe: recipes[index]),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRecommendedRecipes() {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        (context, index) {
+          if (index < recipes.length) {
+            return Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
+              child: RecipeCardV2(recipe: recipes[index]),
+            );
+          } else if (recipes.length > 5 && index == recipes.length) {
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: Center(
+                child: ElevatedButton(
+                  onPressed: () {},
+                  child: Text('More'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Theme.of(context).primaryColor,
+                    padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                  ),
+                ),
+              ),
+            );
+          }
+          return null;
         },
+        childCount: recipes.length > 5 ? recipes.length + 1 : recipes.length,
       ),
     );
   }
 
   Container _searchField() {
     return Container(
-      margin: EdgeInsets.only(top: 40, left: 20, right: 20),
+      margin: EdgeInsets.only(top: 10, left: 20, right: 20),
       child: TextField(
         decoration: InputDecoration(
           filled: true,
@@ -191,57 +274,10 @@ class _HomePageState extends State<HomePage> {
             child: Icon(Icons.search_rounded),
           ),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30),
+            borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide.none,
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _categoryList() {
-    return Container(
-      height: 120,
-      child: ListView.separated(
-        itemCount: categories.length,
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        scrollDirection: Axis.horizontal,
-        separatorBuilder: (context, index) => const SizedBox(width: 25),
-        itemBuilder: (context, index) {
-          return Container(
-            width: 100,
-            decoration: BoxDecoration(
-              color: categories[index].boxColor.withOpacity(0.3),
-              borderRadius: BorderRadius.circular(16),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Container(
-                  width: 50,
-                  height: 50,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child:
-                        Image(image: AssetImage(categories[index].image_urls)),
-                  ),
-                ),
-                Text(
-                  categories[index].name,
-                  style: const TextStyle(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14,
-                  ),
-                )
-              ],
-            ),
-          );
-        },
       ),
     );
   }
