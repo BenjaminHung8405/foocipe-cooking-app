@@ -12,7 +12,6 @@ final Map<String, WidgetBuilder> routes = {
   '/register': (context) => const RegisterPage(),
 };
 
-// Add this function to handle dynamic routes
 Route<dynamic> generateRoute(RouteSettings settings) {
   if (settings.name?.startsWith('/recipe/') ?? false) {
     final recipeId = settings.name!.split('/').last;
@@ -22,7 +21,6 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     );
   }
 
-  // If no match is found, you can return a default route or throw an error
   return MaterialPageRoute(
     builder: (_) => Scaffold(body: Center(child: Text('Route not found'))),
   );
