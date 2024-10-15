@@ -109,8 +109,8 @@ class _RegisterPageState extends State<RegisterPage> {
               const Text(
                 'Create an Account',
                 style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 30,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 50,
                   color: Color(0xFF2E3E5C),
                 ),
               ),
@@ -118,8 +118,8 @@ class _RegisterPageState extends State<RegisterPage> {
               const Text(
                 'Please fill in the form to continue',
                 style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 20,
                   color: Color(0xFF9FA5C0),
                 ),
               ),
@@ -164,7 +164,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 'Or sign up with',
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
-                  fontSize: 14,
+                  fontSize: 20,
                   color: Color(0xFF9FA5C0),
                 ),
                 textAlign: TextAlign.center,
@@ -192,12 +192,17 @@ class _RegisterPageState extends State<RegisterPage> {
       controller: controller,
       obscureText: isPassword && _isObscure,
       keyboardType: keyboardType,
+      style: const TextStyle(
+          color: Colors.black, fontSize: 25, fontWeight: FontWeight.w500),
       decoration: InputDecoration(
         filled: true,
         fillColor: Colors.white,
         contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 0),
         hintText: hintText,
-        hintStyle: const TextStyle(color: Color(0xffDDDADA), fontSize: 14),
+        hintStyle: const TextStyle(
+            color: Color(0xffDDDADA),
+            fontSize: 25,
+            fontWeight: FontWeight.w500),
         prefixIcon: Icon(prefixIcon, size: 20),
         suffixIcon: isPassword
             ? IconButton(
@@ -232,7 +237,7 @@ class _RegisterPageState extends State<RegisterPage> {
           ? CircularProgressIndicator(color: Colors.white, strokeWidth: 2)
           : Text(
               _isEmailVerified ? 'Sign Up' : 'Verify Email',
-              style: TextStyle(fontSize: 16, color: Colors.white),
+              style: TextStyle(fontSize: 25, color: Colors.white),
             ),
     );
   }
@@ -274,7 +279,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 text,
                 style: const TextStyle(
                   fontWeight: FontWeight.w600,
-                  fontSize: 10,
+                  fontSize: 20,
                   color: Colors.black87,
                 ),
                 overflow: TextOverflow.ellipsis,
@@ -292,7 +297,11 @@ class _RegisterPageState extends State<RegisterPage> {
       children: [
         const Text(
           'Already have an account?',
-          style: TextStyle(fontSize: 14, color: Color(0xFF9FA5C0)),
+          style: TextStyle(
+            fontSize: 25,
+            color: Color(0xFF9FA5C0),
+            fontWeight: FontWeight.w400,
+          ),
         ),
         TextButton(
           onPressed: () {
@@ -303,7 +312,7 @@ class _RegisterPageState extends State<RegisterPage> {
           },
           child: const Text(
             'Sign In',
-            style: TextStyle(fontSize: 14, color: Color(0xFFFD8B51)),
+            style: TextStyle(fontSize: 25, color: Color(0xFFFD8B51)),
           ),
         )
       ],

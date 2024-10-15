@@ -41,7 +41,7 @@ class RecipeCardV1 extends StatelessWidget {
                 Text(
                   recipe['name'],
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.w600,
                         color: Color(0xFF3E5481),
                       ),
                   maxLines: 2,

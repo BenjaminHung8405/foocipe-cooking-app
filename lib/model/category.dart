@@ -36,7 +36,7 @@ class CategoryModel {
 
     categories.add(CategoryModel(
         id: '4',
-        name: 'Dụng cụ Nhà Bếp',
+        name: 'Dụng cụ',
         image_urls: 'assets/icons/spoon.png',
         boxColor: Color(0xffFE8000)));
 

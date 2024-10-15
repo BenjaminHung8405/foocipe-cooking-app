@@ -78,16 +78,15 @@ class _LoginPageState extends State<LoginPage> {
                 'Sign in',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
-                  fontSize: 30,
+                  fontSize: 40,
                   color: Color(0xFF2E3E5C),
                 ),
               ),
-              const SizedBox(height: 8),
               const Text(
                 'Hi, Welcome back you\'ve been missed!',
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
-                  fontSize: 14,
+                  fontSize: 20,
                   color: Color(0xFF9FA5C0),
                 ),
               ),
@@ -113,7 +112,7 @@ class _LoginPageState extends State<LoginPage> {
                     'Forget Password?',
                     style: TextStyle(
                       color: Color(0xFFFFA500),
-                      fontSize: 12,
+                      fontSize: 20,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -121,12 +120,12 @@ class _LoginPageState extends State<LoginPage> {
               ),
               const SizedBox(height: 12),
               _buildLoginButton(),
-              const SizedBox(height: 40),
+              const SizedBox(height: 16),
               const Text(
                 'Or sign in with',
                 style: TextStyle(
                   fontWeight: FontWeight.w500,
-                  fontSize: 14,
+                  fontSize: 25,
                   color: Color(0xFF9FA5C0),
                 ),
               ),
@@ -150,12 +149,17 @@ class _LoginPageState extends State<LoginPage> {
     return TextField(
       controller: controller,
       obscureText: isPassword && _isObscure,
+      style: const TextStyle(
+          color: Colors.black, fontSize: 25, fontWeight: FontWeight.w500),
       decoration: InputDecoration(
         filled: true,
         fillColor: Colors.white,
         contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 0),
         hintText: hintText,
-        hintStyle: const TextStyle(color: Color(0xffDDDADA), fontSize: 14),
+        hintStyle: const TextStyle(
+            color: Color(0xffDDDADA),
+            fontSize: 25,
+            fontWeight: FontWeight.w400),
         prefixIcon: Icon(prefixIcon, size: 20),
         suffixIcon: isPassword
             ? IconButton(
@@ -189,7 +193,10 @@ class _LoginPageState extends State<LoginPage> {
           ? CircularProgressIndicator(color: Colors.white, strokeWidth: 2)
           : const Text(
               'Login',
-              style: TextStyle(fontSize: 16, color: Colors.white),
+              style: TextStyle(
+                  fontSize: 25,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w600),
             ),
     );
   }
@@ -230,7 +237,7 @@ class _LoginPageState extends State<LoginPage> {
                 text,
                 style: const TextStyle(
                   fontWeight: FontWeight.w600,
-                  fontSize: 12,
+                  fontSize: 20,
                   color: Colors.black87,
                 ),
               ),
@@ -247,7 +254,7 @@ class _LoginPageState extends State<LoginPage> {
       children: [
         const Text(
           'Don\'t have an account?',
-          style: TextStyle(fontSize: 14, color: Color(0xFF9FA5C0)),
+          style: TextStyle(fontSize: 25, color: Color(0xFF9FA5C0)),
         ),
         TextButton(
           onPressed: () {
@@ -256,7 +263,7 @@ class _LoginPageState extends State<LoginPage> {
           },
           child: const Text(
             'Sign up',
-            style: TextStyle(fontSize: 14, color: Color(0xFFFD8B51)),
+            style: TextStyle(fontSize: 25, color: Color(0xFFFD8B51)),
           ),
         )
       ],

@@ -61,42 +61,64 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        body: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 20),
-                  _buildHeader(),
-                  _searchField(),
-                  _buildCategorySection(),
-                ],
+      child: Padding(
+        padding: const EdgeInsets.only(left: 20, right: 20),
+        child: Scaffold(
+          appBar: appBar(),
+          body: CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildHeader(),
+                    _searchField(),
+                    _buildCategorySection(),
+                  ],
+                ),
               ),
-            ),
-            _buildCategoryList(),
-            SliverToBoxAdapter(child: const SizedBox(height: 20)),
-            _buildSectionTitle('Today\'s Recipes'),
-            _buildRecipeSlider(),
-            SliverToBoxAdapter(child: const SizedBox(height: 30)),
-            _buildSectionTitle('Recommended Recipes'),
-            _buildRecommendedRecipes(),
-          ],
+              _buildCategoryList(),
+              SliverToBoxAdapter(child: const SizedBox(height: 20)),
+              _buildSectionTitle('Today\'s Recipes'),
+              _buildRecipeSlider(),
+              SliverToBoxAdapter(child: const SizedBox(height: 30)),
+              _buildSectionTitle('Recommended Recipes'),
+              _buildRecommendedRecipes(),
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Widget _buildHeader() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Text(
-        'What would you like to Cook?',
-        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-              fontWeight: FontWeight.bold,
-            ),
+  AppBar appBar() {
+    return AppBar(
+      toolbarHeight: 100,
+      backgroundColor: Colors.white,
+      leading: GestureDetector(
+        onTap: () {},
+        child: Container(
+            alignment: Alignment.center,
+            width: 37,
+            child: Image(
+              image: AssetImage('assets/icons/list-button.png'),
+            )),
       ),
+    );
+  }
+
+  Widget _buildHeader() {
+    return Container(
+      padding: const EdgeInsets.only(
+        left: 20,
+        right: 150,
+      ),
+      child: Text('What would you like to Cook?',
+          style: TextStyle(
+              color: Colors.black,
+              fontSize: 60,
+              fontWeight: FontWeight.w600,
+              height: 0.8)),
     );
   }
 
@@ -109,18 +131,18 @@ class _HomePageState extends State<HomePage> {
           Text(
             'Category',
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  color: Color(0xFF3E5481),
-                  fontWeight: FontWeight.w700,
-                ),
+                color: Color.fromARGB(255, 29, 40, 61),
+                fontWeight: FontWeight.w600,
+                fontSize: 40),
           ),
           TextButton(
             onPressed: () {},
             child: Text(
               'See all',
               style: TextStyle(
-                color: Theme.of(context).primaryColor,
-                fontWeight: FontWeight.w600,
-              ),
+                  color: Theme.of(context).primaryColor,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 25),
             ),
           ),
         ],
@@ -151,12 +173,8 @@ class _HomePageState extends State<HomePage> {
     return Container(
       width: 100,
       decoration: BoxDecoration(
-        color: category.boxColor.withOpacity(0.1),
+        color: category.boxColor.withOpacity(0.3),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: category.boxColor.withOpacity(0.3),
-          width: 1,
-        ),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -185,9 +203,9 @@ class _HomePageState extends State<HomePage> {
           Text(
             category.name,
             style: TextStyle(
-              color: Color(0xFF3E5481),
+              color: Colors.black,
               fontWeight: FontWeight.w600,
-              fontSize: 14,
+              fontSize: 20,
             ),
           )
         ],
@@ -201,9 +219,10 @@ class _HomePageState extends State<HomePage> {
         padding: const EdgeInsets.only(left: 20, bottom: 12),
         child: Text(
           title,
-          style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.bold,
-              ),
+          style: Theme.of(context)
+              .textTheme
+              .titleLarge
+              ?.copyWith(fontWeight: FontWeight.w600, fontSize: 40),
         ),
       ),
     );
@@ -261,20 +280,26 @@ class _HomePageState extends State<HomePage> {
 
   Container _searchField() {
     return Container(
-      margin: EdgeInsets.only(top: 10, left: 20, right: 20),
+      margin: EdgeInsets.only(top: 20, left: 20, right: 20),
       child: TextField(
         decoration: InputDecoration(
           filled: true,
           fillColor: Color(0xFFF4F5F7),
-          contentPadding: const EdgeInsets.all(15),
-          hintText: 'Search',
-          hintStyle: const TextStyle(color: Color(0xffDDDADA), fontSize: 14),
+          contentPadding: const EdgeInsets.all(10),
+          hintText: 'Search for your recipe',
+          hintStyle: const TextStyle(
+              color: Color.fromARGB(255, 206, 203, 203),
+              fontSize: 35,
+              fontWeight: FontWeight.w400),
           prefixIcon: Padding(
-            padding: EdgeInsets.all(12),
-            child: Icon(Icons.search_rounded),
+            padding: EdgeInsets.only(left: 20, right: 20),
+            child: Icon(
+              Icons.search_rounded,
+              size: 30,
+            ),
           ),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(20),
             borderSide: BorderSide.none,
           ),
         ),

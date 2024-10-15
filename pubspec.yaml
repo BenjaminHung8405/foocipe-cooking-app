@@ -37,6 +37,7 @@ flutter:
     - assets/icons/pizza.png
     - assets/icons/spoon.png
     - assets/icons/watermelon.png
+    - assets/icons/list-button.png
     - assets/images/welcome_background-1.jpg
     - assets/images/welcome_background-2.jpg
     - assets/images/welcome_background-3.jpg
@@ -53,3 +54,13 @@ flutter:
           weight: 400
         - asset: 'fonts/SF-Pro-Display-SemiBold.otf'
           weight: 600
+          
+    - family: Dongle
+      fonts:
+        - asset: 'fonts/Dongle-Regular.ttf'
+          weight: 500
+        - asset: 'fonts/Dongle-Light.ttf'
+          weight: 400
+        - asset: 'fonts/Dongle-Bold.ttf'
+          weight: 600
+    
