@@ -21,6 +21,7 @@ class MyApp extends StatelessWidget {
       ),
       title: 'Pleno',
       initialRoute: '/',
+      onGenerateRoute: generateRoute,
       routes: routes,
     );
   }

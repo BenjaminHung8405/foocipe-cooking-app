@@ -7,62 +7,68 @@ class RecipeCardV1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 180,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-            child: Image.network(
-              recipe['image_urls'][0],
-              height: 120,
-              width: double.infinity,
-              fit: BoxFit.cover,
+    return InkWell(
+      onTap: () {
+        Navigator.pushNamed(context, '/recipe/${recipe['id']}');
+      },
+      child: Container(
+        width: 180,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 4,
+              offset: const Offset(0, 2),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  recipe['name'],
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: Color(0xFF3E5481),
-                      ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                const SizedBox(height: 8),
-                Row(
-                  children: [
-                    _buildInfoChip(
-                        Icons.access_time, '${recipe['cook_time']} min'),
-                    const SizedBox(width: 8),
-                    _buildInfoChip(Icons.star,
-                        recipe['average_rating'].toStringAsFixed(1)),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                _buildDifficultyChip(recipe['difficulty']),
-              ],
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(16)),
+              child: Image.network(
+                recipe['image_urls'][0],
+                height: 120,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    recipe['name'],
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: Color(0xFF3E5481),
+                        ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      _buildInfoChip(
+                          Icons.access_time, '${recipe['cook_time']} min'),
+                      const SizedBox(width: 8),
+                      _buildInfoChip(Icons.star,
+                          recipe['average_rating'].toStringAsFixed(1)),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  _buildDifficultyChip(recipe['difficulty']),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -102,62 +108,68 @@ class RecipeCardV2 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 120,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.1),
-            spreadRadius: 1,
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          ClipRRect(
-            borderRadius:
-                const BorderRadius.horizontal(left: Radius.circular(16)),
-            child: Image.network(
-              recipe['image_urls'][0],
-              width: 120,
-              height: 120,
-              fit: BoxFit.cover,
+    return InkWell(
+      onTap: () {
+        print(recipe['id']);
+        Navigator.pushNamed(context, '/recipe/${recipe['id']}');
+      },
+      child: Container(
+        height: 120,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          color: Colors.white,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              spreadRadius: 1,
+              blurRadius: 4,
+              offset: const Offset(0, 2),
             ),
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(12),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    recipe['name'],
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF3E5481),
-                        ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    children: [
-                      _buildInfoChip(
-                          Icons.access_time, '${recipe['cook_time']} min'),
-                      const SizedBox(width: 16),
-                      _buildInfoChip(Icons.star, recipe['difficulty']),
-                    ],
-                  ),
-                ],
+          ],
+        ),
+        child: Row(
+          children: [
+            ClipRRect(
+              borderRadius:
+                  const BorderRadius.horizontal(left: Radius.circular(16)),
+              child: Image.network(
+                recipe['image_urls'][0],
+                width: 120,
+                height: 120,
+                fit: BoxFit.cover,
               ),
             ),
-          ),
-        ],
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      recipe['name'],
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: Color(0xFF3E5481),
+                          ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        _buildInfoChip(
+                            Icons.access_time, '${recipe['cook_time']} min'),
+                        const SizedBox(width: 16),
+                        _buildInfoChip(Icons.star, recipe['difficulty']),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
