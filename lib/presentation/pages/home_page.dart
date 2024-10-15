@@ -64,52 +64,35 @@ class _HomePageState extends State<HomePage> {
     return MainLayout(
         child: SafeArea(
       child: Scaffold(
-        body: NestedScrollView(
-          floatHeaderSlivers: true,
-          headerSliverBuilder: (context, innerBoxIsScrolled) => [_appBar()],
-          body: CustomScrollView(
-            slivers: [
-              SliverToBoxAdapter(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildHeader(),
-                    _searchField(),
-                    _buildCategorySection(),
-                  ],
-                ),
+        body: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 20,
+                  ),
+                  _buildHeader(),
+                  _searchField(),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  _buildCategorySection(),
+                ],
               ),
-              _buildCategoryList(),
-              SliverToBoxAdapter(child: const SizedBox(height: 20)),
-              _buildSectionTitle('Today\'s Recipes'),
-              _buildRecipeSlider(),
-              SliverToBoxAdapter(child: const SizedBox(height: 30)),
-              _buildSectionTitle('Recommended Recipes'),
-              _buildRecommendedRecipes(),
-            ],
-          ),
+            ),
+            _buildCategoryList(),
+            SliverToBoxAdapter(child: const SizedBox(height: 40)),
+            _buildSectionTitle('Today\'s Recipes'),
+            _buildRecipeSlider(),
+            SliverToBoxAdapter(child: const SizedBox(height: 40)),
+            _buildSectionTitle('Recommended Recipes'),
+            _buildRecommendedRecipes(),
+          ],
         ),
       ),
     ));
-  }
-
-  SliverAppBar _appBar() {
-    return SliverAppBar(
-      floating: true,
-      snap: true,
-      toolbarHeight: 80,
-      backgroundColor: Colors.white,
-      scrolledUnderElevation: 0,
-      leading: GestureDetector(
-        onTap: () {},
-        child: Container(
-            alignment: Alignment.center,
-            width: 20,
-            child: Image(
-              image: AssetImage('assets/icons/list-button.png'),
-            )),
-      ),
-    );
   }
 
   Widget _buildHeader() {
@@ -119,10 +102,10 @@ class _HomePageState extends State<HomePage> {
       ),
       child: Text('What would you\nlike to Cook?',
           style: TextStyle(
-              color: Colors.black,
-              fontSize: 50,
-              fontWeight: FontWeight.w600,
-              height: 0.8)),
+            color: Colors.black,
+            fontSize: 35,
+            fontWeight: FontWeight.w700,
+          )),
     );
   }
 
@@ -136,8 +119,8 @@ class _HomePageState extends State<HomePage> {
             'Category',
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 color: Color.fromARGB(255, 29, 40, 61),
-                fontWeight: FontWeight.w600,
-                fontSize: 40),
+                fontWeight: FontWeight.w700,
+                fontSize: 25),
           ),
           TextButton(
             onPressed: () {},
@@ -146,7 +129,7 @@ class _HomePageState extends State<HomePage> {
               style: TextStyle(
                   color: Theme.of(context).primaryColor,
                   fontWeight: FontWeight.w600,
-                  fontSize: 25),
+                  fontSize: 18),
             ),
           ),
         ],
@@ -208,8 +191,8 @@ class _HomePageState extends State<HomePage> {
             category.name,
             style: TextStyle(
               color: Colors.black,
-              fontWeight: FontWeight.w600,
-              fontSize: 20,
+              fontWeight: FontWeight.w700,
+              fontSize: 18,
             ),
           )
         ],
@@ -226,7 +209,7 @@ class _HomePageState extends State<HomePage> {
           style: Theme.of(context)
               .textTheme
               .titleLarge
-              ?.copyWith(fontWeight: FontWeight.w600, fontSize: 40),
+              ?.copyWith(fontWeight: FontWeight.w700, fontSize: 25),
         ),
       ),
     );
@@ -293,7 +276,7 @@ class _HomePageState extends State<HomePage> {
           hintText: 'Search for your recipe',
           hintStyle: const TextStyle(
               color: Color.fromARGB(255, 206, 203, 203),
-              fontSize: 25,
+              fontSize: 18,
               fontWeight: FontWeight.w400),
           prefixIcon: Padding(
             padding: EdgeInsets.only(left: 15, right: 10),
