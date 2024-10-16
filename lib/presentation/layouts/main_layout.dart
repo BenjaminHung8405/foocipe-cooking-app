@@ -64,10 +64,12 @@ class _MainLayoutState extends State<MainLayout> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Theme.of(context).primaryColor,
-        unselectedItemColor: Colors.grey,
+        selectedItemColor: Color.fromARGB(255, 221, 105, 70),
+        unselectedItemColor: Color.fromARGB(255, 94, 89, 74),
         onTap: _onItemTapped,
         type: BottomNavigationBarType.fixed,
+        backgroundColor: Colors.white,
+        elevation: 10,
       ),
     );
   }

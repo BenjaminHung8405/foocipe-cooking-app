@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(
-                    height: 20,
+                    height: 30,
                   ),
                   _buildHeader(),
                   _searchField(),
@@ -100,12 +100,14 @@ class _HomePageState extends State<HomePage> {
       padding: const EdgeInsets.only(
         left: 20,
       ),
-      child: Text('What would you\nlike to Cook?',
-          style: TextStyle(
+      child: Text(
+        'What would you\nlike to Cook?',
+        style: TextStyle(
             color: Colors.black,
-            fontSize: 35,
+            fontSize: 30,
             fontWeight: FontWeight.w700,
-          )),
+            height: 1),
+      ),
     );
   }
 

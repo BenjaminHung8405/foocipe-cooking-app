@@ -7,11 +7,15 @@ class CartPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        title: Text('Cart'),
+        title: Text(
+          'Cart',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+        ),
         actions: [
           IconButton(
             icon: Icon(Icons.more_vert),
@@ -25,7 +29,7 @@ class CartPage extends StatelessWidget {
             padding: const EdgeInsets.all(16.0),
             child: Text(
               'Total 3 Items',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
           ),
           Expanded(
@@ -42,8 +46,16 @@ class CartPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: ElevatedButton(
-              child: Text('Checkout'),
+              child: Text(
+                'Checkout',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600),
+              ),
               style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
                 backgroundColor: Colors.green,
                 minimumSize: Size(double.infinity, 50),
               ),
@@ -92,7 +104,10 @@ class CartPage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Sub Total'),
+              Text(
+                'Sub Total',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+              ),
               Text('\$57.00'),
             ],
           ),
