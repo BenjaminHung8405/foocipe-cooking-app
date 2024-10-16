@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
               color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
         ),
       ),
-      title: 'Pleno',
+      title: 'Foocipe',
       initialRoute: '/',
       onGenerateRoute: generateRoute,
       routes: routes,

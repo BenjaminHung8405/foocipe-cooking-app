@@ -148,7 +148,7 @@ class _RecipePageState extends State<RecipePage> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       decoration: BoxDecoration(
-        color: _getCategoryColor(category).withOpacity(0.7), // Làm nhạt màu
+        color: _getCategoryColor(category).withOpacity(0.7),
         borderRadius: BorderRadius.circular(20),
       ),
       child: Text(

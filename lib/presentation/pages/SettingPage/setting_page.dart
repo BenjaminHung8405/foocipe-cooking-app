@@ -6,68 +6,127 @@ class SettingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.grey[100],
       appBar: AppBar(
-        title: const Text('Settings', style: TextStyle(color: Colors.white)),
-        backgroundColor: Colors.black,
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        title: const Text('Settings',
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.notifications_none, color: Colors.black),
+            onPressed: () {},
+          ),
+        ],
       ),
-      body: ListView(
+      body: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildProfileSection(),
+            const SizedBox(height: 20),
+            _buildSectionTitle('Account'),
+            _buildSettingTile('Recipes', Icons.restaurant_menu),
+            _buildSettingTile('Products', Icons.inventory_2),
+            _buildSettingTile('Orders', Icons.shopping_cart),
+            const SizedBox(height: 20),
+            _buildSectionTitle('Preferences'),
+            _buildSettingTile('Security', Icons.security),
+            _buildSettingTile('Payment', Icons.payment),
+            _buildSettingTile('Notifications', Icons.notifications),
+            _buildLanguageTile(),
+            const SizedBox(height: 20),
+            _buildSectionTitle('Support'),
+            _buildSettingTile('Ask a Question', Icons.question_answer),
+            _buildSettingTile('FAQ', Icons.help),
+            const SizedBox(height: 20),
+            _buildLogoutButton(context),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildProfileSection() {
+    return Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Row(
         children: [
-          _buildProfileTile(),
-          _buildSwitchTile('Dark Mode', true),
-          _buildNavigationTile('Notifications', Icons.notifications),
-          _buildNavigationTile('Privacy', Icons.lock),
-          _buildNavigationTile('Security', Icons.security),
-          _buildNavigationTile('Main', Icons.home),
-          _buildNavigationTile('Appearance', Icons.palette),
-          _buildLanguageTile(),
-          _buildNavigationTile('Ask a Question', Icons.question_answer),
-          _buildNavigationTile('FAQ', Icons.help),
+          CircleAvatar(
+            backgroundImage: AssetImage('assets/profile_image.jpg'),
+            radius: 40,
+          ),
+          const SizedBox(width: 20),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Jim Kein',
+                    style:
+                        TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
+                Text('+8 902 21 00 00', style: TextStyle(color: Colors.grey)),
+              ],
+            ),
+          ),
+          IconButton(
+            icon: Icon(Icons.edit, color: Colors.blue),
+            onPressed: () {},
+          ),
         ],
       ),
     );
   }
 
-  Widget _buildProfileTile() {
-    return ListTile(
-      leading: CircleAvatar(
-        backgroundImage: AssetImage('assets/profile_image.jpg'),
-        radius: 25,
-      ),
-      title: Text('Jim Kein', style: TextStyle(color: Colors.white)),
-      subtitle: Text('+8 902 21 00 00', style: TextStyle(color: Colors.grey)),
-      trailing: Icon(Icons.chevron_right, color: Colors.white),
+  Widget _buildSectionTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      child: Text(title,
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
     );
   }
 
-  Widget _buildSwitchTile(String title, bool value) {
-    return SwitchListTile(
-      title: Text(title, style: TextStyle(color: Colors.white)),
-      value: value,
-      onChanged: (bool newValue) {},
-      activeColor: Colors.purple,
-    );
-  }
-
-  Widget _buildNavigationTile(String title, IconData icon) {
+  Widget _buildSettingTile(String title, IconData icon) {
     return ListTile(
-      leading: Icon(icon, color: Colors.purple),
-      title: Text(title, style: TextStyle(color: Colors.white)),
-      trailing: Icon(Icons.chevron_right, color: Colors.white),
+      leading: Icon(icon, color: Colors.blue),
+      title: Text(title),
+      trailing: Icon(Icons.chevron_right),
+      onTap: () {},
     );
   }
 
   Widget _buildLanguageTile() {
     return ListTile(
-      leading: Icon(Icons.language, color: Colors.purple),
-      title: Text('Language', style: TextStyle(color: Colors.white)),
+      leading: Icon(Icons.language, color: Colors.blue),
+      title: Text('Language'),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text('English', style: TextStyle(color: Colors.grey)),
           SizedBox(width: 8),
-          Icon(Icons.chevron_right, color: Colors.white),
+          Icon(Icons.chevron_right),
         ],
+      ),
+      onTap: () {},
+    );
+  }
+
+  Widget _buildLogoutButton(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.red,
+          minimumSize: Size(double.infinity, 50),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        onPressed: () {},
+        child: Text('Đăng xuất', style: TextStyle(fontSize: 18)),
       ),
     );
   }

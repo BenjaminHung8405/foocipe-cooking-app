@@ -10,14 +10,13 @@ class MainLayout extends StatefulWidget {
 }
 
 class _MainLayoutState extends State<MainLayout> {
-  int _selectedIndex = 2; // Default to Home
+  int _selectedIndex = 2;
 
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
 
-    // Navigate to the corresponding route
     switch (index) {
       case 0:
         Navigator.pushNamed(context, '/product');

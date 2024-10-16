@@ -3,11 +3,13 @@ import '../presentation/pages/home_page.dart';
 import '../presentation/pages/login_page.dart';
 import '../presentation/pages/register_page.dart';
 import '../presentation/pages/welcome_page.dart';
-import '../presentation/pages/recipe_page.dart';
+import '../presentation/pages/Recipe/recipe_page.dart';
 import '../presentation/pages/Product/product_page.dart';
 import '../presentation/pages/Product/product_shop_page.dart';
 import '../presentation/pages/Recipe/recipe_management_page.dart';
 import '../presentation/pages/SettingPage/setting_page.dart';
+import '../presentation/pages/cart_page.dart';
+import '../presentation/pages/Recipe/add_recipe_page.dart';
 
 final Map<String, WidgetBuilder> routes = {
   '/': (context) => const WelcomePage(),
@@ -18,6 +20,8 @@ final Map<String, WidgetBuilder> routes = {
   '/product': (context) => const ProductShopPage(),
   '/recipe_management': (context) => const RecipeManagementPage(),
   '/setting': (context) => const SettingPage(),
+  '/cart': (context) => const CartPage(),
+  '/recipe/add': (context) => const AddRecipePage(),
 };
 
 Route<dynamic> generateRoute(RouteSettings settings) {
