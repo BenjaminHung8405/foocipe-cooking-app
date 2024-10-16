@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "928435367399",
+    "project_id": "foocipe-firebase",
+    "storage_bucket": "foocipe-firebase.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:928435367399:android:9da19ae88286c5e6f9a142",
+        "android_client_info": {
+          "package_name": "com.foocipe.cooking.foocipe_cooking_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDmCFZP4NdnyL2G34zTFWpErpKtXUEriJ0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
