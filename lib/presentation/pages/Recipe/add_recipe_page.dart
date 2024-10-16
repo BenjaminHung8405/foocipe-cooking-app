@@ -30,6 +30,7 @@ class _AddRecipePageState extends State<AddRecipePage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: const Text('Add Recipe'),
         bottom: TabBar(
           controller: _tabController,
