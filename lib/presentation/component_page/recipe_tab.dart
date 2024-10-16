@@ -35,13 +35,9 @@ class _RecipeTabState extends State<RecipeTab> {
                   SizedBox(height: 32),
                   ElevatedButton(
                     onPressed: () {},
-                    child: Text(
-                      'Next',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
-                    ),
+                    child: Text('Next'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orange,
+                      backgroundColor: Theme.of(context).primaryColor,
                       minimumSize: Size(double.infinity, 50),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -76,8 +72,7 @@ class _RecipeTabState extends State<RecipeTab> {
 
   Widget _buildInfoSection() {
     return Card(
-      color: Colors.white,
-      elevation: 0,
+      elevation: 4,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -99,11 +94,9 @@ class _RecipeTabState extends State<RecipeTab> {
       {String unit = ''}) {
     return Row(
       children: [
-        Icon(icon, color: Colors.orange),
+        Icon(icon, color: Theme.of(context).primaryColor),
         SizedBox(width: 8),
-        Expanded(
-            child: Text(label,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600))),
+        Expanded(child: Text(label, style: TextStyle(fontSize: 16))),
         IconButton(
           icon: Icon(Icons.remove_circle_outline),
           onPressed: () => setState(() => value > 1 ? value-- : null),
@@ -132,13 +125,11 @@ class _RecipeTabState extends State<RecipeTab> {
                 padding: const EdgeInsets.symmetric(horizontal: 4.0),
                 child: ElevatedButton(
                   onPressed: () => setState(() => difficulty = value),
-                  child: Text(
-                    value,
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-                  ),
+                  child: Text(value),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        difficulty == value ? Colors.orange : Colors.grey[200],
+                    backgroundColor: difficulty == value
+                        ? Theme.of(context).primaryColor
+                        : Colors.grey[200],
                     foregroundColor:
                         difficulty == value ? Colors.white : Colors.black,
                     shape: RoundedRectangleBorder(
