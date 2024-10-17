@@ -17,17 +17,19 @@ class _AddRecipePageState extends State<AddRecipePage>
   final storage = const FlutterSecureStorage();
   List<Map<String, dynamic>> selectedIngredients = [];
   List<Map<String, dynamic>> selectedTools = [];
+  List<String> steps = [];
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 2, vsync: this);
     _loadSavedData();
   }
 
   Future<void> _loadSavedData() async {
     final savedIngredients = await storage.read(key: 'selectedIngredients');
     final savedTools = await storage.read(key: 'selectedTools');
+    final savedSteps = await storage.read(key: 'steps');
     if (savedIngredients != null) {
       setState(() {
         selectedIngredients =
@@ -40,6 +42,29 @@ class _AddRecipePageState extends State<AddRecipePage>
             List<Map<String, dynamic>>.from(json.decode(savedTools));
       });
     }
+    if (savedSteps != null) {
+      setState(() {
+        steps = List<String>.from(json.decode(savedSteps));
+      });
+    }
+  }
+
+  void _updateIngredients(List<Map<String, dynamic>> ingredients) {
+    setState(() {
+      selectedIngredients = ingredients;
+    });
+  }
+
+  void _updateTools(List<Map<String, dynamic>> tools) {
+    setState(() {
+      selectedTools = tools;
+    });
+  }
+
+  void _updateSteps(List<String> newSteps) {
+    setState(() {
+      steps = newSteps;
+    });
   }
 
   @override
@@ -83,8 +108,15 @@ class _AddRecipePageState extends State<AddRecipePage>
       body: TabBarView(
         controller: _tabController,
         children: [
-          const RecipeTab(),
-          IngredientToolStepsTab(storage: storage),
+          RecipeTab(
+            storage: storage,
+            selectedIngredients: selectedIngredients,
+            selectedTools: selectedTools,
+            steps: steps,
+          ),
+          IngredientToolStepsTab(
+            storage: storage,
+          ),
         ],
       ),
     );

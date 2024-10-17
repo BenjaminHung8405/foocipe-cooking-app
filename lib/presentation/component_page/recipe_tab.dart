@@ -1,7 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class RecipeTab extends StatefulWidget {
-  const RecipeTab({super.key});
+  final FlutterSecureStorage storage;
+  final List<Map<String, dynamic>> selectedIngredients;
+  final List<Map<String, dynamic>> selectedTools;
+  final List<String> steps;
+
+  const RecipeTab({
+    Key? key,
+    required this.storage,
+    required this.selectedIngredients,
+    required this.selectedTools,
+    required this.steps,
+  }) : super(key: key);
 
   @override
   _RecipeTabState createState() => _RecipeTabState();
@@ -12,6 +26,18 @@ class _RecipeTabState extends State<RecipeTab> {
   int prepTime = 20;
   int cookTime = 30;
   String difficulty = 'Easy';
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+  bool _isPublic = true;
+  String _category = 'Main Course';
+  List<String> _subCategories = ['Vietnamese', 'Soup'];
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,17 +50,25 @@ class _RecipeTabState extends State<RecipeTab> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildTextField('Recipe Title', Icons.title),
+                  _buildTextField(
+                      'Recipe Title', Icons.title, _titleController),
                   const SizedBox(height: 16),
-                  _buildTextField('Description', Icons.description,
+                  _buildTextField(
+                      'Description', Icons.description, _descriptionController,
                       maxLines: 3),
                   const SizedBox(height: 24),
                   _buildInfoSection(),
                   const SizedBox(height: 24),
                   _buildDifficultySelection(),
+                  const SizedBox(height: 24),
+                  _buildPublicToggle(),
+                  const SizedBox(height: 24),
+                  _buildCategoryDropdown(),
+                  const SizedBox(height: 24),
+                  _buildSubCategoriesChips(),
                   const SizedBox(height: 32),
                   ElevatedButton(
-                    onPressed: () {},
+                    onPressed: _createRecipe,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).primaryColor,
                       minimumSize: const Size(double.infinity, 50),
@@ -42,7 +76,7 @@ class _RecipeTabState extends State<RecipeTab> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
-                    child: Text('Next'),
+                    child: Text('Create Recipe'),
                   ),
                 ],
               ),
@@ -53,8 +87,11 @@ class _RecipeTabState extends State<RecipeTab> {
     );
   }
 
-  Widget _buildTextField(String hint, IconData icon, {int maxLines = 1}) {
+  Widget _buildTextField(
+      String hint, IconData icon, TextEditingController controller,
+      {int maxLines = 1}) {
     return TextField(
+      controller: controller,
       decoration: InputDecoration(
         hintText: hint,
         prefixIcon: Icon(icon),
@@ -99,13 +136,39 @@ class _RecipeTabState extends State<RecipeTab> {
         Expanded(child: Text(label, style: const TextStyle(fontSize: 16))),
         IconButton(
           icon: const Icon(Icons.remove_circle_outline),
-          onPressed: () => setState(() => value > 1 ? value-- : null),
+          onPressed: () => setState(() {
+            if (value > 1) {
+              switch (label) {
+                case 'Servings':
+                  servings--;
+                  break;
+                case 'Prep Time':
+                  prepTime--;
+                  break;
+                case 'Cook Time':
+                  cookTime--;
+                  break;
+              }
+            }
+          }),
         ),
         Text('$value ${unit.isNotEmpty ? unit : ''}',
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
         IconButton(
           icon: const Icon(Icons.add_circle_outline),
-          onPressed: () => setState(() => value++),
+          onPressed: () => setState(() {
+            switch (label) {
+              case 'Servings':
+                servings++;
+                break;
+              case 'Prep Time':
+                prepTime++;
+                break;
+              case 'Cook Time':
+                cookTime++;
+                break;
+            }
+          }),
         ),
       ],
     );
@@ -143,5 +206,126 @@ class _RecipeTabState extends State<RecipeTab> {
         ),
       ],
     );
+  }
+
+  Widget _buildPublicToggle() {
+    return Row(
+      children: [
+        Text('Public Recipe'),
+        Switch(
+          value: _isPublic,
+          onChanged: (value) {
+            setState(() {
+              _isPublic = value;
+            });
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCategoryDropdown() {
+    return DropdownButtonFormField<String>(
+      value: _category,
+      decoration: InputDecoration(
+        labelText: 'Category',
+        border: OutlineInputBorder(),
+      ),
+      items: ['Appetizer', 'Main Course', 'Dessert', 'Beverage']
+          .map((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
+      onChanged: (String? newValue) {
+        setState(() {
+          _category = newValue!;
+        });
+      },
+    );
+  }
+
+  Widget _buildSubCategoriesChips() {
+    return Wrap(
+      spacing: 8.0,
+      children: _subCategories.map((String subCategory) {
+        return Chip(
+          label: Text(subCategory),
+          onDeleted: () {
+            setState(() {
+              _subCategories.remove(subCategory);
+            });
+          },
+        );
+      }).toList(),
+    );
+  }
+
+  Future<void> _createRecipe() async {
+    final accessToken = await widget.storage.read(key: 'access_token');
+
+    if (accessToken == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('No access token found')),
+      );
+      return;
+    }
+
+    final recipeData = {
+      "recipeData": {
+        "name": _titleController.text,
+        "description": _descriptionController.text,
+        "difficulty": difficulty,
+        "prep_time": prepTime,
+        "cook_time": cookTime,
+        "servings": servings,
+        "category": _category,
+        "sub_categories": _subCategories,
+        "image_urls": [], // Add image URLs if available
+        "is_public": _isPublic
+      },
+      "recipeIngredientData": widget.selectedIngredients.map((ingredient) {
+        return {
+          "ingredient_id": ingredient['id'],
+          "quantity": ingredient['quantity']
+        };
+      }).toList(),
+      "recipeToolData": widget.selectedTools.map((tool) {
+        return {"tool_id": tool['id'], "quantity": 1};
+      }).toList(),
+      "stepsData": widget.steps.asMap().entries.map((entry) {
+        return {
+          "step_number": entry.key + 1,
+          "title": entry.value,
+          "description": ""
+        };
+      }).toList(),
+    };
+
+    try {
+      final response = await http.post(
+        Uri.parse('https://foocipe-recipe-service.onrender.com/v1/recipes'),
+        headers: {
+          'access_token': accessToken,
+          'Content-Type': 'application/json',
+        },
+        body: json.encode(recipeData),
+      );
+
+      if (response.statusCode == 201) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Recipe created successfully')),
+        );
+        // Optionally, navigate to a different screen or clear the form
+      } else {
+        throw Exception('Failed to create recipe: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error creating recipe: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to create recipe. Please try again.')),
+      );
+    }
   }
 }
