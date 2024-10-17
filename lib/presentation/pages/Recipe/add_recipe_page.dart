@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../presentation/component_page/recipe_tab.dart';
-import '../../../presentation/component_page/ingredient_tab.dart';
+import '../../component_page/ingredient_tool_tab.dart';
 import '../../../presentation/component_page/steps_tab.dart';
 
 class AddRecipePage extends StatefulWidget {
@@ -72,7 +72,7 @@ class _AddRecipePageState extends State<AddRecipePage>
         controller: _tabController,
         children: const [
           RecipeTab(),
-          IngredientTab(),
+          IngredientToolTab(),
           StepsTab(),
         ],
       ),
