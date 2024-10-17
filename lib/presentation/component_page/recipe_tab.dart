@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class RecipeTab extends StatefulWidget {
-  const RecipeTab({Key? key}) : super(key: key);
+  const RecipeTab({super.key});
 
   @override
   _RecipeTabState createState() => _RecipeTabState();
@@ -25,24 +25,24 @@ class _RecipeTabState extends State<RecipeTab> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildTextField('Recipe Title', Icons.title),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   _buildTextField('Description', Icons.description,
                       maxLines: 3),
-                  SizedBox(height: 24),
+                  const SizedBox(height: 24),
                   _buildInfoSection(),
-                  SizedBox(height: 24),
+                  const SizedBox(height: 24),
                   _buildDifficultySelection(),
-                  SizedBox(height: 32),
+                  const SizedBox(height: 32),
                   ElevatedButton(
                     onPressed: () {},
-                    child: Text('Next'),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).primaryColor,
-                      minimumSize: Size(double.infinity, 50),
+                      minimumSize: const Size(double.infinity, 50),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
                       ),
                     ),
+                    child: Text('Next'),
                   ),
                 ],
               ),
@@ -79,10 +79,10 @@ class _RecipeTabState extends State<RecipeTab> {
         child: Column(
           children: [
             _buildInfoRow('Servings', servings, Icons.people),
-            Divider(),
+            const Divider(),
             _buildInfoRow('Prep Time', prepTime, Icons.access_time,
                 unit: 'min'),
-            Divider(),
+            const Divider(),
             _buildInfoRow('Cook Time', cookTime, Icons.timer, unit: 'min'),
           ],
         ),
@@ -95,16 +95,16 @@ class _RecipeTabState extends State<RecipeTab> {
     return Row(
       children: [
         Icon(icon, color: Theme.of(context).primaryColor),
-        SizedBox(width: 8),
-        Expanded(child: Text(label, style: TextStyle(fontSize: 16))),
+        const SizedBox(width: 8),
+        Expanded(child: Text(label, style: const TextStyle(fontSize: 16))),
         IconButton(
-          icon: Icon(Icons.remove_circle_outline),
+          icon: const Icon(Icons.remove_circle_outline),
           onPressed: () => setState(() => value > 1 ? value-- : null),
         ),
         Text('$value ${unit.isNotEmpty ? unit : ''}',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
         IconButton(
-          icon: Icon(Icons.add_circle_outline),
+          icon: const Icon(Icons.add_circle_outline),
           onPressed: () => setState(() => value++),
         ),
       ],
@@ -115,9 +115,9 @@ class _RecipeTabState extends State<RecipeTab> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Difficulty',
+        const Text('Difficulty',
             style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         Row(
           children: ['Easy', 'Medium', 'Hard'].map((String value) {
             return Expanded(
@@ -125,7 +125,6 @@ class _RecipeTabState extends State<RecipeTab> {
                 padding: const EdgeInsets.symmetric(horizontal: 4.0),
                 child: ElevatedButton(
                   onPressed: () => setState(() => difficulty = value),
-                  child: Text(value),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: difficulty == value
                         ? Theme.of(context).primaryColor
@@ -136,6 +135,7 @@ class _RecipeTabState extends State<RecipeTab> {
                       borderRadius: BorderRadius.circular(20),
                     ),
                   ),
+                  child: Text(value),
                 ),
               ),
             );

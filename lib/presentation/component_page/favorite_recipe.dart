@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 class FavoriteRecipePage extends StatelessWidget {
-  const FavoriteRecipePage({Key? key}) : super(key: key);
+  const FavoriteRecipePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return const Center(
       child: Text('Favorite Recipe Content'),
     );
   }

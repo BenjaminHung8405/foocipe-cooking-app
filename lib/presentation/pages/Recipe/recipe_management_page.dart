@@ -3,7 +3,7 @@ import '../../../presentation/component_page/favorite_recipe.dart';
 import '../../../presentation/component_page/my_recipe.dart';
 
 class RecipeManagementPage extends StatelessWidget {
-  const RecipeManagementPage({Key? key}) : super(key: key);
+  const RecipeManagementPage({super.key});
 
   @override
   Widget build(BuildContext context) {

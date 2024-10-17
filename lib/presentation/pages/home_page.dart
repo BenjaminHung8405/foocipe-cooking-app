@@ -16,7 +16,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   List<CategoryModel> categories = [];
   List<Map<String, dynamic>> recipes = [];
-  final storage = FlutterSecureStorage();
+  final storage = const FlutterSecureStorage();
 
   @override
   void initState() {
@@ -70,12 +70,12 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(
+                  const SizedBox(
                     height: 30,
                   ),
                   _buildHeader(),
                   _searchField(),
-                  SizedBox(
+                  const SizedBox(
                     height: 30,
                   ),
                   _buildCategorySection(),
@@ -83,10 +83,10 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             _buildCategoryList(),
-            SliverToBoxAdapter(child: const SizedBox(height: 40)),
+            const SliverToBoxAdapter(child: SizedBox(height: 40)),
             _buildSectionTitle('Today\'s Recipes'),
             _buildRecipeSlider(),
-            SliverToBoxAdapter(child: const SizedBox(height: 40)),
+            const SliverToBoxAdapter(child: SizedBox(height: 40)),
             _buildSectionTitle('Recommended Recipes'),
             _buildRecommendedRecipes(),
           ],
@@ -100,7 +100,7 @@ class _HomePageState extends State<HomePage> {
       padding: const EdgeInsets.only(
         left: 20,
       ),
-      child: Text(
+      child: const Text(
         'What would you\nlike to Cook?',
         style: TextStyle(
             color: Colors.black,
@@ -120,7 +120,7 @@ class _HomePageState extends State<HomePage> {
           Text(
             'Category',
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                color: Color.fromARGB(255, 29, 40, 61),
+                color: const Color.fromARGB(255, 29, 40, 61),
                 fontWeight: FontWeight.w700,
                 fontSize: 25),
           ),
@@ -149,7 +149,7 @@ class _HomePageState extends State<HomePage> {
           padding: const EdgeInsets.symmetric(horizontal: 20),
           itemBuilder: (context, index) {
             return Padding(
-              padding: EdgeInsets.only(right: 16),
+              padding: const EdgeInsets.only(right: 16),
               child: _buildCategoryItem(categories[index]),
             );
           },
@@ -179,7 +179,7 @@ class _HomePageState extends State<HomePage> {
                   color: Colors.grey.withOpacity(0.3),
                   spreadRadius: 2,
                   blurRadius: 5,
-                  offset: Offset(0, 2),
+                  offset: const Offset(0, 2),
                 ),
               ],
             ),
@@ -188,10 +188,10 @@ class _HomePageState extends State<HomePage> {
               child: Image(image: AssetImage(category.image_urls)),
             ),
           ),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Text(
             category.name,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.black,
               fontWeight: FontWeight.w700,
               fontSize: 18,
@@ -251,11 +251,12 @@ class _HomePageState extends State<HomePage> {
               child: Center(
                 child: ElevatedButton(
                   onPressed: () {},
-                  child: Text('More'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Theme.of(context).primaryColor,
-                    padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 32, vertical: 12),
                   ),
+                  child: Text('More'),
                 ),
               ),
             );
@@ -269,18 +270,18 @@ class _HomePageState extends State<HomePage> {
 
   Container _searchField() {
     return Container(
-      margin: EdgeInsets.only(top: 20, left: 20, right: 20),
+      margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
       child: TextField(
         decoration: InputDecoration(
           filled: true,
-          fillColor: Color(0xFFF4F5F7),
+          fillColor: const Color(0xFFF4F5F7),
           contentPadding: const EdgeInsets.all(10),
           hintText: 'Search for your recipe',
           hintStyle: const TextStyle(
               color: Color.fromARGB(255, 206, 203, 203),
               fontSize: 18,
               fontWeight: FontWeight.w400),
-          prefixIcon: Padding(
+          prefixIcon: const Padding(
             padding: EdgeInsets.only(left: 15, right: 10),
             child: Icon(
               Icons.search_rounded,

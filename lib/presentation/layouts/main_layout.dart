@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class MainLayout extends StatefulWidget {
   final Widget child;
 
-  const MainLayout({Key? key, required this.child}) : super(key: key);
+  const MainLayout({super.key, required this.child});
 
   @override
   _MainLayoutState createState() => _MainLayoutState();
@@ -64,8 +64,8 @@ class _MainLayoutState extends State<MainLayout> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Color.fromARGB(255, 221, 105, 70),
-        unselectedItemColor: Color.fromARGB(255, 94, 89, 74),
+        selectedItemColor: const Color.fromARGB(255, 221, 105, 70),
+        unselectedItemColor: const Color.fromARGB(255, 94, 89, 74),
         onTap: _onItemTapped,
         type: BottomNavigationBarType.fixed,
         backgroundColor: Colors.white,

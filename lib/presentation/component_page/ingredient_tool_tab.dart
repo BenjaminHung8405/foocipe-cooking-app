@@ -4,7 +4,20 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class IngredientToolTab extends StatefulWidget {
-  const IngredientToolTab({Key? key}) : super(key: key);
+  final FlutterSecureStorage storage;
+  final List<Map<String, dynamic>> initialIngredients;
+  final List<Map<String, dynamic>> initialTools;
+  final Function(List<Map<String, dynamic>>) onIngredientsChanged;
+  final Function(List<Map<String, dynamic>>) onToolsChanged;
+
+  const IngredientToolTab({
+    super.key,
+    required this.storage,
+    required this.initialIngredients,
+    required this.initialTools,
+    required this.onIngredientsChanged,
+    required this.onToolsChanged,
+  });
 
   @override
   _IngredientToolTabState createState() => _IngredientToolTabState();
@@ -13,7 +26,6 @@ class IngredientToolTab extends StatefulWidget {
 class _IngredientToolTabState extends State<IngredientToolTab>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-  final storage = FlutterSecureStorage();
 
   @override
   void initState() {
@@ -31,10 +43,10 @@ class _IngredientToolTabState extends State<IngredientToolTab>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Nguyên liệu & Dụng cụ'),
+        title: const Text('Nguyên liệu & Dụng cụ'),
         bottom: TabBar(
           controller: _tabController,
-          tabs: [
+          tabs: const [
             Tab(text: 'Nguyên liệu'),
             Tab(text: 'Dụng cụ'),
           ],
@@ -43,8 +55,14 @@ class _IngredientToolTabState extends State<IngredientToolTab>
       body: TabBarView(
         controller: _tabController,
         children: [
-          IngredientTab(storage: storage),
-          ToolTab(storage: storage),
+          IngredientTab(
+            storage: widget.storage,
+            onIngredientsChanged: widget.onIngredientsChanged,
+          ),
+          ToolTab(
+            storage: widget.storage,
+            onToolsChanged: widget.onToolsChanged,
+          ),
         ],
       ),
     );
@@ -53,8 +71,13 @@ class _IngredientToolTabState extends State<IngredientToolTab>
 
 class IngredientTab extends StatefulWidget {
   final FlutterSecureStorage storage;
+  final Function(List<Map<String, dynamic>>) onIngredientsChanged;
 
-  const IngredientTab({Key? key, required this.storage}) : super(key: key);
+  const IngredientTab({
+    super.key,
+    required this.storage,
+    required this.onIngredientsChanged,
+  });
 
   @override
   _IngredientTabState createState() => _IngredientTabState();
@@ -75,11 +98,11 @@ class _IngredientTabState extends State<IngredientTab> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildSearchBar(),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             _buildSearchResults(),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             _buildSelectedIngredients(),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             _buildRecipes(),
           ],
         ),
@@ -98,7 +121,7 @@ class _IngredientTabState extends State<IngredientTab> {
             Expanded(
               child: TextField(
                 controller: searchController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: 'Tìm kiếm nguyên liệu...',
                   border: InputBorder.none,
                   icon: Icon(Icons.search),
@@ -107,7 +130,7 @@ class _IngredientTabState extends State<IngredientTab> {
               ),
             ),
             IconButton(
-              icon: Icon(Icons.clear),
+              icon: const Icon(Icons.clear),
               onPressed: () {
                 searchController.clear();
                 searchIngredients('');
@@ -120,7 +143,7 @@ class _IngredientTabState extends State<IngredientTab> {
   }
 
   Widget _buildSearchResults() {
-    if (searchResults.isEmpty) return SizedBox.shrink();
+    if (searchResults.isEmpty) return const SizedBox.shrink();
 
     return Card(
       elevation: 4,
@@ -128,16 +151,16 @@ class _IngredientTabState extends State<IngredientTab> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
+          const Padding(
+            padding: EdgeInsets.all(16.0),
             child: Text('Kết quả tìm kiếm:',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
           ),
           ListView.separated(
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             itemCount: searchResults.length,
-            separatorBuilder: (context, index) => Divider(),
+            separatorBuilder: (context, index) => const Divider(),
             itemBuilder: (context, index) {
               final ingredient = searchResults[index];
               return ListTile(
@@ -149,7 +172,7 @@ class _IngredientTabState extends State<IngredientTab> {
                     height: 50,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) =>
-                        Icon(Icons.error),
+                        const Icon(Icons.error),
                   ),
                 ),
                 title: Text(ingredient['name']),
@@ -165,7 +188,7 @@ class _IngredientTabState extends State<IngredientTab> {
   }
 
   Widget _buildSelectedIngredients() {
-    if (selectedIngredients.isEmpty) return SizedBox.shrink();
+    if (selectedIngredients.isEmpty) return const SizedBox.shrink();
 
     return Card(
       elevation: 4,
@@ -173,16 +196,16 @@ class _IngredientTabState extends State<IngredientTab> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
+          const Padding(
+            padding: EdgeInsets.all(16.0),
             child: Text('Nguyên liệu đã chọn:',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
           ),
           ListView.separated(
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             itemCount: selectedIngredients.length,
-            separatorBuilder: (context, index) => Divider(),
+            separatorBuilder: (context, index) => const Divider(),
             itemBuilder: (context, index) {
               final ingredient = selectedIngredients[index];
               return ListTile(
@@ -194,7 +217,7 @@ class _IngredientTabState extends State<IngredientTab> {
                     height: 50,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) =>
-                        Icon(Icons.error),
+                        const Icon(Icons.error),
                   ),
                 ),
                 title: Text(ingredient['name']),
@@ -202,19 +225,21 @@ class _IngredientTabState extends State<IngredientTab> {
                   children: [
                     Expanded(
                       child: TextField(
-                        decoration: InputDecoration(labelText: 'Số lượng'),
+                        decoration:
+                            const InputDecoration(labelText: 'Số lượng'),
                         keyboardType: TextInputType.number,
                         onChanged: (value) {
                           ingredient['quantity'] = double.tryParse(value) ?? 0;
+                          widget.onIngredientsChanged(selectedIngredients);
                         },
                       ),
                     ),
-                    SizedBox(width: 8),
+                    const SizedBox(width: 8),
                     Text(ingredient['unit']),
                   ],
                 ),
                 trailing: IconButton(
-                  icon: Icon(Icons.delete),
+                  icon: const Icon(Icons.delete),
                   onPressed: () => removeIngredient(index),
                 ),
               );
@@ -226,7 +251,7 @@ class _IngredientTabState extends State<IngredientTab> {
   }
 
   Widget _buildRecipes() {
-    if (recipes.isEmpty) return SizedBox.shrink();
+    if (recipes.isEmpty) return const SizedBox.shrink();
 
     return Card(
       elevation: 4,
@@ -234,16 +259,16 @@ class _IngredientTabState extends State<IngredientTab> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
+          const Padding(
+            padding: EdgeInsets.all(16.0),
             child: Text('Công thức phù hợp:',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
           ),
           ListView.separated(
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             itemCount: recipes.length,
-            separatorBuilder: (context, index) => Divider(),
+            separatorBuilder: (context, index) => const Divider(),
             itemBuilder: (context, index) {
               final recipe = recipes[index];
               return ListTile(
@@ -255,7 +280,7 @@ class _IngredientTabState extends State<IngredientTab> {
                     height: 80,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) =>
-                        Icon(Icons.error),
+                        const Icon(Icons.error),
                   ),
                 ),
                 title: Text(recipe['name']),
@@ -285,8 +310,7 @@ class _IngredientTabState extends State<IngredientTab> {
     }
 
     final response = await http.get(
-      Uri.parse(
-          'https://foocipe-recipe-service.onrender.com/v1/search/ingredients?name=$query'),
+      Uri.parse('http://localhost:8081/v1/search/ingredients?name=$query'),
       headers: {
         'access_token': accessToken,
         'Content-Type': 'application/json',
@@ -314,6 +338,7 @@ class _IngredientTabState extends State<IngredientTab> {
       searchResults = [];
       searchController.clear();
     });
+    widget.onIngredientsChanged(selectedIngredients);
     searchRecipes();
   }
 
@@ -321,6 +346,7 @@ class _IngredientTabState extends State<IngredientTab> {
     setState(() {
       selectedIngredients.removeAt(index);
     });
+    widget.onIngredientsChanged(selectedIngredients);
     searchRecipes();
   }
 
@@ -341,8 +367,7 @@ class _IngredientTabState extends State<IngredientTab> {
         selectedIngredients.map((e) => e['id'] as int).toList();
 
     final response = await http.put(
-      Uri.parse(
-          'https://foocipe-recipe-service.onrender.com/v1/search/recipes/ingredient'),
+      Uri.parse('http://localhost:8081/v1/search/recipes/ingredient'),
       headers: {
         'access_token': accessToken,
         'Content-Type': 'application/json',
@@ -363,8 +388,13 @@ class _IngredientTabState extends State<IngredientTab> {
 
 class ToolTab extends StatefulWidget {
   final FlutterSecureStorage storage;
+  final Function(List<Map<String, dynamic>>) onToolsChanged;
 
-  const ToolTab({Key? key, required this.storage}) : super(key: key);
+  const ToolTab({
+    super.key,
+    required this.storage,
+    required this.onToolsChanged,
+  });
 
   @override
   _ToolTabState createState() => _ToolTabState();
@@ -384,9 +414,9 @@ class _ToolTabState extends State<ToolTab> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildSearchBar(),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             _buildSearchResults(),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             _buildSelectedTools(),
           ],
         ),
@@ -405,7 +435,7 @@ class _ToolTabState extends State<ToolTab> {
             Expanded(
               child: TextField(
                 controller: searchController,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   hintText: 'Tìm kiếm dụng cụ...',
                   border: InputBorder.none,
                   icon: Icon(Icons.search),
@@ -414,7 +444,7 @@ class _ToolTabState extends State<ToolTab> {
               ),
             ),
             IconButton(
-              icon: Icon(Icons.clear),
+              icon: const Icon(Icons.clear),
               onPressed: () {
                 searchController.clear();
                 searchTools('');
@@ -427,7 +457,7 @@ class _ToolTabState extends State<ToolTab> {
   }
 
   Widget _buildSearchResults() {
-    if (searchResults.isEmpty) return SizedBox.shrink();
+    if (searchResults.isEmpty) return const SizedBox.shrink();
 
     return Card(
       elevation: 4,
@@ -435,16 +465,16 @@ class _ToolTabState extends State<ToolTab> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
+          const Padding(
+            padding: EdgeInsets.all(16.0),
             child: Text('Kết quả tìm kiếm:',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
           ),
           ListView.separated(
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             itemCount: searchResults.length,
-            separatorBuilder: (context, index) => Divider(),
+            separatorBuilder: (context, index) => const Divider(),
             itemBuilder: (context, index) {
               final tool = searchResults[index];
               return ListTile(
@@ -456,13 +486,13 @@ class _ToolTabState extends State<ToolTab> {
                     height: 50,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) =>
-                        Icon(Icons.error),
+                        const Icon(Icons.error),
                   ),
                 ),
                 title: Text(tool['name']),
                 subtitle: Text(tool['description']),
                 trailing: IconButton(
-                  icon: Icon(Icons.add),
+                  icon: const Icon(Icons.add),
                   onPressed: () => addTool(tool),
                 ),
               );
@@ -474,7 +504,7 @@ class _ToolTabState extends State<ToolTab> {
   }
 
   Widget _buildSelectedTools() {
-    if (selectedTools.isEmpty) return SizedBox.shrink();
+    if (selectedTools.isEmpty) return const SizedBox.shrink();
 
     return Card(
       elevation: 4,
@@ -482,16 +512,16 @@ class _ToolTabState extends State<ToolTab> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.all(16.0),
+          const Padding(
+            padding: EdgeInsets.all(16.0),
             child: Text('Dụng cụ đã chọn:',
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
           ),
           ListView.separated(
             shrinkWrap: true,
-            physics: NeverScrollableScrollPhysics(),
+            physics: const NeverScrollableScrollPhysics(),
             itemCount: selectedTools.length,
-            separatorBuilder: (context, index) => Divider(),
+            separatorBuilder: (context, index) => const Divider(),
             itemBuilder: (context, index) {
               final tool = selectedTools[index];
               return ListTile(
@@ -503,13 +533,13 @@ class _ToolTabState extends State<ToolTab> {
                     height: 50,
                     fit: BoxFit.cover,
                     errorBuilder: (context, error, stackTrace) =>
-                        Icon(Icons.error),
+                        const Icon(Icons.error),
                   ),
                 ),
                 title: Text(tool['name']),
                 subtitle: Text(tool['description']),
                 trailing: IconButton(
-                  icon: Icon(Icons.delete),
+                  icon: const Icon(Icons.delete),
                   onPressed: () => removeTool(index),
                 ),
               );
@@ -534,8 +564,7 @@ class _ToolTabState extends State<ToolTab> {
     }
 
     final response = await http.get(
-      Uri.parse(
-          'https://foocipe-recipe-service.onrender.com/v1/search/tools?name=$query'),
+      Uri.parse('http://localhost:8081/v1/search/tools?name=$query'),
       headers: {
         'access_token': accessToken,
         'Content-Type': 'application/json',
@@ -562,11 +591,13 @@ class _ToolTabState extends State<ToolTab> {
       searchResults = [];
       searchController.clear();
     });
+    widget.onToolsChanged(selectedTools);
   }
 
   void removeTool(int index) {
     setState(() {
       selectedTools.removeAt(index);
     });
+    widget.onToolsChanged(selectedTools);
   }
 }

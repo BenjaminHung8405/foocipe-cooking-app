@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../../presentation/component_page/recipe_tab.dart';
-import '../../component_page/ingredient_tool_tab.dart';
-import '../../../presentation/component_page/steps_tab.dart';
+import '../../../presentation/component_page/ingredient_tool_steps_tab.dart';
+import 'dart:convert';
 
 class AddRecipePage extends StatefulWidget {
-  const AddRecipePage({Key? key}) : super(key: key);
+  const AddRecipePage({super.key});
 
   @override
   _AddRecipePageState createState() => _AddRecipePageState();
@@ -13,11 +14,32 @@ class AddRecipePage extends StatefulWidget {
 class _AddRecipePageState extends State<AddRecipePage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
+  final storage = const FlutterSecureStorage();
+  List<Map<String, dynamic>> selectedIngredients = [];
+  List<Map<String, dynamic>> selectedTools = [];
 
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+    _loadSavedData();
+  }
+
+  Future<void> _loadSavedData() async {
+    final savedIngredients = await storage.read(key: 'selectedIngredients');
+    final savedTools = await storage.read(key: 'selectedTools');
+    if (savedIngredients != null) {
+      setState(() {
+        selectedIngredients =
+            List<Map<String, dynamic>>.from(json.decode(savedIngredients));
+      });
+    }
+    if (savedTools != null) {
+      setState(() {
+        selectedTools =
+            List<Map<String, dynamic>>.from(json.decode(savedTools));
+      });
+    }
   }
 
   @override
@@ -51,29 +73,18 @@ class _AddRecipePageState extends State<AddRecipePage>
                 children: [
                   Icon(Icons.shopping_basket),
                   SizedBox(width: 8),
-                  Text('Ingredient'),
+                  Text('Ingredient & Tool'),
                 ],
               ),
-            ),
-            Tab(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.list),
-                  SizedBox(width: 8),
-                  Text('Steps'),
-                ],
-              ),
-            ),
+            )
           ],
         ),
       ),
       body: TabBarView(
         controller: _tabController,
-        children: const [
-          RecipeTab(),
-          IngredientToolTab(),
-          StepsTab(),
+        children: [
+          const RecipeTab(),
+          IngredientToolStepsTab(storage: storage),
         ],
       ),
     );

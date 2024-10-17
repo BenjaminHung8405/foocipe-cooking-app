@@ -21,10 +21,10 @@ class _WelcomePageState extends State<WelcomePage> {
 
   Future<void> checkCredentials() async {
     try {
-      final access_token = await storage.read(key: 'access_token');
-      print(access_token);
+      final accessToken = await storage.read(key: 'access_token');
+      print(accessToken);
 
-      if (access_token != null) {
+      if (accessToken != null) {
         Navigator.of(context).pushReplacementNamed('/home');
       } else {
         Navigator.of(context).pushReplacementNamed('/login');

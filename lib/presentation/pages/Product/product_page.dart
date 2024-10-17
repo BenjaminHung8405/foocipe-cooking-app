@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 class ProductPage extends StatelessWidget {
   final String productId;
 
-  const ProductPage({Key? key, required this.productId}) : super(key: key);
+  const ProductPage({super.key, required this.productId});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: Center(
         child: Text('Product Page'),
       ),

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class RecipeCardV1 extends StatelessWidget {
   final Map<String, dynamic> recipe;
 
-  const RecipeCardV1({Key? key, required this.recipe}) : super(key: key);
+  const RecipeCardV1({super.key, required this.recipe});
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +47,7 @@ class RecipeCardV1 extends StatelessWidget {
                     recipe['name'],
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.w600,
-                          color: Color(0xFF3E5481),
+                          color: const Color(0xFF3E5481),
                         ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
@@ -76,11 +76,11 @@ class RecipeCardV1 extends StatelessWidget {
   Widget _buildInfoChip(IconData icon, String text) {
     return Row(
       children: [
-        Icon(icon, size: 16, color: Color(0xFF9FA5C0)),
+        Icon(icon, size: 16, color: const Color(0xFF9FA5C0)),
         const SizedBox(width: 4),
         Text(
           text,
-          style: TextStyle(fontSize: 12, color: Color(0xFF9FA5C0)),
+          style: const TextStyle(fontSize: 12, color: Color(0xFF9FA5C0)),
         ),
       ],
     );
@@ -104,7 +104,7 @@ class RecipeCardV1 extends StatelessWidget {
 class RecipeCardV2 extends StatelessWidget {
   final Map<String, dynamic> recipe;
 
-  const RecipeCardV2({Key? key, required this.recipe}) : super(key: key);
+  const RecipeCardV2({super.key, required this.recipe});
 
   @override
   Widget build(BuildContext context) {
@@ -150,7 +150,7 @@ class RecipeCardV2 extends StatelessWidget {
                       recipe['name'],
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
-                            color: Color(0xFF3E5481),
+                            color: const Color(0xFF3E5481),
                           ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,

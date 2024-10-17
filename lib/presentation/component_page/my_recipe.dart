@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 
 class MyRecipePage extends StatelessWidget {
-  const MyRecipePage({Key? key}) : super(key: key);
+  const MyRecipePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
+      body: const Center(
         child: Text('My Recipe Content'),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.pushNamed(context, '/recipe/add');
         },
-        child: Icon(Icons.add),
+        child: const Icon(Icons.add),
       ),
     );
   }

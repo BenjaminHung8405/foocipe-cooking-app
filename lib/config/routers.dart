@@ -13,7 +13,7 @@ import '../presentation/pages/Recipe/add_recipe_page.dart';
 
 final Map<String, WidgetBuilder> routes = {
   '/': (context) => const WelcomePage(),
-  '/home': (context) => HomePage(),
+  '/home': (context) => const HomePage(),
   '/login': (context) => const LoginPage(),
   '/register': (context) => const RegisterPage(),
   '/recipe': (context) => const RecipeManagementPage(),
@@ -42,6 +42,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
   }
 
   return MaterialPageRoute(
-    builder: (_) => Scaffold(body: Center(child: Text('Route not found'))),
+    builder: (_) =>
+        const Scaffold(body: Center(child: Text('Route not found'))),
   );
 }

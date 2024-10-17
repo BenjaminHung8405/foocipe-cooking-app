@@ -17,7 +17,7 @@ class _LoginPageState extends State<LoginPage> {
   bool _isLoading = false;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final storage = FlutterSecureStorage();
+  final storage = const FlutterSecureStorage();
 
   @override
   void dispose() {
@@ -46,16 +46,17 @@ class _LoginPageState extends State<LoginPage> {
             key: 'refresh_token', value: data['data']['refresh_token']);
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => HomePage()),
+          MaterialPageRoute(builder: (context) => const HomePage()),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Login failed. Please try again.')),
+          const SnackBar(content: Text('Login failed. Please try again.')),
         );
       }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('An error occurred. Please try again later.')),
+        const SnackBar(
+            content: Text('An error occurred. Please try again later.')),
       );
     } finally {
       setState(() => _isLoading = false);
@@ -190,7 +191,7 @@ class _LoginPageState extends State<LoginPage> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       ),
       child: _isLoading
-          ? CircularProgressIndicator(color: Colors.white, strokeWidth: 2)
+          ? const CircularProgressIndicator(color: Colors.white, strokeWidth: 2)
           : const Text(
               'Login',
               style: TextStyle(

@@ -20,25 +20,25 @@ class CategoryModel {
         id: '1',
         name: 'All',
         image_urls: 'assets/icons/hamburger.png',
-        boxColor: Color(0xffFFB701)));
+        boxColor: const Color(0xffFFB701)));
 
     categories.add(CategoryModel(
         id: '2',
         name: 'Thịt',
         image_urls: 'assets/icons/chicken.png',
-        boxColor: Color(0xffFD423F)));
+        boxColor: const Color(0xffFD423F)));
 
     categories.add(CategoryModel(
         id: '3',
         name: 'Rau Củ',
         image_urls: 'assets/icons/carrot.png',
-        boxColor: Color(0xff67AD00)));
+        boxColor: const Color(0xff67AD00)));
 
     categories.add(CategoryModel(
         id: '4',
         name: 'Dụng cụ',
         image_urls: 'assets/icons/spoon.png',
-        boxColor: Color(0xffFE8000)));
+        boxColor: const Color(0xffFE8000)));
 
     return categories;
   }

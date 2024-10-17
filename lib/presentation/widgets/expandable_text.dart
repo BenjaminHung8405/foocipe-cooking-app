@@ -9,14 +9,14 @@ class ExpandableText extends StatefulWidget {
   final Color linkColor;
 
   const ExpandableText({
-    Key? key,
+    super.key,
     required this.text,
     this.maxLines = 3,
     required this.style,
     this.expandText = 'Read more',
     this.collapseText = 'Show less',
     this.linkColor = Colors.blue,
-  }) : super(key: key);
+  });
 
   @override
   _ExpandableTextState createState() => _ExpandableTextState();

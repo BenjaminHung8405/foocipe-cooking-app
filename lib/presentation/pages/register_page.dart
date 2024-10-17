@@ -95,7 +95,7 @@ class _RegisterPageState extends State<RegisterPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.black),
+          icon: const Icon(Icons.arrow_back, color: Colors.black),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
@@ -129,9 +129,9 @@ class _RegisterPageState extends State<RegisterPage> {
                 hintText: 'Email',
                 prefixIcon: Icons.mail_outline_rounded,
                 suffixIcon: _isEmailVerified
-                    ? Icon(Icons.check_circle, color: Colors.green)
+                    ? const Icon(Icons.check_circle, color: Colors.green)
                     : IconButton(
-                        icon: Icon(Icons.send),
+                        icon: const Icon(Icons.send),
                         onPressed: _isLoading ? null : _verifyEmail,
                       ),
               ),
@@ -234,10 +234,10 @@ class _RegisterPageState extends State<RegisterPage> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
       ),
       child: _isLoading
-          ? CircularProgressIndicator(color: Colors.white, strokeWidth: 2)
+          ? const CircularProgressIndicator(color: Colors.white, strokeWidth: 2)
           : Text(
               _isEmailVerified ? 'Sign Up' : 'Verify Email',
-              style: TextStyle(
+              style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w500,
                   color: Colors.white),

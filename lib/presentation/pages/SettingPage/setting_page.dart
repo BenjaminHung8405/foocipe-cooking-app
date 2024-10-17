@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SettingPage extends StatelessWidget {
-  const SettingPage({Key? key}) : super(key: key);
+  const SettingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +14,7 @@ class SettingPage extends StatelessWidget {
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
         actions: [
           IconButton(
-            icon: Icon(Icons.notifications_none, color: Colors.black),
+            icon: const Icon(Icons.notifications_none, color: Colors.black),
             onPressed: () {},
           ),
         ],
@@ -56,12 +56,12 @@ class SettingPage extends StatelessWidget {
       ),
       child: Row(
         children: [
-          CircleAvatar(
+          const CircleAvatar(
             backgroundImage: AssetImage('assets/profile_image.jpg'),
             radius: 40,
           ),
           const SizedBox(width: 20),
-          Expanded(
+          const Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -73,7 +73,7 @@ class SettingPage extends StatelessWidget {
             ),
           ),
           IconButton(
-            icon: Icon(Icons.edit, color: Colors.blue),
+            icon: const Icon(Icons.edit, color: Colors.blue),
             onPressed: () {},
           ),
         ],
@@ -85,7 +85,7 @@ class SettingPage extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       child: Text(title,
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
     );
   }
 
@@ -93,16 +93,16 @@ class SettingPage extends StatelessWidget {
     return ListTile(
       leading: Icon(icon, color: Colors.blue),
       title: Text(title),
-      trailing: Icon(Icons.chevron_right),
+      trailing: const Icon(Icons.chevron_right),
       onTap: () {},
     );
   }
 
   Widget _buildLanguageTile() {
     return ListTile(
-      leading: Icon(Icons.language, color: Colors.blue),
-      title: Text('Language'),
-      trailing: Row(
+      leading: const Icon(Icons.language, color: Colors.blue),
+      title: const Text('Language'),
+      trailing: const Row(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text('English', style: TextStyle(color: Colors.grey)),
@@ -120,13 +120,13 @@ class SettingPage extends StatelessWidget {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.red,
-          minimumSize: Size(double.infinity, 50),
+          minimumSize: const Size(double.infinity, 50),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),
         ),
         onPressed: () {},
-        child: Text('Đăng xuất', style: TextStyle(fontSize: 18)),
+        child: const Text('Đăng xuất', style: TextStyle(fontSize: 18)),
       ),
     );
   }
