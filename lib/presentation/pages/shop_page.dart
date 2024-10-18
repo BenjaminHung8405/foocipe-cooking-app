@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class ShopPage extends StatefulWidget {
   const ShopPage({super.key});
@@ -8,64 +11,79 @@ class ShopPage extends StatefulWidget {
 }
 
 class _ShopPageState extends State<ShopPage> {
+  List<dynamic> products = [];
+  final storage = const FlutterSecureStorage();
+
+  @override
+  void initState() {
+    super.initState();
+    fetchProducts();
+  }
+
+  Future<void> fetchProducts() async {
+    final accessToken = await storage.read(key: 'access_token');
+
+    if (accessToken == null) {
+      print('No access token found');
+      return;
+    }
+    final response = await http.get(
+      Uri.parse('http://localhost:8081/v1/products/newest'),
+      headers: {
+        'access_token': accessToken ?? '',
+        'Content-Type': 'application/json',
+      },
+    );
+    if (response.statusCode == 200) {
+      setState(() {
+        products = json.decode(response.body);
+      });
+    } else {
+      throw Exception('Failed to load products');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('E-commerce App'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.search),
+            onPressed: () {
+              // Handle search action
+            },
+          ),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Welcome back, Khanh', style: TextStyle(fontSize: 24)),
-                    Text('Time to go shopping', style: TextStyle(fontSize: 24)),
-                  ],
-                ),
-                CircleAvatar(
-                  radius: 20,
-                  backgroundColor: Colors.grey,
-                ),
-              ],
-            ),
+            Text('Welcome back, Khanh', style: TextStyle(fontSize: 24)),
             SizedBox(height: 16),
-            TextField(
-              decoration: InputDecoration(
-                hintText: 'Search Grocery',
-                border: OutlineInputBorder(),
-              ),
-            ),
-            SizedBox(height: 16),
-            Text('Categories',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                CategoryButton(label: 'All'),
-                CategoryButton(label: 'Fruits'),
-                CategoryButton(label: 'Vegetable'),
-              ],
-            ),
-            SizedBox(height: 16),
-            Text('Popular Product',
+            Text('Popular Products',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             Expanded(
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                children: [
-                  ProductCard(
-                      name: 'Orange Fruit',
-                      price: '\$25.00',
-                      color: Colors.orange),
-                  ProductCard(
-                      name: 'Mustard Vegetable',
-                      price: '\$31.00',
-                      color: Colors.green),
-                ],
+              child: GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  childAspectRatio: 0.75,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
+                ),
+                itemCount: products.length,
+                itemBuilder: (context, index) {
+                  final product = products[index];
+                  return ProductCard(
+                    name: product['title'],
+                    price: '\$${product['price'].toString()}',
+                    color: Colors.orange,
+                    imageUrl: product['image_urls'][0],
+                  );
+                },
               ),
             ),
           ],
@@ -75,30 +93,18 @@ class _ShopPageState extends State<ShopPage> {
   }
 }
 
-class CategoryButton extends StatelessWidget {
-  final String label;
-
-  const CategoryButton({required this.label});
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: ElevatedButton(
-        onPressed: () {},
-        child: Text(label),
-      ),
-    );
-  }
-}
-
 class ProductCard extends StatelessWidget {
   final String name;
   final String price;
   final Color color;
+  final String imageUrl;
 
-  const ProductCard(
-      {required this.name, required this.price, required this.color});
+  const ProductCard({
+    required this.name,
+    required this.price,
+    required this.color,
+    required this.imageUrl,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -107,6 +113,11 @@ class ProductCard extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          Container(
+            width: double.infinity,
+            height: 150, // Set desired height
+            child: Image.network(imageUrl, fit: BoxFit.cover),
+          ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(name,
