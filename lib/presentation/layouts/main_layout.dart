@@ -19,7 +19,7 @@ class _MainLayoutState extends State<MainLayout> {
 
     switch (index) {
       case 0:
-        Navigator.pushNamed(context, '/product');
+        Navigator.pushNamed(context, '/shop');
         break;
       case 1:
         Navigator.pushNamed(context, '/recipe');

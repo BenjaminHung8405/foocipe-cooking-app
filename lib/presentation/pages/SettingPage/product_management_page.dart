@@ -12,6 +12,7 @@ class ProductManagementPage extends StatefulWidget {
 
 class _ProductManagementPageState extends State<ProductManagementPage> {
   List<Product> products = [];
+  final storage = const FlutterSecureStorage();
 
   @override
   void initState() {
@@ -20,13 +21,28 @@ class _ProductManagementPageState extends State<ProductManagementPage> {
   }
 
   Future<void> fetchProducts() async {
-    final response =
-        await http.get(Uri.parse('http://localhost:8081/v1/products/seller'));
+    final accessToken = await storage.read(key: 'access_token');
+
+    if (accessToken == null) {
+      print('No access token found');
+      return;
+    }
+
+    final response = await http.get(
+      Uri.parse('http://localhost:8081/v1/products/seller'),
+      headers: {
+        'access_token': accessToken ?? '',
+        'Content-Type': 'application/json',
+      },
+    );
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(response.body);
-      setState(() {
-        products = data.map((item) => Product.fromJson(item)).toList();
-      });
+      if (mounted) {
+        // Check if the widget is still mounted
+        setState(() {
+          products = data.map((item) => Product.fromJson(item)).toList();
+        });
+      }
     } else {
       throw Exception('Failed to load products');
     }
@@ -42,21 +58,8 @@ class _ProductManagementPageState extends State<ProductManagementPage> {
               itemCount: products.length,
               itemBuilder: (context, index) {
                 final product = products[index];
-                return Card(
-                  child: ListTile(
-                    title: Text(product.title),
-                    subtitle: Text(product.description),
-                    trailing: Text("\$${product.price}"),
-                    leading: product.imageUrls.isNotEmpty
-                        ? Image.network(product.imageUrls[0],
-                            width: 50, height: 50)
-                        : Container(
-                            width: 50,
-                            height: 50,
-                            color: Colors.blue,
-                          ),
-                  ),
-                );
+                return ProductCard(
+                    product: product); // Use the new ProductCard widget
               },
             ),
       floatingActionButton: FloatingActionButton(
@@ -64,6 +67,37 @@ class _ProductManagementPageState extends State<ProductManagementPage> {
           Navigator.pushNamed(context, '/setting/add/product');
         },
         child: Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+// New ProductCard widget
+class ProductCard extends StatelessWidget {
+  final Product product;
+
+  const ProductCard({Key? key, required this.product}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: ListTile(
+        title: Text(product.title),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(product.description),
+            Text("Stock: ${product.stock}"), // Display stock information
+          ],
+        ),
+        trailing: Text("\$${product.price}"),
+        leading: product.imageUrls.isNotEmpty
+            ? Image.network(product.imageUrls[0], width: 50, height: 50)
+            : Container(
+                width: 50,
+                height: 50,
+                color: Colors.blue,
+              ),
       ),
     );
   }

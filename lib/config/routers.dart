@@ -12,6 +12,8 @@ import '../presentation/pages/cart_page.dart';
 import '../presentation/pages/Recipe/add_recipe_page.dart';
 import '../presentation/pages/SettingPage/product_management_page.dart';
 import '../presentation/pages/SettingPage/add_product_page.dart';
+import '../presentation/pages/SettingPage/order_management_page.dart';
+import '../presentation/pages/shop_page.dart';
 
 final Map<String, WidgetBuilder> routes = {
   '/': (context) => const WelcomePage(),
@@ -26,6 +28,8 @@ final Map<String, WidgetBuilder> routes = {
   '/recipe/add': (context) => const AddRecipePage(),
   '/setting/management/product': (context) => const ProductManagementPage(),
   '/setting/add/product': (context) => const AddProductPage(),
+  '/setting/management/order': (context) => const OrderManagementPage(),
+  '/shop': (context) => const ShopPage(),
 };
 
 Route<dynamic> generateRoute(RouteSettings settings) {
