@@ -26,19 +26,35 @@ class SettingPage extends StatelessWidget {
             _buildProfileSection(),
             const SizedBox(height: 20),
             _buildSectionTitle('Account'),
-            _buildSettingTile('Recipes', Icons.restaurant_menu),
-            _buildSettingTile('Products', Icons.inventory_2),
-            _buildSettingTile('Orders', Icons.shopping_cart),
+            _buildSettingTile('Recipes', Icons.restaurant_menu, () {
+              Navigator.pushNamed(context, '/setting/management/recipe');
+            }),
+            _buildSettingTile('Products', Icons.inventory_2, () {
+              Navigator.pushNamed(context, '/setting/management/product');
+            }),
+            _buildSettingTile('Orders', Icons.shopping_cart, () {
+              Navigator.pushNamed(context, '/setting/management/order');
+            }),
             const SizedBox(height: 20),
             _buildSectionTitle('Preferences'),
-            _buildSettingTile('Security', Icons.security),
-            _buildSettingTile('Payment', Icons.payment),
-            _buildSettingTile('Notifications', Icons.notifications),
+            _buildSettingTile('Security', Icons.security, () {
+              Navigator.pushNamed(context, '/setting/security');
+            }),
+            _buildSettingTile('Payment', Icons.payment, () {
+              Navigator.pushNamed(context, '/setting/payment');
+            }),
+            _buildSettingTile('Notifications', Icons.notifications, () {
+              Navigator.pushNamed(context, '/setting/notifications');
+            }),
             _buildLanguageTile(),
             const SizedBox(height: 20),
             _buildSectionTitle('Support'),
-            _buildSettingTile('Ask a Question', Icons.question_answer),
-            _buildSettingTile('FAQ', Icons.help),
+            _buildSettingTile('Ask a Question', Icons.question_answer, () {
+              Navigator.pushNamed(context, '/setting/ask-question');
+            }),
+            _buildSettingTile('FAQ', Icons.help, () {
+              Navigator.pushNamed(context, '/setting/faq');
+            }),
             const SizedBox(height: 20),
             _buildLogoutButton(context),
           ],
@@ -89,12 +105,12 @@ class SettingPage extends StatelessWidget {
     );
   }
 
-  Widget _buildSettingTile(String title, IconData icon) {
+  Widget _buildSettingTile(String title, IconData icon, VoidCallback onTap) {
     return ListTile(
       leading: Icon(icon, color: Colors.blue),
       title: Text(title),
       trailing: const Icon(Icons.chevron_right),
-      onTap: () {},
+      onTap: onTap, // Updated to use the passed onTap function
     );
   }
 

@@ -39,9 +39,9 @@ class _HomePageState extends State<HomePage> {
       }
 
       final response = await http.get(
-        Uri.parse('https://foocipe-recipe-service.onrender.com/v1/list-recipe'),
+        Uri.parse('http://localhost:8081/v1/recipes/newest'),
         headers: {
-          'access_token': accessToken,
+          'access_token': accessToken ?? '',
           'Content-Type': 'application/json',
         },
       );
@@ -84,11 +84,8 @@ class _HomePageState extends State<HomePage> {
             ),
             _buildCategoryList(),
             const SliverToBoxAdapter(child: SizedBox(height: 40)),
-            _buildSectionTitle('Today\'s Recipes'),
-            _buildRecipeSlider(),
-            const SliverToBoxAdapter(child: SizedBox(height: 40)),
-            _buildSectionTitle('Recommended Recipes'),
-            _buildRecommendedRecipes(),
+            _buildSectionTitle('Newest Recipes'),
+            _buildNewestRecipeSlider(),
           ],
         ),
       ),
@@ -217,7 +214,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildRecipeSlider() {
+  Widget _buildNewestRecipeSlider() {
     return SliverToBoxAdapter(
       child: SizedBox(
         height: 230,
@@ -227,43 +224,20 @@ class _HomePageState extends State<HomePage> {
           itemBuilder: (context, index) {
             return Padding(
               padding: EdgeInsets.only(left: index == 0 ? 20 : 0, right: 16),
-              child: RecipeCardV1(recipe: recipes[index]),
+              // Ensure to pass the correct image URL or a placeholder if empty
+              child: RecipeCardV1(
+                recipe: {
+                  ...recipes[index],
+                  'image_urls': recipes[index]['image_urls'].isNotEmpty
+                      ? recipes[index]['image_urls']
+                      : [
+                          'https://via.placeholder.com/150'
+                        ], // Placeholder image
+                },
+              ),
             );
           },
         ),
-      ),
-    );
-  }
-
-  Widget _buildRecommendedRecipes() {
-    return SliverList(
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          if (index < recipes.length) {
-            return Padding(
-              padding:
-                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
-              child: RecipeCardV2(recipe: recipes[index]),
-            );
-          } else if (recipes.length > 5 && index == recipes.length) {
-            return Padding(
-              padding: const EdgeInsets.symmetric(vertical: 16.0),
-              child: Center(
-                child: ElevatedButton(
-                  onPressed: () {},
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Theme.of(context).primaryColor,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 32, vertical: 12),
-                  ),
-                  child: Text('More'),
-                ),
-              ),
-            );
-          }
-          return null;
-        },
-        childCount: recipes.length > 5 ? recipes.length + 1 : recipes.length,
       ),
     );
   }

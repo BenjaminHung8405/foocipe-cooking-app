@@ -31,8 +31,7 @@ class _RecipePageState extends State<RecipePage> {
       return;
     }
     final response = await http.get(
-        Uri.parse(
-            'https://foocipe-recipe-service.onrender.com/v1/recipe/${widget.recipeId}'),
+        Uri.parse('http://localhost:8081/v1/recipes/${widget.recipeId}'),
         headers: {
           'access_token': accessToken,
           'Content-Type': 'application/json',
@@ -47,7 +46,27 @@ class _RecipePageState extends State<RecipePage> {
     }
   }
 
-  Future<void> _showPantryDetails(int pantryId) async {
+  Widget _buildIngredientSection(List<dynamic> ingredients) {
+    return _buildSection(
+      'Ingredients',
+      ListView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: ingredients.length,
+        itemBuilder: (context, index) {
+          final ingredient = ingredients[index];
+          return _buildListItem(
+            '${ingredient['quantity']} ${ingredient['ingredient_name']}',
+            Icons.check_circle_outline,
+            onTap: () => _showIngredientDetails(ingredient['ingredient_id']),
+          );
+        },
+      ),
+    );
+  }
+
+  // Thêm phương thức mới để hiển thị chi tiết ingredient
+  Future<void> _showIngredientDetails(int ingredientId) async {
     final accessToken = await storage.read(key: 'access_token');
     if (accessToken == null) {
       print('No access token found');
@@ -55,8 +74,7 @@ class _RecipePageState extends State<RecipePage> {
     }
 
     final response = await http.get(
-      Uri.parse(
-          'https://foocipe-recipe-service.onrender.com/v1/pantry/$pantryId'),
+      Uri.parse('http://localhost:8081/v1/ingredients/$ingredientId'),
       headers: {
         'access_token': accessToken,
         'Content-Type': 'application/json',
@@ -64,14 +82,90 @@ class _RecipePageState extends State<RecipePage> {
     );
 
     if (response.statusCode == 200) {
-      final pantryData = json.decode(response.body);
-      _showPantryDetailDialog(pantryData);
+      final ingredientData = json.decode(response.body);
+      _showIngredientDetailDialog(ingredientData);
     } else {
-      print('Failed to load pantry data');
+      print('Failed to load ingredient data');
     }
   }
 
-  void _showPantryDetailDialog(Map<String, dynamic> pantryData) {
+  Widget _buildToolSection(List<dynamic> tools) {
+    return _buildSection(
+      'Tools',
+      ListView.builder(
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemCount: tools.length,
+        itemBuilder: (context, index) {
+          final tool = tools[index];
+          return _buildListItem(
+            '${tool['quantity']} ${tool['tool_name']}',
+            Icons.kitchen,
+            onTap: () => _showToolDetails(tool['tool_id']),
+          );
+        },
+      ),
+    );
+  }
+
+  Future<void> _showToolDetails(int toolId) async {
+    final accessToken = await storage.read(key: 'access_token');
+    if (accessToken == null) {
+      print('No access token found');
+      return;
+    }
+
+    final response = await http.get(
+      Uri.parse('http://localhost:8081/v1/tools/$toolId'),
+      headers: {
+        'access_token': accessToken,
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final toolData = json.decode(response.body);
+      _showToolDetailDialog(toolData);
+    } else {
+      print('Failed to load tool data');
+    }
+  }
+
+  void _showIngredientDetailDialog(Map<String, dynamic> ingredientData) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.orange[100],
+          child: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    ingredientData['name'],
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text('Quantity: ${ingredientData['quantity']}'),
+                  Text(
+                      'Description: ${ingredientData['description'] ?? 'N/A'}'),
+                  Text('Type: ${ingredientData['type'] ?? 'N/A'}'),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _showToolDetailDialog(Map<String, dynamic> toolData) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -82,90 +176,23 @@ class _RecipePageState extends State<RecipePage> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ClipRRect(
-                  borderRadius:
-                      const BorderRadius.vertical(top: Radius.circular(4)),
-                  child: Image.network(
-                    pantryData['image_urls'][0],
-                    height: 200,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
+                Text(
+                  toolData['name'],
+                  style: const TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        pantryData['name'],
-                        style: const TextStyle(
-                            fontSize: 22, fontWeight: FontWeight.bold),
-                      ),
-                      const SizedBox(height: 4),
-                      Wrap(
-                        spacing: 8,
-                        runSpacing: 8,
-                        children: [
-                          _buildCategoryChip(pantryData['category']),
-                          ...pantryData['sub_categories'].map<Widget>(
-                              (subCategory) => _buildCategoryChip(subCategory)),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        pantryData['description'],
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                      const SizedBox(height: 24),
-                      Row(
-                        children: [
-                          _buildActionButton(Icons.more_horiz,
-                              Colors.blue.withOpacity(0.7), 'More', () {}),
-                          const SizedBox(width: 8),
-                          _buildActionButton(Icons.favorite,
-                              Colors.red.withOpacity(0.7), 'Love', () {}),
-                          const SizedBox(width: 8),
-                          _buildActionButton(Icons.shopping_cart,
-                              Colors.green.withOpacity(0.7), 'Buy', () {
-                            Navigator.pushNamed(
-                                context, '/product/${pantryData['id']}');
-                          }),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
+                const SizedBox(height: 8),
+                Text('Quantity: ${toolData['quantity']}'),
+                Text('Description: ${toolData['description'] ?? 'N/A'}'),
+                Text('Type: ${toolData['type'] ?? 'N/A'}'),
               ],
             ),
           ),
         );
       },
     );
-  }
-
-  Widget _buildCategoryChip(String category) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-      decoration: BoxDecoration(
-        color: _getCategoryColor(category).withOpacity(0.7),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Text(
-        category,
-        style:
-            const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-      ),
-    );
-  }
-
-  Color _getCategoryColor(String category) {
-    final colors = {
-      'Rau củ': Colors.green,
-      'Gia vị': Colors.red,
-      'Thực phẩm tươi sống': Colors.blue,
-    };
-    return colors[category] ?? Colors.grey;
   }
 
   Widget _buildActionButton(
@@ -208,8 +235,8 @@ class _RecipePageState extends State<RecipePage> {
     }
 
     final recipe = recipeData!['recipeData'];
-    final ingredients = recipeData!['recipeIngredientData'];
-    final tools = recipeData!['recipeToolData'];
+    final ingredients = recipeData!['recipeIngredientData'] ?? [];
+    final tools = recipeData!['recipeToolData'] ?? [];
     final steps = recipeData!['stepsData'];
 
     return Scaffold(
@@ -380,44 +407,6 @@ class _RecipePageState extends State<RecipePage> {
             linkColor: Colors.blue,
           ),
         ],
-      ),
-    );
-  }
-
-  Widget _buildIngredientSection(List<dynamic> ingredients) {
-    return _buildSection(
-      'Ingredients',
-      ListView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: ingredients.length,
-        itemBuilder: (context, index) {
-          final ingredient = ingredients[index];
-          return _buildListItem(
-            '${ingredient['quantity']} ${ingredient['pantry_name']}',
-            Icons.check_circle_outline,
-            onTap: () => _showPantryDetails(ingredient['pantry_id']),
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildToolSection(List<dynamic> tools) {
-    return _buildSection(
-      'Tools',
-      ListView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        itemCount: tools.length,
-        itemBuilder: (context, index) {
-          final tool = tools[index];
-          return _buildListItem(
-            '${tool['quantity']} ${tool['pantry_name']}',
-            Icons.kitchen,
-            onTap: () => _showPantryDetails(tool['pantry_id']),
-          );
-        },
       ),
     );
   }
