@@ -4,8 +4,6 @@ import '../presentation/pages/login_page.dart';
 import '../presentation/pages/register_page.dart';
 import '../presentation/pages/welcome_page.dart';
 import '../presentation/pages/Recipe/recipe_page.dart';
-import '../presentation/pages/Product/product_page.dart';
-import '../presentation/pages/Product/product_shop_page.dart';
 import '../presentation/pages/Recipe/recipe_management_page.dart';
 import '../presentation/pages/SettingPage/setting_page.dart';
 import '../presentation/pages/cart_page.dart';
@@ -14,6 +12,7 @@ import '../presentation/pages/SettingPage/product_management_page.dart';
 import '../presentation/pages/SettingPage/add_product_page.dart';
 import '../presentation/pages/SettingPage/order_management_page.dart';
 import '../presentation/pages/shop_page.dart';
+import '../presentation/pages/product_page.dart';
 
 final Map<String, WidgetBuilder> routes = {
   '/': (context) => const WelcomePage(),
@@ -21,7 +20,6 @@ final Map<String, WidgetBuilder> routes = {
   '/login': (context) => const LoginPage(),
   '/register': (context) => const RegisterPage(),
   '/recipe': (context) => const RecipeManagementPage(),
-  '/product': (context) => const ProductShopPage(),
   '/recipe_management': (context) => const RecipeManagementPage(),
   '/setting': (context) => const SettingPage(),
   '/cart': (context) => const CartPage(),

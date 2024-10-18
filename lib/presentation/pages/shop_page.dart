@@ -77,11 +77,16 @@ class _ShopPageState extends State<ShopPage> {
                 itemCount: products.length,
                 itemBuilder: (context, index) {
                   final product = products[index];
-                  return ProductCard(
-                    name: product['title'],
-                    price: '\$${product['price'].toString()}',
-                    color: Colors.orange,
-                    imageUrl: product['image_urls'][0],
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.pushNamed(context, '/product/${product['id']}');
+                    },
+                    child: ProductCard(
+                      name: product['title'],
+                      price: '\$${product['price'].toString()}',
+                      color: Colors.orange,
+                      imageUrl: product['image_urls'][0],
+                    ),
                   );
                 },
               ),
