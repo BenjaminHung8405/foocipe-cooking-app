@@ -71,50 +71,53 @@ class _IngredientToolStepsTabState extends State<IngredientToolStepsTab>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Recipe Creator'),
-        bottom: TabBar(
-          controller: _tabController,
-          tabs: [
-            Tab(icon: Icon(Icons.food_bank), text: 'Ingredients'),
-            Tab(icon: Icon(Icons.build), text: 'Tools'),
-            Tab(icon: Icon(Icons.list), text: 'Steps'),
-          ],
-        ),
-      ),
-      body: TabBarView(
-        controller: _tabController,
+      body: Column(
         children: [
-          IngredientTab(
-            selectedIngredients: selectedIngredients,
-            storage: widget.storage,
-            onIngredientsChanged: (ingredients) {
-              setState(() {
-                selectedIngredients = ingredients;
-              });
-              _saveData();
-            },
+          TabBar(
+            controller: _tabController,
+            tabs: [
+              Tab(icon: Icon(Icons.food_bank), text: 'Ingredients'),
+              Tab(icon: Icon(Icons.build), text: 'Tools'),
+              Tab(icon: Icon(Icons.list), text: 'Steps'),
+            ],
           ),
-          ToolTab(
-            selectedTools: selectedTools,
-            storage: widget.storage,
-            onToolsChanged: (tools) {
-              setState(() {
-                selectedTools = tools;
-              });
-              _saveData();
-            },
-          ),
-          StepsTab(
-            steps: steps,
-            selectedIngredients: selectedIngredients,
-            selectedTools: selectedTools,
-            onStepsChanged: (newSteps) {
-              setState(() {
-                steps = newSteps;
-              });
-              _saveData();
-            },
+          Expanded(
+            child: TabBarView(
+              controller: _tabController,
+              children: [
+                IngredientTab(
+                  selectedIngredients: selectedIngredients,
+                  storage: widget.storage,
+                  onIngredientsChanged: (ingredients) {
+                    setState(() {
+                      selectedIngredients = ingredients;
+                    });
+                    _saveData();
+                  },
+                ),
+                ToolTab(
+                  selectedTools: selectedTools,
+                  storage: widget.storage,
+                  onToolsChanged: (tools) {
+                    setState(() {
+                      selectedTools = tools;
+                    });
+                    _saveData();
+                  },
+                ),
+                StepsTab(
+                  steps: steps,
+                  selectedIngredients: selectedIngredients,
+                  selectedTools: selectedTools,
+                  onStepsChanged: (newSteps) {
+                    setState(() {
+                      steps = newSteps;
+                    });
+                    _saveData();
+                  },
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -149,12 +152,13 @@ class _IngredientTabState extends State<IngredientTab> {
       child: Column(
         children: [
           _buildSearchBar(),
+          SizedBox(height: 16),
           Expanded(
             child: AnimatedSwitcher(
               duration: Duration(milliseconds: 300),
               child: searchResults.isEmpty
                   ? _buildSelectedIngredients()
-                  : _buildSearchResults(),
+                  : _buildSearchIngredientsResults(),
             ),
           ),
         ],
@@ -166,7 +170,13 @@ class _IngredientTabState extends State<IngredientTab> {
     return TextField(
       controller: searchController,
       decoration: InputDecoration(
-        hintText: 'Search ingredients...',
+        hintText: 'Tìm kiếm nguyên liệu...',
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.orange),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide(color: Colors.orange),
+        ),
         suffixIcon: IconButton(
           icon: Icon(Icons.search),
           onPressed: () => searchIngredients(searchController.text),
@@ -176,17 +186,38 @@ class _IngredientTabState extends State<IngredientTab> {
     );
   }
 
-  Widget _buildSearchResults() {
+  Widget _buildSearchIngredientsResults() {
     return ListView.builder(
       itemCount: searchResults.length,
       itemBuilder: (context, index) {
         final ingredient = searchResults[index];
-        return ListTile(
-          title: Text(ingredient['name']),
-          subtitle: Text(ingredient['description']),
-          trailing: IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () => addIngredient(ingredient),
+        return GestureDetector(
+          onTap: () => addIngredient(ingredient),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: Colors.orange),
+              borderRadius: BorderRadius.circular(8.0),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.2),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: Offset(0, 3),
+                ),
+              ],
+            ),
+            child: ListTile(
+              title: Text(
+                ingredient['name'],
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              subtitle: Text(ingredient['description']),
+              trailing: IconButton(
+                icon: Icon(Icons.add, color: Colors.green),
+                onPressed: () => addIngredient(ingredient),
+              ),
+            ),
           ),
         );
       },
@@ -198,26 +229,51 @@ class _IngredientTabState extends State<IngredientTab> {
       itemCount: widget.selectedIngredients.length,
       itemBuilder: (context, index) {
         final ingredient = widget.selectedIngredients[index];
-        return ListTile(
-          title: Text(ingredient['name']),
-          subtitle:
-              Text('Quantity: ${ingredient['quantity']} ${ingredient['unit']}'),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              IconButton(
-                icon: Icon(Icons.remove),
-                onPressed: () => updateIngredientQuantity(index, -1),
+        return GestureDetector(
+          onTap: () => updateIngredientQuantity(index, 1),
+          child: Container(
+            margin: const EdgeInsets.only(bottom: 8.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: Colors.orange),
+              borderRadius: BorderRadius.circular(8.0),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.2),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: Offset(0, 3),
+                ),
+              ],
+            ),
+            child: ListTile(
+              title: Text(
+                ingredient['name'],
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.orange),
               ),
-              IconButton(
-                icon: Icon(Icons.add),
-                onPressed: () => updateIngredientQuantity(index, 1),
+              subtitle: Text(
+                'Số lượng: ${ingredient['quantity']} ${ingredient['unit']}',
+                style: TextStyle(color: Colors.black54),
               ),
-              IconButton(
-                icon: Icon(Icons.delete),
-                onPressed: () => removeIngredient(index),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.remove, color: Colors.red),
+                    onPressed: () => updateIngredientQuantity(index, -1),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.add, color: Colors.green),
+                    onPressed: () => updateIngredientQuantity(index, 1),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.delete, color: Colors.redAccent),
+                    onPressed: () => removeIngredient(index),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         );
       },
@@ -336,6 +392,7 @@ class _ToolTabState extends State<ToolTab> {
     widget.onToolsChanged(widget.selectedTools);
   }
 
+  // Tool tab
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -343,12 +400,13 @@ class _ToolTabState extends State<ToolTab> {
       child: Column(
         children: [
           _buildSearchBar(),
+          SizedBox(height: 16),
           Expanded(
             child: AnimatedSwitcher(
               duration: Duration(milliseconds: 300),
               child: searchResults.isEmpty
                   ? _buildSelectedTools()
-                  : _buildSearchResults(),
+                  : _buildSearchToolsResults(),
             ),
           ),
         ],
@@ -360,7 +418,7 @@ class _ToolTabState extends State<ToolTab> {
     return TextField(
       controller: searchController,
       decoration: InputDecoration(
-        hintText: 'Search tools...',
+        hintText: 'Tìm kiếm dụng cụ...',
         suffixIcon: IconButton(
           icon: Icon(Icons.search),
           onPressed: () => searchTools(searchController.text),
@@ -370,34 +428,58 @@ class _ToolTabState extends State<ToolTab> {
     );
   }
 
-  Widget _buildSearchResults() {
+  Widget _buildSearchToolsResults() {
     return ListView.builder(
       itemCount: searchResults.length,
       itemBuilder: (context, index) {
         final tool = searchResults[index];
         TextEditingController quantityController = TextEditingController();
-        return ListTile(
-          title: Text(tool['name']),
-          subtitle: Text(tool['description']),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(
-                width: 50,
-                child: TextField(
-                  controller: quantityController,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(hintText: 'Qty'),
+        return GestureDetector(
+          onTap: () {},
+          child: Container(
+            margin: const EdgeInsets.only(bottom: 8.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: Colors.orange),
+              borderRadius: BorderRadius.circular(8.0),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.2),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: Offset(0, 3),
                 ),
+              ],
+            ),
+            child: ListTile(
+              title: Text(
+                tool['name'],
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.orange),
               ),
-              IconButton(
-                icon: Icon(Icons.add),
-                onPressed: () {
-                  final quantity = int.tryParse(quantityController.text) ?? 1;
-                  addToolWithQuantity(tool, quantity);
-                },
+              subtitle: Text(tool['description']),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(
+                    width: 50,
+                    child: TextField(
+                      controller: quantityController,
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(hintText: 'Qty'),
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.add, color: Colors.green),
+                    onPressed: () {
+                      final quantity =
+                          int.tryParse(quantityController.text) ?? 1;
+                      addToolWithQuantity(tool, quantity);
+                    },
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         );
       },
@@ -409,18 +491,42 @@ class _ToolTabState extends State<ToolTab> {
       itemCount: widget.selectedTools.length,
       itemBuilder: (context, index) {
         final tool = widget.selectedTools[index];
-        return ListTile(
-          title: Text(tool['name']),
-          subtitle: Text(tool['description']),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('Qty: ${tool['quantity']}'),
-              IconButton(
-                icon: Icon(Icons.delete),
-                onPressed: () => removeTool(index),
+        return GestureDetector(
+          onTap: () {},
+          child: Container(
+            margin: const EdgeInsets.only(bottom: 8.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: Colors.orange),
+              borderRadius: BorderRadius.circular(8.0),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.2),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: Offset(0, 3),
+                ),
+              ],
+            ),
+            child: ListTile(
+              title: Text(
+                tool['name'],
+                style: TextStyle(
+                    fontWeight: FontWeight.bold, color: Colors.orange),
               ),
-            ],
+              subtitle: Text(tool['description']),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text('Qty: ${tool['quantity']}',
+                      style: TextStyle(color: Colors.black54)),
+                  IconButton(
+                    icon: Icon(Icons.delete, color: Colors.redAccent),
+                    onPressed: () => removeTool(index),
+                  ),
+                ],
+              ),
+            ),
           ),
         );
       },
