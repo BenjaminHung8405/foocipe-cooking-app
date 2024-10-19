@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../widgets/product_rating.dart';
 
 class Product {
   final String name;
@@ -10,6 +11,12 @@ class Product {
   final String imageUrl;
   final double rating;
   final int reviews;
+  final int oneStarReviews;
+  final int twoStarReviews;
+  final int threeStarReviews;
+  final int fourStarReviews;
+  final int fiveStarReviews;
+  final List<String> recentReviews;
 
   Product({
     required this.name,
@@ -18,6 +25,12 @@ class Product {
     required this.imageUrl,
     required this.rating,
     required this.reviews,
+    required this.oneStarReviews,
+    required this.twoStarReviews,
+    required this.threeStarReviews,
+    required this.fourStarReviews,
+    required this.fiveStarReviews,
+    required this.recentReviews,
   });
 }
 
@@ -62,8 +75,20 @@ class _ProductPageState extends State<ProductPage> {
           price: '\$${data['price']}',
           description: data['description'],
           imageUrl: data['image_urls'][0], // Assuming the first image is used
-          rating: 0, // You may want to adjust this based on your needs
-          reviews: 0, // You may want to adjust this based on your needs
+          rating: 4.2, // Ví dụ giá trị rating
+          reviews: 150, // Ví dụ tổng số lượt đánh giá
+          oneStarReviews: 10,
+          twoStarReviews: 20,
+          threeStarReviews: 30,
+          fourStarReviews: 40,
+          fiveStarReviews: 50,
+          recentReviews: [
+            "Sản phẩm rất tốt, tôi rất hài lòng!",
+            "Chất lượng không như mong đợi.",
+            "Tôi sẽ không mua lại sản phẩm này.",
+            "Dịch vụ khách hàng rất tốt.",
+            "Sản phẩm tuyệt vời, sẽ giới thiệu cho bạn bè!"
+          ],
         );
       });
     } else {
@@ -132,6 +157,18 @@ class _ProductPageState extends State<ProductPage> {
                         ),
                         Text(
                           product!.description, // Use fetched data
+                        ),
+                        SizedBox(height: 16),
+                        // Thêm widget ProductRating
+                        ProductRating(
+                          rating: product!.rating,
+                          reviews: product!.reviews,
+                          oneStarReviews: product!.oneStarReviews,
+                          twoStarReviews: product!.twoStarReviews,
+                          threeStarReviews: product!.threeStarReviews,
+                          fourStarReviews: product!.fourStarReviews,
+                          fiveStarReviews: product!.fiveStarReviews,
+                          recentReviews: product!.recentReviews,
                         ),
                       ],
                     ),
