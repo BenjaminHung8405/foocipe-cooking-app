@@ -1,7 +1,10 @@
+// lib/presentation/pages/shop_page.dart
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../layouts/main_layout.dart';
+import '../widgets/search_bar.dart';
 
 class ShopPage extends StatefulWidget {
   const ShopPage({super.key});
@@ -45,53 +48,71 @@ class _ShopPageState extends State<ShopPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('E-commerce App'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              // Handle search action
-            },
-          ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Welcome back, Khanh', style: TextStyle(fontSize: 24)),
-            SizedBox(height: 16),
-            Text('Popular Products',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            Expanded(
-              child: GridView.builder(
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 0.75,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
-                ),
-                itemCount: products.length,
-                itemBuilder: (context, index) {
-                  final product = products[index];
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, '/product/${product['id']}');
-                    },
-                    child: ProductCard(
-                      name: product['title'],
-                      price: '\$${product['price'].toString()}',
-                      color: Colors.orange,
-                      imageUrl: product['image_urls'][0],
+    return MainLayout(
+      child: SafeArea(
+        child: Scaffold(
+          body: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(10.20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('Welcome back!', style: TextStyle(fontSize: 18)),
+                        Text('KhanhRom',
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold)),
+                      ],
                     ),
-                  );
-                },
+                    CircleAvatar(
+                      // Placeholder for avatar
+                      radius: 20,
+                      backgroundColor: Colors.grey, // Placeholder color
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
+              // Search Bar
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 0.0),
+                child: SearchBarWidget(), // Replaced with SearchBarWidget
+              ),
+              // Existing GridView
+              Expanded(
+                // Wrap GridView in Expanded to take remaining space
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: GridView.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 0.8,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                    ),
+                    itemCount: products.length,
+                    itemBuilder: (context, index) {
+                      final product = products[index];
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(
+                              context, '/product/${product['id']}');
+                        },
+                        child: ProductCard(
+                          name: product['title'],
+                          price: '\$${product['price'].toString()}',
+                          color: Colors.orangeAccent,
+                          imageUrl: product['image_urls'][0],
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -114,7 +135,7 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: color,
+      color: Colors.white,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

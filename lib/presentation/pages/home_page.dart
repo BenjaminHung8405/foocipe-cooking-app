@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../widgets/recipe_card.dart';
 import '../layouts/main_layout.dart';
+import '../widgets/search_bar.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -74,7 +75,7 @@ class _HomePageState extends State<HomePage> {
                     height: 30,
                   ),
                   _buildHeader(),
-                  _searchField(),
+                  const SearchBarWidget(),
                   const SizedBox(
                     height: 30,
                   ),
@@ -237,35 +238,6 @@ class _HomePageState extends State<HomePage> {
               ),
             );
           },
-        ),
-      ),
-    );
-  }
-
-  Container _searchField() {
-    return Container(
-      margin: const EdgeInsets.only(top: 20, left: 20, right: 20),
-      child: TextField(
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: const Color(0xFFF4F5F7),
-          contentPadding: const EdgeInsets.all(10),
-          hintText: 'Search for your recipe',
-          hintStyle: const TextStyle(
-              color: Color.fromARGB(255, 206, 203, 203),
-              fontSize: 18,
-              fontWeight: FontWeight.w400),
-          prefixIcon: const Padding(
-            padding: EdgeInsets.only(left: 15, right: 10),
-            child: Icon(
-              Icons.search_rounded,
-              size: 30,
-            ),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(20),
-            borderSide: BorderSide.none,
-          ),
         ),
       ),
     );
