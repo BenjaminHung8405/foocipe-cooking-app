@@ -11,7 +11,6 @@ class RecipeManagementPage extends StatelessWidget {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
-          foregroundColor: Color(0xFFFD8B51),
           title: const Text('Recipe Management'),
           bottom: const TabBar(
             tabs: [

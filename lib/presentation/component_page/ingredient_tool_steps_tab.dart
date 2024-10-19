@@ -239,8 +239,7 @@ class _IngredientTabState extends State<IngredientTab> {
 
     try {
       final response = await http.get(
-        Uri.parse(
-            'https://foocipe-recipe-service.onrender.com/v1/search/ingredients?name=$query'),
+        Uri.parse('http://localhost:8081/v1/search/ingredients?name=$query'),
         headers: {
           'access_token': accessToken,
           'Content-Type': 'application/json',
@@ -322,6 +321,21 @@ class _ToolTabState extends State<ToolTab> {
   List<Map<String, dynamic>> searchResults = [];
   TextEditingController searchController = TextEditingController();
 
+  void addToolWithQuantity(Map<String, dynamic> tool, int quantity) {
+    setState(() {
+      final existingIndex = widget.selectedTools
+          .indexWhere((element) => element['id'] == tool['id']);
+      if (existingIndex == -1) {
+        widget.selectedTools.add({...tool, 'quantity': quantity});
+      } else {
+        widget.selectedTools[existingIndex]['quantity'] += quantity;
+      }
+      searchResults = [];
+      searchController.clear();
+    });
+    widget.onToolsChanged(widget.selectedTools);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -361,12 +375,29 @@ class _ToolTabState extends State<ToolTab> {
       itemCount: searchResults.length,
       itemBuilder: (context, index) {
         final tool = searchResults[index];
+        TextEditingController quantityController = TextEditingController();
         return ListTile(
           title: Text(tool['name']),
           subtitle: Text(tool['description']),
-          trailing: IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () => addTool(tool),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(
+                width: 50,
+                child: TextField(
+                  controller: quantityController,
+                  keyboardType: TextInputType.number,
+                  decoration: InputDecoration(hintText: 'Qty'),
+                ),
+              ),
+              IconButton(
+                icon: Icon(Icons.add),
+                onPressed: () {
+                  final quantity = int.tryParse(quantityController.text) ?? 1;
+                  addToolWithQuantity(tool, quantity);
+                },
+              ),
+            ],
           ),
         );
       },
@@ -381,9 +412,15 @@ class _ToolTabState extends State<ToolTab> {
         return ListTile(
           title: Text(tool['name']),
           subtitle: Text(tool['description']),
-          trailing: IconButton(
-            icon: Icon(Icons.delete),
-            onPressed: () => removeTool(index),
+          trailing: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Qty: ${tool['quantity']}'),
+              IconButton(
+                icon: Icon(Icons.delete),
+                onPressed: () => removeTool(index),
+              ),
+            ],
           ),
         );
       },
@@ -405,8 +442,7 @@ class _ToolTabState extends State<ToolTab> {
 
     try {
       final response = await http.get(
-        Uri.parse(
-            'https://foocipe-recipe-service.onrender.com/v1/search/tools?name=$query'),
+        Uri.parse('http://localhost:8081/v1/search/tools?name=$query'),
         headers: {
           'access_token': accessToken,
           'Content-Type': 'application/json',
@@ -429,17 +465,6 @@ class _ToolTabState extends State<ToolTab> {
         SnackBar(content: Text('Failed to search tools. Please try again.')),
       );
     }
-  }
-
-  void addTool(Map<String, dynamic> tool) {
-    setState(() {
-      if (!widget.selectedTools.any((element) => element['id'] == tool['id'])) {
-        widget.selectedTools.add(tool);
-      }
-      searchResults = [];
-      searchController.clear();
-    });
-    widget.onToolsChanged(widget.selectedTools);
   }
 
   void removeTool(int index) {

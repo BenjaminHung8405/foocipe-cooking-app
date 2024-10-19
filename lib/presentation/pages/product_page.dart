@@ -100,6 +100,7 @@ class _ProductPageState extends State<ProductPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.white,
         leading: IconButton(
           icon:
               Icon(Icons.arrow_back_ios, size: 16, color: Colors.grey.shade800),

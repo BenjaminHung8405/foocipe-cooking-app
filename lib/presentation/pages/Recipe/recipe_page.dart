@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../widgets/expandable_text.dart';
+import '../../widgets/steps.dart';
 
 class RecipePage extends StatefulWidget {
   final String recipeId;
@@ -252,7 +253,8 @@ class _RecipePageState extends State<RecipePage> {
                 _buildDescription(recipe),
                 _buildIngredientSection(ingredients),
                 _buildToolSection(tools),
-                _buildStepSection(steps),
+                // _buildStepSection(steps),
+                StepsWidget(steps: steps)
               ],
             ),
           ),
