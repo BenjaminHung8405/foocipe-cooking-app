@@ -6,56 +6,77 @@ class ProductCard extends StatelessWidget {
   final Color color;
   final String imageUrl;
 
+  final double rating;
+  final int totalRatings;
+
   const ProductCard({
     required this.title,
     required this.price,
     required this.color,
     required this.imageUrl,
+    this.rating = 4.5,
+    this.totalRatings = 255,
   });
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isWideScreen = screenWidth > 600;
+
     return Card(
       color: color,
-      elevation: 4,
-      child: Stack(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Image.network(imageUrl, fit: BoxFit.cover),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  title,
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+      elevation: 2,
+      child: SingleChildScrollView(
+        child: Stack(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(8)),
+                  child: Image.network(imageUrl, fit: BoxFit.cover),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Text(
-                  '\$${price.toStringAsFixed(2)}',
-                  style: TextStyle(fontSize: 14, color: Colors.green),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    title,
+                    style: TextStyle(
+                        fontSize: isWideScreen ? 20 : 16,
+                        fontWeight: FontWeight.bold),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          Positioned(
-            bottom: 8,
-            right: 8,
-            child: ElevatedButton(
-              onPressed: () {},
-              child: Text('+'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.orange,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '\$${price.toStringAsFixed(2)}',
+                        style: TextStyle(
+                            fontSize: isWideScreen ? 16 : 14,
+                            color: Colors.orange.shade400),
+                      ),
+                      Row(
+                        children: [
+                          Icon(Icons.star, color: Colors.yellow),
+                          SizedBox(width: 4),
+                          Text(
+                            '$rating (${totalRatings})',
+                            style: TextStyle(
+                                fontSize: isWideScreen ? 14 : 12,
+                                color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-                padding: EdgeInsets.only(top: 4, bottom: 4),
-              ),
+              ],
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
