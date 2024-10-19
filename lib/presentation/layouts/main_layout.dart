@@ -39,7 +39,12 @@ class _MainLayoutState extends State<MainLayout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: widget.child,
+      body: Padding(
+        // Added Padding widget
+        padding: const EdgeInsets.symmetric(
+            horizontal: 16.0), // Set left and right padding
+        child: widget.child,
+      ),
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(

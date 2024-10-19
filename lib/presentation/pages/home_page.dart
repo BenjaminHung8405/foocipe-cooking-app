@@ -95,7 +95,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildHeader() {
     return Container(
-      padding: const EdgeInsets.only(left: 20, bottom: 10),
+      padding: const EdgeInsets.only(bottom: 4.0),
       child: const Text(
         'What would you\nlike to Cook?',
         style: TextStyle(
@@ -109,7 +109,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildCategorySection() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+      padding: const EdgeInsets.only(bottom: 4),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -118,7 +118,7 @@ class _HomePageState extends State<HomePage> {
             style: Theme.of(context).textTheme.titleLarge?.copyWith(
                 color: const Color.fromARGB(255, 29, 40, 61),
                 fontWeight: FontWeight.w700,
-                fontSize: 25),
+                fontSize: 20),
           ),
           TextButton(
             onPressed: () {},
@@ -127,7 +127,7 @@ class _HomePageState extends State<HomePage> {
               style: TextStyle(
                   color: Theme.of(context).primaryColor,
                   fontWeight: FontWeight.w600,
-                  fontSize: 18),
+                  fontSize: 14),
             ),
           ),
         ],
@@ -142,7 +142,7 @@ class _HomePageState extends State<HomePage> {
         child: ListView.builder(
           itemCount: categories.length,
           scrollDirection: Axis.horizontal,
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding: const EdgeInsets.only(),
           itemBuilder: (context, index) {
             return Padding(
               padding: const EdgeInsets.only(right: 16),
@@ -201,7 +201,7 @@ class _HomePageState extends State<HomePage> {
   Widget _buildSectionTitle(String title) {
     return SliverToBoxAdapter(
       child: Padding(
-        padding: const EdgeInsets.only(left: 20, bottom: 12),
+        padding: const EdgeInsets.only(bottom: 12),
         child: Text(
           title,
           style: Theme.of(context)

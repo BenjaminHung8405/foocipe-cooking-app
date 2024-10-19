@@ -39,6 +39,7 @@ class _ShopPageState extends State<ShopPage> {
     if (response.statusCode == 200) {
       setState(() {
         products = json.decode(response.body);
+        print(products);
       });
     } else {
       throw Exception('Failed to load products');
@@ -50,73 +51,17 @@ class _ShopPageState extends State<ShopPage> {
     return MainLayout(
       child: SafeArea(
         child: Scaffold(
-          body: Column(
-            children: [
-              // Header
-              Padding(
-                padding: const EdgeInsets.only(
-                    top: 20.0, left: 16.0, right: 16.0, bottom: 0.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          body: CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: Column(
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('Welcome back!', style: TextStyle(fontSize: 18)),
-                        Text('KhanhRom',
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold)),
-                      ],
-                    ),
-                    CircleAvatar(
-                      // Placeholder for avatar
-                      radius: 20,
-                      backgroundColor: Colors.grey, // Placeholder color
-                    ),
+                    _buildHeader(),
+                    SearchBarWidget(),
+                    _buildCategories(),
+                    _buildProductGrid(),
+                    _buildProductSlider()
                   ],
-                ),
-              ),
-              // Searchbả
-              SearchBarWidget(),
-              // Categories
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Categories',
-                      style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                  Text('See All',
-                      style: TextStyle(fontSize: 16, color: Colors.orange)),
-                ],
-              ),
-              _buildCategories(),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 0.8,
-                      crossAxisSpacing: 16,
-                      mainAxisSpacing: 16,
-                    ),
-                    itemCount: products.length,
-                    itemBuilder: (context, index) {
-                      final product = products[index];
-                      return GestureDetector(
-                        onTap: () {
-                          Navigator.pushNamed(
-                              context, '/product/${product['id']}');
-                        },
-                        child: ProductCard(
-                          name: product['title'],
-                          price: '\$${product['price'].toString()}',
-                          color: Colors.orangeAccent,
-                          imageUrl: product['image_urls'][0],
-                        ),
-                      );
-                    },
-                  ),
                 ),
               ),
             ],
@@ -125,16 +70,86 @@ class _ShopPageState extends State<ShopPage> {
       ),
     );
   }
+
+  Widget _buildHeader() {
+    return Padding(
+      padding: const EdgeInsets.only(top: 20.0, bottom: 0.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Welcome back!', style: TextStyle(fontSize: 18)),
+              Text('KhanhRom',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            ],
+          ),
+          CircleAvatar(
+            radius: 20,
+            backgroundColor: Colors.grey, // Placeholder color
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProductGrid() {
+    return Container(
+      child: GridView.builder(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 2,
+          childAspectRatio: 0.75,
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
+        ),
+        itemCount: products.length,
+        itemBuilder: (context, index) {
+          final product = products[index];
+          return ProductCard(
+            title: product['title'],
+            price: product['price'],
+            color: Colors.white,
+            imageUrl: product['image_urls'][0],
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildProductSlider() {
+    return Container(
+      height: 200, // Set a height for the slider
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: products.length,
+        itemBuilder: (context, index) {
+          final product = products[index];
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ProductCard(
+              title: product['title'],
+              price: product['price'],
+              color: Colors.white,
+              imageUrl: product['image_urls'][0],
+            ),
+          );
+        },
+      ),
+    );
+  }
 }
 
 class ProductCard extends StatelessWidget {
-  final String name;
-  final String price;
+  final String title;
+  final double price;
   final Color color;
   final String imageUrl;
 
   const ProductCard({
-    required this.name,
+    required this.title,
     required this.price,
     required this.color,
     required this.imageUrl,
@@ -143,24 +158,44 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      color: Colors.white,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
+      color: color,
+      elevation: 4,
+      child: Stack(
         children: [
-          Container(
-            width: double.infinity,
-            height: 150, // Set desired height
-            child: Image.network(imageUrl, fit: BoxFit.cover),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Image.network(imageUrl, fit: BoxFit.cover),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  title,
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Text(
+                  '\$${price.toStringAsFixed(2)}',
+                  style: TextStyle(fontSize: 14, color: Colors.green),
+                ),
+              ),
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(name,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-          ),
-          Text(price),
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {},
+          Positioned(
+            bottom: 8,
+            right: 8,
+            child: ElevatedButton(
+              onPressed: () {},
+              child: Text('+'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.orange,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                padding: EdgeInsets.only(top: 4, bottom: 4),
+              ),
+            ),
           ),
         ],
       ),
@@ -171,27 +206,30 @@ class ProductCard extends StatelessWidget {
 Widget _buildCategories() {
   return Container(
     height: 100,
-    padding: EdgeInsets.only(left: 16, right: 16),
+    padding: EdgeInsets.only(),
     child: ListView(
-      scrollDirection: Axis.horizontal, // Change to horizontal scrolling
+      scrollDirection: Axis.horizontal,
       children: [
-        _buildCategoryTab('All'),
-        _buildCategoryTab('Fruit'),
-        _buildCategoryTab('Vegetable'),
-        _buildCategoryTab('Meal'),
-        _buildCategoryTab('Fish'),
-        _buildCategoryTab('Tool'),
+        _buildCategoryTab('All', Colors.orange, Colors.white),
+        _buildCategoryTab('Fruit', Colors.grey.shade100, Colors.black),
+        _buildCategoryTab('Vegetable', Colors.grey.shade100, Colors.black),
+        _buildCategoryTab('Meal', Colors.grey.shade100, Colors.black),
+        _buildCategoryTab('Fish', Colors.grey.shade100, Colors.black),
+        _buildCategoryTab('Tool', Colors.grey.shade100, Colors.black),
       ],
     ),
   );
 }
 
-Widget _buildCategoryTab(String category) {
+Widget _buildCategoryTab(String category, Color bgColor, Color textColor) {
   return Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+    padding: const EdgeInsets.only(right: 8),
     child: Chip(
-      // Using Chip for a tab-like appearance
-      label: Text(category),
+      backgroundColor: bgColor, // Set background color
+      label: Text(
+        category,
+        style: TextStyle(color: textColor), // Set text color
+      ),
     ),
   );
 }
