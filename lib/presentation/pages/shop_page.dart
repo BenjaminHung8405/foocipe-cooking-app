@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../layouts/main_layout.dart';
 import '../widgets/search_bar.dart';
+import '../widgets/product_card.dart';
 
 class ShopPage extends StatefulWidget {
   const ShopPage({super.key});
@@ -60,7 +61,6 @@ class _ShopPageState extends State<ShopPage> {
                     SearchBarWidget(),
                     _buildCategories(),
                     _buildProductGrid(),
-                    _buildProductSlider()
                   ],
                 ),
               ),
@@ -108,27 +108,12 @@ class _ShopPageState extends State<ShopPage> {
         itemCount: products.length,
         itemBuilder: (context, index) {
           final product = products[index];
-          return ProductCard(
-            title: product['title'],
-            price: product['price'],
-            color: Colors.white,
-            imageUrl: product['image_urls'][0],
-          );
-        },
-      ),
-    );
-  }
-
-  Widget _buildProductSlider() {
-    return Container(
-      height: 200, // Set a height for the slider
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: products.length,
-        itemBuilder: (context, index) {
-          final product = products[index];
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
+          return GestureDetector(
+            // Thay đổi ở đây
+            onTap: () {
+              Navigator.pushNamed(context,
+                  '/product/${product['id']}'); // Chuyển hướng đến trang sản phẩm
+            },
             child: ProductCard(
               title: product['title'],
               price: product['price'],
@@ -137,67 +122,6 @@ class _ShopPageState extends State<ShopPage> {
             ),
           );
         },
-      ),
-    );
-  }
-}
-
-class ProductCard extends StatelessWidget {
-  final String title;
-  final double price;
-  final Color color;
-  final String imageUrl;
-
-  const ProductCard({
-    required this.title,
-    required this.price,
-    required this.color,
-    required this.imageUrl,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      color: color,
-      elevation: 4,
-      child: Stack(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Image.network(imageUrl, fit: BoxFit.cover),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  title,
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Text(
-                  '\$${price.toStringAsFixed(2)}',
-                  style: TextStyle(fontSize: 14, color: Colors.green),
-                ),
-              ),
-            ],
-          ),
-          Positioned(
-            bottom: 8,
-            right: 8,
-            child: ElevatedButton(
-              onPressed: () {},
-              child: Text('+'),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.orange,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                padding: EdgeInsets.only(top: 4, bottom: 4),
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
