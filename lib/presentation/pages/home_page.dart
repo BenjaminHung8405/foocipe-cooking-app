@@ -95,14 +95,12 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildHeader() {
     return Container(
-      padding: const EdgeInsets.only(
-        left: 20,
-      ),
+      padding: const EdgeInsets.only(left: 20, bottom: 10),
       child: const Text(
         'What would you\nlike to Cook?',
         style: TextStyle(
             color: Colors.black,
-            fontSize: 30,
+            fontSize: 25,
             fontWeight: FontWeight.w700,
             height: 1),
       ),

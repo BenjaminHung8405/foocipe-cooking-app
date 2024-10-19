@@ -1,4 +1,3 @@
-// lib/presentation/pages/shop_page.dart
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -53,8 +52,10 @@ class _ShopPageState extends State<ShopPage> {
         child: Scaffold(
           body: Column(
             children: [
+              // Header
               Padding(
-                padding: const EdgeInsets.all(10.20),
+                padding: const EdgeInsets.only(
+                    top: 20.0, left: 16.0, right: 16.0, bottom: 0.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -75,14 +76,21 @@ class _ShopPageState extends State<ShopPage> {
                   ],
                 ),
               ),
-              // Search Bar
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 0.0),
-                child: SearchBarWidget(), // Replaced with SearchBarWidget
+              // Searchbả
+              SearchBarWidget(),
+              // Categories
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Categories',
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  Text('See All',
+                      style: TextStyle(fontSize: 16, color: Colors.orange)),
+                ],
               ),
-              // Existing GridView
+              _buildCategories(),
               Expanded(
-                // Wrap GridView in Expanded to take remaining space
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: GridView.builder(
@@ -158,4 +166,32 @@ class ProductCard extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget _buildCategories() {
+  return Container(
+    height: 100,
+    padding: EdgeInsets.only(left: 16, right: 16),
+    child: ListView(
+      scrollDirection: Axis.horizontal, // Change to horizontal scrolling
+      children: [
+        _buildCategoryTab('All'),
+        _buildCategoryTab('Fruit'),
+        _buildCategoryTab('Vegetable'),
+        _buildCategoryTab('Meal'),
+        _buildCategoryTab('Fish'),
+        _buildCategoryTab('Tool'),
+      ],
+    ),
+  );
+}
+
+Widget _buildCategoryTab(String category) {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+    child: Chip(
+      // Using Chip for a tab-like appearance
+      label: Text(category),
+    ),
+  );
 }
