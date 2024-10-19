@@ -71,7 +71,7 @@ class _RecipeTabState extends State<RecipeTab> {
                   ElevatedButton(
                     onPressed: _createRecipe,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.orange,
+                      backgroundColor: Color(0xFFFD8B51),
                       minimumSize: const Size(double.infinity, 50),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(8),
@@ -162,11 +162,7 @@ class _RecipeTabState extends State<RecipeTab> {
   Widget _buildServingTimeSection() {
     return Card(
       elevation: 0,
-      color: Colors.transparent,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: Colors.orange),
-      ),
+      color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -187,43 +183,66 @@ class _RecipeTabState extends State<RecipeTab> {
       {String unit = ''}) {
     return Row(
       children: [
+        Icon(icon, color: Color(0xFFFD8B51)),
         const SizedBox(width: 8),
         Expanded(child: Text(label, style: const TextStyle(fontSize: 16))),
-        IconButton(
-          icon: const Icon(Icons.remove_circle_outline),
-          onPressed: () => setState(() {
-            if (value > 1) {
-              switch (label) {
-                case 'Số phần':
-                  servings--;
-                  break;
-                case 'Thời gian chuẩn bị':
-                  prepTime--;
-                  break;
-                case 'Thời gian nấu':
-                  cookTime--;
-                  break;
-              }
-            }
-          }),
+        Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: const Color.fromARGB(255, 94, 89, 74),
+            ),
+            borderRadius: BorderRadius.circular(16),
+          ),
+          height: 40,
+          width: 105,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IconButton(
+                icon: const Icon(Icons.remove_circle_outline),
+                onPressed: () => setState(() {
+                  if (value > 1) {
+                    switch (label) {
+                      case 'Servings':
+                        servings--;
+                        break;
+                      case 'Prep Time':
+                        prepTime--;
+                        break;
+                      case 'Cook Time':
+                        cookTime--;
+                        break;
+                    }
+                  }
+                }),
+              ),
+              Text('$value',
+                  style: const TextStyle(
+                      fontSize: 16, fontWeight: FontWeight.bold)),
+              IconButton(
+                icon: const Icon(Icons.add_circle_outline),
+                onPressed: () => setState(() {
+                  switch (label) {
+                    case 'Servings':
+                      servings++;
+                      break;
+                    case 'Prep Time':
+                      prepTime++;
+                      break;
+                    case 'Cook Time':
+                      cookTime++;
+                      break;
+                  }
+                }),
+              ),
+            ],
+          ),
         ),
-        Text('$value ${unit.isNotEmpty ? unit : ''}',
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-        IconButton(
-          icon: const Icon(Icons.add_circle_outline),
-          onPressed: () => setState(() {
-            switch (label) {
-              case 'Số phần':
-                servings++;
-                break;
-              case 'Thời gian chuẩn bị':
-                prepTime++;
-                break;
-              case 'Thời gian nấu':
-                cookTime++;
-                break;
-            }
-          }),
+        Expanded(
+          child: Text('${unit.isNotEmpty ? unit : ''}',
+              textAlign: TextAlign.center,
+              style:
+                  const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
         ),
       ],
     );
@@ -244,8 +263,9 @@ class _RecipeTabState extends State<RecipeTab> {
                 child: ElevatedButton(
                   onPressed: () => setState(() => difficulty = value),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor:
-                        difficulty == value ? Colors.orange : Colors.grey[200],
+                    backgroundColor: difficulty == value
+                        ? Color(0xFFFD8B51)
+                        : Colors.grey[200],
                     foregroundColor:
                         difficulty == value ? Colors.white : Colors.black,
                     shape: RoundedRectangleBorder(
