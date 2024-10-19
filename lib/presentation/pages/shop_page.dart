@@ -149,10 +149,10 @@ Widget _buildCategoryTab(String category, Color bgColor, Color textColor) {
   return Padding(
     padding: const EdgeInsets.only(right: 8),
     child: Chip(
-      backgroundColor: bgColor, // Set background color
+      backgroundColor: bgColor,
       label: Text(
         category,
-        style: TextStyle(color: textColor), // Set text color
+        style: TextStyle(color: textColor),
       ),
     ),
   );
