@@ -96,35 +96,45 @@ class _ProductPageState extends State<ProductPage> {
         child: product == null // Check if product data is loaded
             ? Center(
                 child: CircularProgressIndicator()) // Show loading indicator
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Image.network(product!.imageUrl), // Use fetched data
-                  SizedBox(height: 16),
-                  Text(
-                    product!.name, // Use fetched data
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    product!.price, // Use fetched data
-                    style:
-                        TextStyle(fontSize: 20, color: Colors.orange.shade500),
-                  ),
-                  SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Icon(Icons.star, color: Colors.amber),
-                      Text(
-                          '${product!.rating} (${product!.reviews} Review)'), // Use fetched data
-                    ],
-                  ),
-                  SizedBox(height: 16),
-                  Text(
-                    'Description',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  Text(
-                    product!.description, // Use fetched data
+            : CustomScrollView(
+                // Changed to CustomScrollView
+                slivers: [
+                  // Use slivers for CustomScrollView
+                  SliverToBoxAdapter(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Image.network(product!.imageUrl), // Use fetched data
+                        SizedBox(height: 16),
+                        Text(
+                          product!.name, // Use fetched data
+                          style: TextStyle(
+                              fontSize: 24, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          product!.price, // Use fetched data
+                          style: TextStyle(
+                              fontSize: 20, color: Colors.orange.shade500),
+                        ),
+                        SizedBox(height: 8),
+                        Row(
+                          children: [
+                            Icon(Icons.star, color: Colors.amber),
+                            Text(
+                                '${product!.rating} (${product!.reviews} Review)'), // Use fetched data
+                          ],
+                        ),
+                        SizedBox(height: 16),
+                        Text(
+                          'Description',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          product!.description, // Use fetched data
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
