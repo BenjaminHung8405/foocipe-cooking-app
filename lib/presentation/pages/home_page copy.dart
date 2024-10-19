@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:foocipe_cooking_app/model/category.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../widgets/recipe_card.dart';
 import '../layouts/main_layout.dart';
 import '../widgets/search_bar.dart';
+import '../../service/api_service.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -18,6 +17,7 @@ class _HomePageState extends State<HomePage> {
   List<CategoryModel> categories = [];
   List<Map<String, dynamic>> recipes = [];
   final storage = const FlutterSecureStorage();
+  final ApiService apiService = ApiService(); // Khởi tạo ApiService
 
   @override
   void initState() {
@@ -32,28 +32,13 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _fetchRecipes() async {
     try {
-      final accessToken = await storage.read(key: 'access_token');
-
-      if (accessToken == null) {
-        print('No access token found');
-        return;
-      }
-
-      final response = await http.get(
-        Uri.parse('http://localhost:8081/v1/recipes/newest'),
-        headers: {
-          'access_token': accessToken ?? '',
-          'Content-Type': 'application/json',
-        },
-      );
-
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
+      final fetchedRecipes = await apiService.GET();
+      if (fetchedRecipes != null) {
         setState(() {
-          recipes = List<Map<String, dynamic>>.from(data['recipes']);
+          recipes = List<Map<String, dynamic>>.from(fetchedRecipes);
         });
       } else {
-        print('Failed to fetch recipes: ${response.statusCode}');
+        print('No recipes found');
       }
     } catch (e) {
       print('Error fetching recipes: $e');
