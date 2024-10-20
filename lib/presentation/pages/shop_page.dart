@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../layouts/main_layout.dart';
 import '../widgets/search_bar.dart';
 import '../widgets/product_card.dart';
@@ -31,7 +32,7 @@ class _ShopPageState extends State<ShopPage> {
       return;
     }
     final response = await http.get(
-      Uri.parse('http://localhost:8081/v1/products/newest'),
+      Uri.parse('${dotenv.env['PRODUCT_SERVICE_API']}/products/newest'),
       headers: {
         'access_token': accessToken ?? '',
         'Content-Type': 'application/json',

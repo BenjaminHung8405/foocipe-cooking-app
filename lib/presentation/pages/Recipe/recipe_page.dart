@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../widgets/expandable_text.dart';
@@ -32,7 +33,8 @@ class _RecipePageState extends State<RecipePage> {
       return;
     }
     final response = await http.get(
-        Uri.parse('http://localhost:8081/v1/recipes/${widget.recipeId}'),
+        Uri.parse(
+            '${dotenv.env['RECIPE_SERVICE_API']}/recipes/${widget.recipeId}'),
         headers: {
           'access_token': accessToken,
           'Content-Type': 'application/json',
@@ -75,7 +77,8 @@ class _RecipePageState extends State<RecipePage> {
     }
 
     final response = await http.get(
-      Uri.parse('http://localhost:8081/v1/ingredients/$ingredientId'),
+      Uri.parse(
+          '${dotenv.env['RECIPE_SERVICE_API']}/ingredients/$ingredientId'),
       headers: {
         'access_token': accessToken,
         'Content-Type': 'application/json',
@@ -117,7 +120,7 @@ class _RecipePageState extends State<RecipePage> {
     }
 
     final response = await http.get(
-      Uri.parse('http://localhost:8081/v1/tools/$toolId'),
+      Uri.parse('${dotenv.env['RECIPE_SERVICE_API']}/tools/$toolId'),
       headers: {
         'access_token': accessToken,
         'Content-Type': 'application/json',

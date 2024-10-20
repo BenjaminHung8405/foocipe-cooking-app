@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class MyRecipePage extends StatefulWidget {
   const MyRecipePage({super.key});
@@ -17,7 +18,7 @@ class _MyRecipePageState extends State<MyRecipePage> {
     final accessToken = await storage.read(key: 'access_token');
 
     final response = await http.get(
-      Uri.parse('http://localhost:8081/v1/recipes/my'),
+      Uri.parse('${dotenv.env['RECIPE_SERVICE_API']}/recipes/my'),
       headers: {
         'access_token': accessToken ?? '',
         'Content-Type': 'application/json',
