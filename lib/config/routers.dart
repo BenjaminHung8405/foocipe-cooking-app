@@ -14,6 +14,7 @@ import '../presentation/pages/SettingPage/order_management_page.dart';
 import '../presentation/pages/shop_page.dart';
 import '../presentation/pages/product_page.dart';
 import '../presentation/pages/SettingPage/account_page.dart';
+import '../presentation/pages/checkout_page.dart';
 
 final Map<String, WidgetBuilder> routes = {
   '/': (context) => const WelcomePage(),
@@ -29,7 +30,7 @@ final Map<String, WidgetBuilder> routes = {
   '/setting/add/product': (context) => const AddProductPage(),
   '/setting/management/order': (context) => const OrderManagementPage(),
   '/shop': (context) => const ShopPage(),
-  '/setting/account': (context) => const AccountPage()
+  '/setting/account': (context) => const AccountPage(),
 };
 
 Route<dynamic> generateRoute(RouteSettings settings) {
@@ -45,6 +46,14 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     final productId = settings.name!.split('/').last;
     return MaterialPageRoute(
       builder: (context) => ProductPage(productId: productId),
+      settings: settings,
+    );
+  }
+
+  if (settings.name == '/checkout') {
+    final List<int> selectedCartIds = settings.arguments as List<int>;
+    return MaterialPageRoute(
+      builder: (context) => CheckoutPage(selectedCartIds: selectedCartIds),
       settings: settings,
     );
   }

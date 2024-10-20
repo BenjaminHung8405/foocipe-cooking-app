@@ -46,12 +46,12 @@ class ProductPage extends StatefulWidget {
 
 class _ProductPageState extends State<ProductPage> {
   final storage = const FlutterSecureStorage();
-  Product? product; // Variable to hold the product data
+  Product? product;
 
   @override
   void initState() {
     super.initState();
-    fetchProduct(); // Fetch product data when the state initializes
+    fetchProduct();
   }
 
   Future<void> fetchProduct() async {
@@ -76,9 +76,9 @@ class _ProductPageState extends State<ProductPage> {
           name: data['title'],
           price: '\$${data['price']}',
           description: data['description'],
-          imageUrl: data['image_urls'][0], // Assuming the first image is used
-          rating: 4.2, // Ví dụ giá trị rating
-          reviews: 150, // Ví dụ tổng số lượt đánh giá
+          imageUrl: data['image_urls'][0],
+          rating: 4.2,
+          reviews: 150,
           oneStarReviews: 10,
           twoStarReviews: 20,
           threeStarReviews: 30,
@@ -98,6 +98,24 @@ class _ProductPageState extends State<ProductPage> {
     }
   }
 
+  Future<void> addToCart(String productId) async {
+    final response = await http.post(
+      Uri.parse('${dotenv.env['RECIPE_SERVICE_API']}/carts/add/$productId/1'),
+      headers: {
+        'access_token': await storage.read(key: 'access_token') ?? '',
+        'Content-Type': 'application/json',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      // Handle successful response
+      print('Product added to cart successfully');
+    } else {
+      // Handle error response
+      print('Failed to add product to cart');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -111,7 +129,7 @@ class _ProductPageState extends State<ProductPage> {
           },
         ),
         title: Center(
-            child: Text('Detail Product', style: TextStyle(fontSize: 16))),
+            child: Text('Thông tin sản phẩm', style: TextStyle(fontSize: 16))),
         actions: [
           IconButton(
             icon: Icon(Icons.more_vert),
@@ -119,112 +137,119 @@ class _ProductPageState extends State<ProductPage> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: product == null // Check if product data is loaded
-            ? Center(
-                child: CircularProgressIndicator()) // Show loading indicator
-            : CustomScrollView(
-                // Changed to CustomScrollView
-                slivers: [
-                  // Use slivers for CustomScrollView
-                  SliverToBoxAdapter(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Image.network(product!.imageUrl), // Use fetched data
-                        SizedBox(height: 16),
-                        Text(
-                          product!.name, // Use fetched data
-                          style: TextStyle(
-                              fontSize: 24, fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          product!.price, // Use fetched data
-                          style: TextStyle(
-                              fontSize: 20, color: Colors.orange.shade500),
-                        ),
-                        SizedBox(height: 8),
-                        Row(
+      body: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: product == null
+                ? Center(child: CircularProgressIndicator())
+                : CustomScrollView(
+                    slivers: [
+                      SliverToBoxAdapter(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Icon(Icons.star, color: Colors.amber),
+                            Image.network(product!.imageUrl),
+                            SizedBox(height: 16),
                             Text(
-                                '${product!.rating} (${product!.reviews} Review)'), // Use fetched data
+                              product!.name,
+                              style: TextStyle(
+                                  fontSize: 24, fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              product!.price,
+                              style: TextStyle(
+                                  fontSize: 20, color: Colors.orange.shade500),
+                            ),
+                            SizedBox(height: 8),
+                            Row(
+                              children: [
+                                Icon(Icons.star, color: Colors.amber),
+                                Text(
+                                    '${product!.rating} (${product!.reviews} Review)'),
+                              ],
+                            ),
+                            SizedBox(height: 16),
+                            Text(
+                              'Description',
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            Text(
+                              product!.description,
+                            ),
+                            SizedBox(height: 16),
+                            ProductRating(
+                              rating: product!.rating,
+                              reviews: product!.reviews,
+                              oneStarReviews: product!.oneStarReviews,
+                              twoStarReviews: product!.twoStarReviews,
+                              threeStarReviews: product!.threeStarReviews,
+                              fourStarReviews: product!.fourStarReviews,
+                              fiveStarReviews: product!.fiveStarReviews,
+                              recentReviews: product!.recentReviews,
+                            ),
                           ],
                         ),
-                        SizedBox(height: 16),
-                        Text(
-                          'Description',
-                          style: TextStyle(
-                              fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          product!.description, // Use fetched data
-                        ),
-                        SizedBox(height: 16),
-                        // Thêm widget ProductRating
-                        ProductRating(
-                          rating: product!.rating,
-                          reviews: product!.reviews,
-                          oneStarReviews: product!.oneStarReviews,
-                          twoStarReviews: product!.twoStarReviews,
-                          threeStarReviews: product!.threeStarReviews,
-                          fourStarReviews: product!.fourStarReviews,
-                          fiveStarReviews: product!.fiveStarReviews,
-                          recentReviews: product!.recentReviews,
-                        ),
-                      ],
+                      ),
+                    ],
+                  ),
+          ),
+          Positioned(
+            left: 0, // Đặt lại vị trí bên trái
+            right: 0, // Đặt lại vị trí bên phải
+            bottom: 16,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center, // Căn giữa hàng
+              children: [
+                OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    padding: EdgeInsets.all(8),
+                    side: BorderSide(color: Colors.black),
+                    backgroundColor: Colors.white, // Thêm màu nền trắng
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6),
                     ),
                   ),
-                ],
-              ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: Colors.transparent,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            OutlinedButton(
-              style: OutlinedButton.styleFrom(
-                padding: EdgeInsets.all(8),
-                side: BorderSide(color: Colors.black),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(6),
+                  onPressed: () {},
+                  child:
+                      Icon(Icons.chat_outlined, color: Colors.black, size: 18),
                 ),
-              ),
-              onPressed: () {},
-              child: Icon(Icons.chat_outlined, color: Colors.black, size: 18),
-            ),
-            SizedBox(width: 8),
-            OutlinedButton(
-              style: OutlinedButton.styleFrom(
-                padding: EdgeInsets.all(8),
-                side: BorderSide(color: Colors.black),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(6),
+                SizedBox(width: 8),
+                OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    padding: EdgeInsets.all(8),
+                    side: BorderSide(color: Colors.black),
+                    backgroundColor: Colors.white, // Thêm màu nền trắng
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                  ),
+                  onPressed: () async {
+                    await addToCart(
+                        widget.productId); // Call the function to add to cart
+                  },
+                  child: Icon(Icons.shopping_cart_outlined,
+                      color: Colors.black, size: 18),
                 ),
-              ),
-              onPressed: () {},
-              child: Icon(Icons.shopping_cart_outlined,
-                  color: Colors.black, size: 18),
-            ),
-            SizedBox(width: 8),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.orange,
-                padding:
-                    EdgeInsets.only(top: 8, bottom: 8, left: 20, right: 20),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(6),
+                SizedBox(width: 8),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.orange,
+                    padding:
+                        EdgeInsets.only(top: 8, bottom: 8, left: 20, right: 20),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(6),
+                    ),
+                  ),
+                  onPressed: () {},
+                  child: Text('Buy Now',
+                      style: TextStyle(color: Colors.white, fontSize: 18)),
                 ),
-              ),
-              onPressed: () {},
-              child: Text('Buy Now',
-                  style: TextStyle(color: Colors.white, fontSize: 18)),
+              ],
             ),
-            SizedBox(width: 8),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }

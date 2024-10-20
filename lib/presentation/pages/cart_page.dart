@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http; // Importing http package
-import 'dart:convert'; // Importing for JSON decoding
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import '../pages/checkout_page.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
 
   @override
-  _CartPageState createState() => _CartPageState(); // State class
+  _CartPageState createState() => _CartPageState();
 }
 
 class _CartPageState extends State<CartPage> {
   final storage = const FlutterSecureStorage();
   List<dynamic> cartItems = [];
   double totalPrice = 0.0;
-  List<int> selectedItems = []; // List to keep track of selected item IDs
+  List<int> selectedItems = [];
 
   @override
   void initState() {
@@ -34,7 +35,7 @@ class _CartPageState extends State<CartPage> {
     if (response.statusCode == 200) {
       final List<dynamic> data = json.decode(response.body);
       setState(() {
-        cartItems = data; // Update cart items
+        cartItems = data;
         totalPrice = cartItems.fold(
             0, (sum, item) => sum + (item['price'] * item['quantity']));
       });
@@ -52,7 +53,7 @@ class _CartPageState extends State<CartPage> {
       },
     );
     if (response.statusCode == 200) {
-      fetchCartData(); // Refresh cart data after deletion
+      fetchCartData();
     } else {
       throw Exception('Failed to delete cart item');
     }
@@ -67,7 +68,7 @@ class _CartPageState extends State<CartPage> {
           'Content-Type': 'application/json',
         });
     if (response.statusCode == 200) {
-      fetchCartData(); // Refresh cart data after updating quantity
+      fetchCartData();
     } else {
       throw Exception('Failed to update cart item quantity');
     }
@@ -75,8 +76,7 @@ class _CartPageState extends State<CartPage> {
 
   Widget _buildCartItem(String name, double price, String imageUrl,
       String category, int id, int quantity) {
-    final isSelected =
-        selectedItems.contains(id); // Check if the item is selected
+    final isSelected = selectedItems.contains(id);
     return Card(
       color: Colors.white,
       margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 8.0),
@@ -89,9 +89,9 @@ class _CartPageState extends State<CartPage> {
               onChanged: (bool? value) {
                 setState(() {
                   if (value == true) {
-                    selectedItems.add(id); // Add to selected items
+                    selectedItems.add(id);
                   } else {
-                    selectedItems.remove(id); // Remove from selected items
+                    selectedItems.remove(id);
                   }
                 });
               },
@@ -108,12 +108,11 @@ class _CartPageState extends State<CartPage> {
                     icon: const Icon(Icons.remove, size: 14),
                     onPressed: () async {
                       if (quantity > 1) {
-                        // Prevent quantity from going below 1
                         await _updateCartItemQuantity(id, quantity - 1);
                       }
                     },
                   ),
-                  Text('$quantity'), // Display current quantity
+                  Text('$quantity'),
                   IconButton(
                     icon: const Icon(Icons.add, size: 14),
                     onPressed: () async {
@@ -164,11 +163,10 @@ class _CartPageState extends State<CartPage> {
                 ],
               ),
             ),
-            // New close icon for deleting the item
             IconButton(
               icon: const Icon(Icons.close, color: Colors.red),
               onPressed: () async {
-                await _deleteCartItem(id); // Call delete function
+                await _deleteCartItem(id);
               },
             ),
           ],
@@ -178,8 +176,11 @@ class _CartPageState extends State<CartPage> {
   }
 
   void _checkoutSelectedItems() {
-    // Implement your checkout logic here using selectedItems
-    print('Selected items for checkout: $selectedItems');
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => CheckoutPage(selectedCartIds: selectedItems),
+      ),
+    );
   }
 
   @override
@@ -215,8 +216,8 @@ class _CartPageState extends State<CartPage> {
                   item['price'],
                   item['image_urls'][0],
                   'Water, Food, Clothes',
-                  item['id'], // Pass the item ID
-                  item['quantity'], // Pass the item quantity
+                  item['id'],
+                  item['quantity'],
                 );
               },
             ),
@@ -228,11 +229,11 @@ class _CartPageState extends State<CartPage> {
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
-                backgroundColor: Colors.blue, // Changed color for distinction
+                backgroundColor: Colors.blue,
                 minimumSize: const Size(double.infinity, 50),
               ),
               onPressed: () {
-                _checkoutSelectedItems(); // Call the checkout method
+                _checkoutSelectedItems();
               },
               child: const Text(
                 'Checkout Selected Items',
@@ -249,9 +250,8 @@ class _CartPageState extends State<CartPage> {
   }
 
   Widget _buildOrderSummary() {
-    double selectedTotalPrice = 0.0; // Initialize selected total price
+    double selectedTotalPrice = 0.0;
 
-    // Calculate total price for selected items
     for (var item in cartItems) {
       if (selectedItems.contains(item['id'])) {
         selectedTotalPrice += item['price'] * item['quantity'];
@@ -269,26 +269,17 @@ class _CartPageState extends State<CartPage> {
                 'Tổng số tiền',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
               ),
-              Text(
-                  '${selectedTotalPrice.toStringAsFixed(2)} VNĐ'), // Display selected total price
+              Text('${selectedTotalPrice.toStringAsFixed(2)} VNĐ'),
             ],
           ),
           const SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [
-              Text('Phí vận chuyển'),
-              Text('2.00 VNĐ'),
-            ],
-          ),
           const Divider(),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text('Tổng tiền',
                   style: TextStyle(fontWeight: FontWeight.bold)),
-              Text(
-                  '${(selectedTotalPrice + 2.00).toStringAsFixed(2)} VNĐ', // Calculate total with shipping
+              Text('${(selectedTotalPrice).toStringAsFixed(2)} VNĐ',
                   style: const TextStyle(fontWeight: FontWeight.bold)),
             ],
           ),
