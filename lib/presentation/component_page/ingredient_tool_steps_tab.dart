@@ -205,18 +205,19 @@ class _IngredientTabState extends State<IngredientTab> {
           child: Container(
             decoration: BoxDecoration(
               color: Colors.white,
-              border: Border.all(color: Colors.orange),
-              borderRadius: BorderRadius.circular(8.0),
+              border: Border.all(color: Colors.white),
+              borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.2),
                   spreadRadius: 2,
                   blurRadius: 5,
-                  offset: Offset(0, 3),
+                  offset: Offset(0, 2),
                 ),
               ],
             ),
             child: ListTile(
+              leading: Image(image: AssetImage('assets/icons/egg.png')),
               title: Text(
                 ingredient['name'],
                 style: TextStyle(fontWeight: FontWeight.bold),
@@ -238,49 +239,58 @@ class _IngredientTabState extends State<IngredientTab> {
       itemCount: widget.selectedIngredients.length,
       itemBuilder: (context, index) {
         final ingredient = widget.selectedIngredients[index];
-        return GestureDetector(
-          onTap: () => updateIngredientQuantity(index, 1),
-          child: Container(
-            margin: const EdgeInsets.only(bottom: 8.0),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border.all(color: Colors.orange),
-              borderRadius: BorderRadius.circular(8.0),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
-                  spreadRadius: 2,
-                  blurRadius: 5,
-                  offset: Offset(0, 3),
-                ),
-              ],
-            ),
-            child: ListTile(
-              title: Text(
-                ingredient['name'],
-                style: TextStyle(
-                    fontWeight: FontWeight.bold, color: Colors.orange),
-              ),
-              subtitle: Text(
-                'Số lượng: ${ingredient['quantity']} ${ingredient['unit']}',
-                style: TextStyle(color: Colors.black54),
-              ),
-              trailing: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                    icon: Icon(Icons.remove, color: Colors.red),
-                    onPressed: () => updateIngredientQuantity(index, -1),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.add, color: Colors.green),
-                    onPressed: () => updateIngredientQuantity(index, 1),
-                  ),
-                  IconButton(
-                    icon: Icon(Icons.delete, color: Colors.redAccent),
-                    onPressed: () => removeIngredient(index),
+        return Padding(
+          padding: const EdgeInsets.only(top: 100),
+          child: GestureDetector(
+            onTap: () => updateIngredientQuantity(index, 1),
+            child: Container(
+              margin: const EdgeInsets.only(bottom: 8.0),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: Colors.white),
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.2),
+                    spreadRadius: 2,
+                    blurRadius: 5,
+                    offset: Offset(0, 2),
                   ),
                 ],
+              ),
+              child: ListTile(
+                leading: Image(image: AssetImage('assets/icons/egg.png')),
+                title: Text(
+                  ingredient['name'],
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: const Color.fromARGB(255, 94, 89, 74),
+                  ),
+                ),
+                subtitle: Text(
+                  'Số lượng: ${ingredient['quantity']} ${ingredient['unit']}',
+                  style: TextStyle(color: Colors.black54),
+                ),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.remove, color: Colors.red),
+                      onPressed: () => updateIngredientQuantity(index, -1),
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.add, color: Colors.green),
+                      onPressed: () => updateIngredientQuantity(index, 1),
+                    ),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    IconButton(
+                      icon: Icon(Icons.delete, color: Colors.redAccent),
+                      onPressed: () => removeIngredient(index),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -464,8 +474,10 @@ class _ToolTabState extends State<ToolTab> {
             margin: const EdgeInsets.only(bottom: 8.0),
             decoration: BoxDecoration(
               color: Colors.white,
-              border: Border.all(color: Colors.orange),
-              borderRadius: BorderRadius.circular(8.0),
+              border: Border.all(
+                color: const Color.fromARGB(255, 94, 89, 74),
+              ),
+              borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.2),
@@ -476,10 +488,12 @@ class _ToolTabState extends State<ToolTab> {
               ],
             ),
             child: ListTile(
+              leading: Image(image: AssetImage('assets/icons/spoon.png')),
               title: Text(
                 tool['name'],
                 style: TextStyle(
-                    fontWeight: FontWeight.bold, color: Colors.orange),
+                    fontWeight: FontWeight.bold,
+                    color: const Color.fromARGB(255, 94, 89, 74)),
               ),
               subtitle: Text(tool['description']),
               trailing: Row(
@@ -521,8 +535,8 @@ class _ToolTabState extends State<ToolTab> {
             margin: const EdgeInsets.only(bottom: 8.0),
             decoration: BoxDecoration(
               color: Colors.white,
-              border: Border.all(color: Colors.orange),
-              borderRadius: BorderRadius.circular(8.0),
+              border: Border.all(color: const Color.fromARGB(255, 94, 89, 74)),
+              borderRadius: BorderRadius.circular(16),
               boxShadow: [
                 BoxShadow(
                   color: Colors.grey.withOpacity(0.2),
@@ -533,10 +547,12 @@ class _ToolTabState extends State<ToolTab> {
               ],
             ),
             child: ListTile(
+              leading: Image(image: AssetImage('assets/icons/spoon.png')),
               title: Text(
                 tool['name'],
                 style: TextStyle(
-                    fontWeight: FontWeight.bold, color: Colors.orange),
+                    fontWeight: FontWeight.bold,
+                    color: const Color.fromARGB(255, 94, 89, 74)),
               ),
               subtitle: Text(tool['description']),
               trailing: Row(
@@ -544,6 +560,9 @@ class _ToolTabState extends State<ToolTab> {
                 children: [
                   Text('Qty: ${tool['quantity']}',
                       style: TextStyle(color: Colors.black54)),
+                  SizedBox(
+                    width: 20,
+                  ),
                   IconButton(
                     icon: Icon(Icons.delete, color: Colors.redAccent),
                     onPressed: () => removeTool(index),
@@ -728,8 +747,15 @@ class _StepsTabState extends State<StepsTab> {
           return ElevatedButton(
             onPressed: () => _showIngredientDialog(ingredient, entry.value),
             child: Text(
-                '${ingredient['name']}: ${entry.value} ${ingredient['unit']} remaining'),
+              '${ingredient['name']}: ${entry.value} ${ingredient['unit']} remaining',
+              style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  color: Colors.white),
+            ),
             style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
               backgroundColor: isUsed
                   ? (isFullyUsed ? Colors.green : Colors.orange)
                   : Colors.red,
@@ -742,9 +768,19 @@ class _StepsTabState extends State<StepsTab> {
           final tool = widget.selectedTools
               .firstWhere((t) => t['id'].toString() == toolId);
           return ElevatedButton(
-            onPressed: () => _addToolToStep(tool),
-            child: Text(tool['name']),
-          );
+              onPressed: () => _addToolToStep(tool),
+              child: Text(
+                tool['name'],
+                style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.white),
+              ),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+              ));
         }),
       ],
     );

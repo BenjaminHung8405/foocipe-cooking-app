@@ -23,7 +23,6 @@ class _AddProductPageState extends State<AddProductPage> {
               fontWeight: FontWeight.w600,
               color: const Color.fromARGB(255, 94, 89, 74),
             ),
-            textAlign: TextAlign.left,
           ),
           Text(
             'Thêm ảnh để mô tả sản phẩm của bạn',
@@ -32,7 +31,7 @@ class _AddProductPageState extends State<AddProductPage> {
               fontWeight: FontWeight.w500,
               color: const Color.fromARGB(255, 94, 89, 74),
             ),
-          )
+          ),
         ],
       ),
     );
