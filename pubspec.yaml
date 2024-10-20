@@ -21,6 +21,7 @@ dependencies:
   firebase_storage: ^12.3.3
   flutter_dotenv: ^5.2.1
   iconsax_plus: ^1.0.0
+  font_awesome_flutter: ^10.7.0
   # firebase_core: ^2.15.1
   # firebase_storage: ^11.2.6
   # image_picker: ^1.0.4

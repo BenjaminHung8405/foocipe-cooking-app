@@ -39,7 +39,6 @@ class _ProductManagementPageState extends State<ProductManagementPage> {
     if (response.statusCode == 200) {
       List<dynamic> data = json.decode(response.body);
       if (mounted) {
-        // Check if the widget is still mounted
         setState(() {
           products = data.map((item) => Product.fromJson(item)).toList();
         });

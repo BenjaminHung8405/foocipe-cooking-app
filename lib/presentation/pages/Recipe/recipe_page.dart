@@ -49,6 +49,45 @@ class _RecipePageState extends State<RecipePage> {
     }
   }
 
+  @override
+  Widget build(BuildContext context) {
+    if (recipeData == null) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
+          ),
+        ),
+      );
+    }
+
+    final recipe = recipeData!['recipeData'];
+    final ingredients = recipeData!['recipeIngredientData'] ?? [];
+    final tools = recipeData!['recipeToolData'] ?? [];
+    final steps = recipeData!['stepsData'];
+
+    return Scaffold(
+      body: CustomScrollView(
+        slivers: [
+          _buildSliverAppBar(recipe),
+          SliverToBoxAdapter(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildRecipeHeader(recipe),
+                _buildInfoSection(recipe),
+                _buildDescription(recipe),
+                _buildIngredientSection(ingredients),
+                _buildToolSection(tools),
+                StepsWidget(steps: steps)
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildIngredientSection(List<dynamic> ingredients) {
     return _buildSection(
       'Ingredients',
@@ -226,46 +265,6 @@ class _RecipePageState extends State<RecipePage> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    if (recipeData == null) {
-      return const Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.orange),
-          ),
-        ),
-      );
-    }
-
-    final recipe = recipeData!['recipeData'];
-    final ingredients = recipeData!['recipeIngredientData'] ?? [];
-    final tools = recipeData!['recipeToolData'] ?? [];
-    final steps = recipeData!['stepsData'];
-
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          _buildSliverAppBar(recipe),
-          SliverToBoxAdapter(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildRecipeHeader(recipe),
-                _buildInfoSection(recipe),
-                _buildDescription(recipe),
-                _buildIngredientSection(ingredients),
-                _buildToolSection(tools),
-                // _buildStepSection(steps),
-                StepsWidget(steps: steps)
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildSliverAppBar(Map<String, dynamic> recipe) {
     return SliverAppBar(
       expandedHeight: 300,
@@ -307,23 +306,10 @@ class _RecipePageState extends State<RecipePage> {
             child: Text(
               recipe['name'],
               style: const TextStyle(
-                fontFamily: 'Playfair Display',
-                fontSize: 28,
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
-          ),
-          Row(
-            children: [
-              IconButton(
-                icon: const Icon(Icons.feedback, color: Colors.blue),
-                onPressed: () {},
-              ),
-              IconButton(
-                icon: const Icon(Icons.favorite_border, color: Colors.red),
-                onPressed: () {},
-              ),
-            ],
           ),
         ],
       ),
@@ -343,13 +329,13 @@ class _RecipePageState extends State<RecipePage> {
       child: Row(
         children: [
           _buildInfoItem(Icons.access_time, '${recipe['prep_time']} min',
-              'Prep', colors[0]),
+              'Chuẩn bị', colors[0]),
+          _buildInfoItem(Icons.whatshot, '${recipe['cook_time']} min',
+              'Nấu nướng', colors[1]),
           _buildInfoItem(
-              Icons.whatshot, '${recipe['cook_time']} min', 'Cook', colors[1]),
+              Icons.restaurant, '${recipe['servings']}', 'Phục vụ', colors[2]),
           _buildInfoItem(
-              Icons.restaurant, '${recipe['servings']}', 'Servings', colors[2]),
-          _buildInfoItem(Icons.fitness_center, recipe['difficulty'],
-              'Difficulty', colors[3]),
+              Icons.fitness_center, recipe['difficulty'], 'Độ khó', colors[3]),
         ],
       ),
     );
@@ -397,8 +383,7 @@ class _RecipePageState extends State<RecipePage> {
           const Text(
             'Description',
             style: TextStyle(
-              fontFamily: 'Playfair Display',
-              fontSize: 24,
+              fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -440,7 +425,6 @@ class _RecipePageState extends State<RecipePage> {
           Text(
             title,
             style: const TextStyle(
-              fontFamily: 'Playfair Display',
               fontSize: 24,
               fontWeight: FontWeight.bold,
             ),
