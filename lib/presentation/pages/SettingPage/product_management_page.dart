@@ -52,7 +52,10 @@ class _ProductManagementPageState extends State<ProductManagementPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Quản lý sản phẩm")),
+      appBar: AppBar(
+        title: Text("Quản lý sản phẩm"),
+        centerTitle: true,
+      ),
       body: products.isEmpty
           ? Center(child: CircularProgressIndicator())
           : ListView.builder(
