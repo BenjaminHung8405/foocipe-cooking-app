@@ -13,6 +13,7 @@ import '../presentation/pages/SettingPage/add_product_page.dart';
 import '../presentation/pages/SettingPage/order_management_page.dart';
 import '../presentation/pages/shop_page.dart';
 import '../presentation/pages/product_page.dart';
+import '../presentation/pages/SettingPage/account_page.dart';
 
 final Map<String, WidgetBuilder> routes = {
   '/': (context) => const WelcomePage(),
@@ -28,6 +29,7 @@ final Map<String, WidgetBuilder> routes = {
   '/setting/add/product': (context) => const AddProductPage(),
   '/setting/management/order': (context) => const OrderManagementPage(),
   '/shop': (context) => const ShopPage(),
+  '/setting/account': (context) => const AccountPage()
 };
 
 Route<dynamic> generateRoute(RouteSettings settings) {

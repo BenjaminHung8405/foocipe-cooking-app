@@ -63,7 +63,7 @@ class _ProductPageState extends State<ProductPage> {
     }
     final response = await http.get(
       Uri.parse(
-          '${dotenv.env['PRODUCT_SERVICE_API']}/products/${widget.productId}'),
+          '${dotenv.env['RECIPE_SERVICE_API']}/products/${widget.productId}'),
       headers: {
         'access_token': accessToken ?? '',
         'Content-Type': 'application/json',

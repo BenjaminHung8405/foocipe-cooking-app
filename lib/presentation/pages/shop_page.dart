@@ -32,7 +32,7 @@ class _ShopPageState extends State<ShopPage> {
       return;
     }
     final response = await http.get(
-      Uri.parse('${dotenv.env['PRODUCT_SERVICE_API']}/products/newest'),
+      Uri.parse('${dotenv.env['RECIPE_SERVICE_API']}/products/newest'),
       headers: {
         'access_token': accessToken ?? '',
         'Content-Type': 'application/json',
