@@ -6,7 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 class ApiService {
   final storage = const FlutterSecureStorage();
 
-  Future<dynamic> request(String endpoint, String method,
+  Future<dynamic> request(String serviceName, String endpoint, String method,
       {Map<String, dynamic>? bodyData}) async {
     try {
       final accessToken = await storage.read(key: 'access_token');
@@ -16,7 +16,14 @@ class ApiService {
         return null;
       }
 
-      final uri = Uri.parse('${dotenv.env['API_URL']}$endpoint');
+      // Lấy URL từ biến môi trường dựa trên serviceName
+      final apiUrl = dotenv.env[serviceName];
+      if (apiUrl == null) {
+        print('Service URL for $serviceName is not set in .env file');
+        return null;
+      }
+
+      final uri = Uri.parse('$apiUrl$endpoint');
       final headers = {
         'access_token': accessToken,
         'Content-Type': 'application/json',
@@ -43,7 +50,8 @@ class ApiService {
       }
 
       if (response.statusCode == 200) {
-        return json.decode(response.body);
+        final responseData = json.decode(response.body);
+        return responseData;
       } else {
         print('Failed to fetch data: ${response.statusCode}');
         return null;
@@ -54,19 +62,22 @@ class ApiService {
     }
   }
 
-  Future<List<Map<String, dynamic>>> GET() async {
-    return await request('/v1', 'GET');
+  Future<List<Map<String, dynamic>>> GET(
+      String serviceName, String endpoint) async {
+    return await request(serviceName, endpoint, 'GET');
   }
 
-  Future<dynamic> POST(Map<String, dynamic> bodyData) async {
-    return await request('/v1', 'POST', bodyData: bodyData);
+  Future<dynamic> POST(String serviceName, String endpoint,
+      Map<String, dynamic> bodyData) async {
+    return await request(serviceName, endpoint, 'POST', bodyData: bodyData);
   }
 
-  Future<dynamic> PUT(String id, Map<String, dynamic> bodyData) async {
-    return await request('/v1/$id', 'PUT', bodyData: bodyData);
+  Future<dynamic> PUT(String serviceName, String endpoint,
+      Map<String, dynamic> bodyData) async {
+    return await request(serviceName, endpoint, 'PUT', bodyData: bodyData);
   }
 
-  Future<dynamic> DELETE(String id) async {
-    return await request('/v1/$id', 'DELETE');
+  Future<dynamic> DELETE(String serviceName, String endpoint) async {
+    return await request(serviceName, endpoint, 'DELETE');
   }
 }

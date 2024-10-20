@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
 
@@ -29,7 +30,7 @@ class _ProductManagementPageState extends State<ProductManagementPage> {
     }
 
     final response = await http.get(
-      Uri.parse('http://localhost:8081/v1/products/seller'),
+      Uri.parse('${dotenv.env['PRODUCT_SERVICE_API']}/products/seller'),
       headers: {
         'access_token': accessToken ?? '',
         'Content-Type': 'application/json',

@@ -33,6 +33,7 @@ flutter:
   uses-material-design: true
 
   assets:
+    - .env
     - assets/logos/foocipe-1.png
     - assets/icons/google-logo.png
     - assets/icons/facebook-logo.png

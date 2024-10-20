@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:convert';
 
 class RecipeTab extends StatefulWidget {
@@ -384,7 +385,7 @@ class _RecipeTabState extends State<RecipeTab> {
 
     try {
       final response = await http.post(
-        Uri.parse('http://localhost:8081/v1/recipes'),
+        Uri.parse('${dotenv.env['RECIPE_SERVICE_API']}/recipes'),
         headers: {
           'access_token': accessToken,
           'Content-Type': 'application/json',

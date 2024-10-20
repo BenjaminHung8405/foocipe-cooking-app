@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class IngredientToolStepsTab extends StatefulWidget {
   final FlutterSecureStorage storage;
@@ -295,7 +296,8 @@ class _IngredientTabState extends State<IngredientTab> {
 
     try {
       final response = await http.get(
-        Uri.parse('http://localhost:8081/v1/search/ingredients?name=$query'),
+        Uri.parse(
+            '${dotenv.env['RECIPE_SERVICE_API']}/search/ingredients?name=$query'),
         headers: {
           'access_token': accessToken,
           'Content-Type': 'application/json',
@@ -548,7 +550,8 @@ class _ToolTabState extends State<ToolTab> {
 
     try {
       final response = await http.get(
-        Uri.parse('http://localhost:8081/v1/search/tools?name=$query'),
+        Uri.parse(
+            '${dotenv.env['RECIPE_SERVICE_API']}/search/tools?name=$query'),
         headers: {
           'access_token': accessToken,
           'Content-Type': 'application/json',

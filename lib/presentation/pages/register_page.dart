@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:foocipe_cooking_app/presentation/pages/login_page.dart';
 import 'dart:convert';
 
@@ -32,8 +33,7 @@ class _RegisterPageState extends State<RegisterPage> {
     setState(() => _isLoading = true);
     try {
       final response = await http.post(
-        Uri.parse(
-            'https://foocipe-user-service.onrender.com/auth/email-verify'),
+        Uri.parse('${dotenv.env['USER_SERVICE_API']}/auth/email-verify'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({
           'email': _emailController.text,
@@ -55,8 +55,7 @@ class _RegisterPageState extends State<RegisterPage> {
     setState(() => _isLoading = true);
     try {
       final response = await http.post(
-        Uri.parse(
-            'https://foocipe-user-service.onrender.com/auth/register-otp'),
+        Uri.parse('${dotenv.env['USER_SERVICE_API']}/auth/register-otp'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode({
           'email': _emailController.text,

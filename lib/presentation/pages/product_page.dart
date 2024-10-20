@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../widgets/product_rating.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class Product {
   final String name;
@@ -61,7 +62,8 @@ class _ProductPageState extends State<ProductPage> {
       return;
     }
     final response = await http.get(
-      Uri.parse('http://localhost:8081/v1/products/${widget.productId}'),
+      Uri.parse(
+          '${dotenv.env['PRODUCT_SERVICE_API']}/products/${widget.productId}'),
       headers: {
         'access_token': accessToken ?? '',
         'Content-Type': 'application/json',

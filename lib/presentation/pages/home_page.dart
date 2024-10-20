@@ -6,6 +6,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../widgets/recipe_card.dart';
 import '../layouts/main_layout.dart';
 import '../widgets/search_bar.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -40,7 +41,7 @@ class _HomePageState extends State<HomePage> {
       }
 
       final response = await http.get(
-        Uri.parse('http://localhost:8081/v1/recipes/newest'),
+        Uri.parse('${dotenv.env['RECIPE_SERVICE_API']}/recipes/newest'),
         headers: {
           'access_token': accessToken ?? '',
           'Content-Type': 'application/json',
@@ -50,7 +51,7 @@ class _HomePageState extends State<HomePage> {
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
         setState(() {
-          recipes = List<Map<String, dynamic>>.from(data['recipes']);
+          recipes = List<Map<String, dynamic>>.from(data);
         });
       } else {
         print('Failed to fetch recipes: ${response.statusCode}');
