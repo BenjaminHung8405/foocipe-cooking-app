@@ -53,15 +53,48 @@ class _MyRecipePageState extends State<MyRecipePage> {
             return ListView.builder(
               itemCount: recipes.length,
               itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text(recipes[index].name),
-                  subtitle: Text(
-                      'Cook time: ${recipes[index].cookTime} min, Difficulty: ${recipes[index].difficulty}'),
-                  onTap: () {
-                    // Chuyển hướng đến trang chi tiết của công thức
-                    Navigator.pushNamed(
-                        context, '/recipe/${recipes[index].id}');
-                  },
+                return Padding(
+                  padding: const EdgeInsets.only(
+                      bottom: 5, left: 30, right: 30, top: 10),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border.all(
+                          color: const Color.fromARGB(255, 94, 89, 74)
+                              .withOpacity(0.3)),
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.2),
+                          spreadRadius: 2,
+                          blurRadius: 5,
+                          offset: Offset(4, 8),
+                        ),
+                      ],
+                    ),
+                    child: ListTile(
+                      leading: Image(
+                          image: AssetImage('assets/icons/watermelon.png')),
+                      title: Text(
+                        recipes[index].name,
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: const Color.fromARGB(255, 94, 89, 74)),
+                      ),
+                      subtitle: Text(
+                        'Cook time: ${recipes[index].cookTime} min, Difficulty: ${recipes[index].difficulty}',
+                        style: TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                            color: const Color.fromARGB(255, 94, 89, 74)),
+                      ),
+                      onTap: () {
+                        // Chuyển hướng đến trang chi tiết của công thức
+                        Navigator.pushNamed(
+                            context, '/recipe/${recipes[index].id}');
+                      },
+                    ),
+                  ),
                 );
               },
             );
