@@ -109,13 +109,13 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildCategorySection() {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 4),
+      padding: const EdgeInsets.only(bottom: 4, left: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
             'Category',
-            style: Theme.of(context).textTheme.titleLarge?.copyWith(
+            style: TextStyle(
                 color: const Color.fromARGB(255, 29, 40, 61),
                 fontWeight: FontWeight.w700,
                 fontSize: 20),
@@ -138,7 +138,7 @@ class _HomePageState extends State<HomePage> {
   Widget _buildCategoryList() {
     return SliverToBoxAdapter(
       child: SizedBox(
-        height: 110,
+        height: 40,
         child: ListView.builder(
           itemCount: categories.length,
           scrollDirection: Axis.horizontal,
@@ -156,23 +156,26 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildCategoryItem(CategoryModel category) {
     return Container(
-      width: 100,
+      width: 110,
       decoration: BoxDecoration(
-        color: category.boxColor.withOpacity(0.25),
+        color: category.boxColor.withOpacity(0.5),
         borderRadius: BorderRadius.circular(16),
       ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
+          SizedBox(
+            width: 10,
+          ),
           Container(
-            width: 50,
-            height: 50,
+            width: 30,
+            height: 30,
             decoration: BoxDecoration(
               color: Colors.white,
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.3),
+                  color: Colors.black.withOpacity(0.25),
                   spreadRadius: 2,
                   blurRadius: 5,
                   offset: const Offset(0, 2),
@@ -180,17 +183,17 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             child: Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(1),
               child: Image(image: AssetImage(category.image_urls)),
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(width: 10),
           Text(
             category.name,
             style: const TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.w500,
-              fontSize: 14,
+              color: const Color.fromARGB(255, 94, 89, 74),
+              fontWeight: FontWeight.w700,
+              fontSize: 13,
             ),
           )
         ],

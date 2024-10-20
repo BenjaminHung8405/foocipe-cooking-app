@@ -26,7 +26,7 @@ class CategoryModel {
         id: '2',
         name: 'Thịt',
         image_urls: 'assets/icons/chicken.png',
-        boxColor: const Color(0xffFD423F)));
+        boxColor: const Color(0xffFF9310)));
 
     categories.add(CategoryModel(
         id: '3',

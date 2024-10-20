@@ -81,6 +81,17 @@ class _AddRecipePageState extends State<AddRecipePage>
         title: const Text('Add Recipe'),
         bottom: TabBar(
           controller: _tabController,
+          labelColor: Colors.orange,
+          labelStyle: TextStyle(
+              color: Color.fromARGB(255, 94, 89, 74),
+              fontSize: 14,
+              fontWeight: FontWeight.w600),
+          indicatorColor: Colors.orange,
+          indicatorWeight: 5,
+          indicatorSize: TabBarIndicatorSize.tab,
+          dividerColor: Color.fromARGB(255, 94, 89, 74),
+          padding: EdgeInsets.symmetric(horizontal: 20),
+          unselectedLabelColor: Color.fromARGB(255, 94, 89, 74),
           tabs: const [
             Tab(
               child: Row(

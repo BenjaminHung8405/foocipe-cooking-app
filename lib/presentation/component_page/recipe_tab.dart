@@ -53,7 +53,7 @@ class _RecipeTabState extends State<RecipeTab> {
                   Text('I. Thông tin công thức',
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 20),
                   _buildNameDesSection(),
                   const SizedBox(height: 24),
                   Text('II. Thông tin nấu ăn',
@@ -65,7 +65,7 @@ class _RecipeTabState extends State<RecipeTab> {
                   Text('III. Thông tin loại món',
                       style:
                           TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                  const SizedBox(height: 4),
+                  const SizedBox(height: 20),
                   _buildDiffCateSection(),
                   const SizedBox(height: 24),
                   ElevatedButton(
@@ -99,11 +99,19 @@ class _RecipeTabState extends State<RecipeTab> {
       controller: controller,
       decoration: InputDecoration(
         hintText: hint,
-        border: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.orange),
+        hintStyle: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: Color.fromARGB(255, 94, 89, 74).withOpacity(0.3)),
+        enabledBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: Color.fromARGB(255, 94, 89, 74).withOpacity(0.3),
+          ),
         ),
         focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.orange),
+          borderSide: BorderSide(
+            color: Color.fromARGB(255, 94, 89, 74),
+          ),
         ),
       ),
       maxLines: maxLines,
@@ -118,12 +126,20 @@ class _RecipeTabState extends State<RecipeTab> {
           child: TextField(
             controller: _descriptionController,
             decoration: InputDecoration(
-              border: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.orange),
+              hintText: "Nhập mô tả",
+              hintStyle: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: Color.fromARGB(255, 94, 89, 74).withOpacity(0.3)),
+              enabledBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                  color: Color.fromARGB(255, 94, 89, 74).withOpacity(0.3),
+                ),
               ),
               focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Colors.orange),
-              ),
+                  borderSide: BorderSide(
+                color: Color.fromARGB(255, 94, 89, 74),
+              )),
             ),
             maxLines: null,
             onChanged: (text) {
@@ -144,7 +160,17 @@ class _RecipeTabState extends State<RecipeTab> {
     return Container(
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.orange),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+              color: Color.fromARGB(255, 94, 89, 74).withOpacity(0.07),
+              offset: Offset(4, 8),
+              blurRadius: 5,
+              spreadRadius: 1)
+        ],
+        border: Border.all(
+          color: const Color.fromARGB(255, 94, 89, 74).withOpacity(0.3),
+        ),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(
@@ -185,7 +211,11 @@ class _RecipeTabState extends State<RecipeTab> {
       children: [
         Icon(icon, color: Color(0xFFFD8B51)),
         const SizedBox(width: 8),
-        Expanded(child: Text(label, style: const TextStyle(fontSize: 16))),
+        Expanded(
+            flex: 3,
+            child: Text(label,
+                style: const TextStyle(
+                    fontSize: 16, fontWeight: FontWeight.w600))),
         Container(
           decoration: BoxDecoration(
             border: Border.all(
@@ -239,6 +269,7 @@ class _RecipeTabState extends State<RecipeTab> {
           ),
         ),
         Expanded(
+          flex: 1,
           child: Text('${unit.isNotEmpty ? unit : ''}',
               textAlign: TextAlign.center,
               style:
@@ -325,7 +356,7 @@ class _RecipeTabState extends State<RecipeTab> {
     return Container(
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.orange),
+        border: Border.all(color: Color.fromARGB(255, 94, 89, 74), width: 1),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Column(

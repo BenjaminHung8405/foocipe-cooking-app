@@ -171,12 +171,20 @@ class _IngredientTabState extends State<IngredientTab> {
       controller: searchController,
       decoration: InputDecoration(
         hintText: 'Tìm kiếm nguyên liệu...',
+        hintStyle: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: Color.fromARGB(255, 94, 89, 74).withOpacity(0.3)),
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.orange),
-        ),
+            borderSide: BorderSide(
+              color: Color.fromARGB(255, 94, 89, 74),
+            ),
+            borderRadius: BorderRadius.circular(18)),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Colors.orange),
-        ),
+            borderSide: BorderSide(
+              color: Color.fromARGB(255, 94, 89, 74).withOpacity(0.3),
+            ),
+            borderRadius: BorderRadius.circular(18)),
         suffixIcon: IconButton(
           icon: Icon(Icons.search),
           onPressed: () => searchIngredients(searchController.text),
@@ -418,7 +426,21 @@ class _ToolTabState extends State<ToolTab> {
     return TextField(
       controller: searchController,
       decoration: InputDecoration(
+        enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Color.fromARGB(255, 94, 89, 74),
+            ),
+            borderRadius: BorderRadius.circular(18)),
+        focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Color.fromARGB(255, 94, 89, 74).withOpacity(0.3),
+            ),
+            borderRadius: BorderRadius.circular(18)),
         hintText: 'Tìm kiếm dụng cụ...',
+        hintStyle: TextStyle(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: Color.fromARGB(255, 94, 89, 74).withOpacity(0.3)),
         suffixIcon: IconButton(
           icon: Icon(Icons.search),
           onPressed: () => searchTools(searchController.text),

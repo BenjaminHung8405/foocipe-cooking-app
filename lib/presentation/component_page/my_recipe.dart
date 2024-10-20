@@ -41,7 +41,10 @@ class _MyRecipePageState extends State<MyRecipePage> {
         future: fetchRecipes(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+                child: CircularProgressIndicator(
+              color: Colors.orange,
+            ));
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else {
@@ -65,11 +68,14 @@ class _MyRecipePageState extends State<MyRecipePage> {
         },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, '/recipe/add');
-        },
-        child: const Icon(Icons.add),
-      ),
+          onPressed: () {
+            Navigator.pushNamed(context, '/recipe/add');
+          },
+          child: const Icon(
+            Icons.add,
+            color: Colors.white,
+          ),
+          backgroundColor: Colors.orange),
     );
   }
 }
