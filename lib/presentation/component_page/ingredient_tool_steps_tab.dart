@@ -75,6 +75,17 @@ class _IngredientToolStepsTabState extends State<IngredientToolStepsTab>
       body: Column(
         children: [
           TabBar(
+            labelColor: Colors.orange,
+            labelStyle: TextStyle(
+                color: Color.fromARGB(255, 94, 89, 74),
+                fontSize: 14,
+                fontWeight: FontWeight.w600),
+            indicatorColor: Colors.orange,
+            indicatorWeight: 2,
+            indicatorSize: TabBarIndicatorSize.tab,
+            dividerColor: Color.fromARGB(255, 94, 89, 74),
+            padding: EdgeInsets.symmetric(horizontal: 20),
+            unselectedLabelColor: Color.fromARGB(255, 94, 89, 74),
             controller: _tabController,
             tabs: [
               Tab(icon: Icon(Icons.food_bank), text: 'Ingredients'),
@@ -239,58 +250,55 @@ class _IngredientTabState extends State<IngredientTab> {
       itemCount: widget.selectedIngredients.length,
       itemBuilder: (context, index) {
         final ingredient = widget.selectedIngredients[index];
-        return Padding(
-          padding: const EdgeInsets.only(top: 100),
-          child: GestureDetector(
-            onTap: () => updateIngredientQuantity(index, 1),
-            child: Container(
-              margin: const EdgeInsets.only(bottom: 8.0),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: Colors.white),
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.grey.withOpacity(0.2),
-                    spreadRadius: 2,
-                    blurRadius: 5,
-                    offset: Offset(0, 2),
+        return GestureDetector(
+          onTap: () => updateIngredientQuantity(index, 1),
+          child: Container(
+            margin: const EdgeInsets.only(bottom: 8.0),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border.all(color: Colors.white),
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.2),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: Offset(0, 2),
+                ),
+              ],
+            ),
+            child: ListTile(
+              leading: Image(image: AssetImage('assets/icons/egg.png')),
+              title: Text(
+                ingredient['name'],
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: const Color.fromARGB(255, 94, 89, 74),
+                ),
+              ),
+              subtitle: Text(
+                'Số lượng: ${ingredient['quantity']} ${ingredient['unit']}',
+                style: TextStyle(color: Colors.black54),
+              ),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.remove, color: Colors.red),
+                    onPressed: () => updateIngredientQuantity(index, -1),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.add, color: Colors.green),
+                    onPressed: () => updateIngredientQuantity(index, 1),
+                  ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.delete, color: Colors.redAccent),
+                    onPressed: () => removeIngredient(index),
                   ),
                 ],
-              ),
-              child: ListTile(
-                leading: Image(image: AssetImage('assets/icons/egg.png')),
-                title: Text(
-                  ingredient['name'],
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: const Color.fromARGB(255, 94, 89, 74),
-                  ),
-                ),
-                subtitle: Text(
-                  'Số lượng: ${ingredient['quantity']} ${ingredient['unit']}',
-                  style: TextStyle(color: Colors.black54),
-                ),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    IconButton(
-                      icon: Icon(Icons.remove, color: Colors.red),
-                      onPressed: () => updateIngredientQuantity(index, -1),
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.add, color: Colors.green),
-                      onPressed: () => updateIngredientQuantity(index, 1),
-                    ),
-                    SizedBox(
-                      width: 20,
-                    ),
-                    IconButton(
-                      icon: Icon(Icons.delete, color: Colors.redAccent),
-                      onPressed: () => removeIngredient(index),
-                    ),
-                  ],
-                ),
               ),
             ),
           ),
@@ -689,17 +697,41 @@ class _StepsTabState extends State<StepsTab> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Steps:',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-            SizedBox(height: 16),
-            ...steps
-                .asMap()
-                .entries
-                .map((entry) => _buildStepItem(entry.key, entry.value)),
-            SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: _addStep,
-              child: Text('Add Step'),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 20),
+              decoration: BoxDecoration(
+                border: Border.all(
+                    color: Color.fromARGB(255, 94, 89, 74), width: 1),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Text('Steps:',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  SizedBox(height: 16),
+                  ...steps
+                      .asMap()
+                      .entries
+                      .map((entry) => _buildStepItem(entry.key, entry.value)),
+                  SizedBox(height: 16),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orange,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8))),
+                    onPressed: _addStep,
+                    child: Text(
+                      'Add Step',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ],
+              ),
             ),
             SizedBox(height: 32),
             _buildUsageStatus(),
@@ -715,13 +747,23 @@ class _StepsTabState extends State<StepsTab> {
       child: Row(
         children: [
           Text('${index + 1}. ', style: TextStyle(fontWeight: FontWeight.bold)),
+          SizedBox(
+            width: 10,
+          ),
           Expanded(
             child: TextField(
               controller: stepControllers[index],
               onChanged: (value) => _updateStep(index, value),
               decoration: InputDecoration(
+                enabledBorder:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(18)),
+                focusedBorder:
+                    OutlineInputBorder(borderRadius: BorderRadius.circular(18)),
                 suffixIcon: IconButton(
-                  icon: Icon(Icons.delete),
+                  icon: Icon(
+                    Icons.delete,
+                    color: Colors.red,
+                  ),
                   onPressed: () => _removeStep(index),
                 ),
               ),
